@@ -13,29 +13,55 @@ import { pm25ToColor, pm25ToYMax } from "./plot-utils.js";
  */
 export function diurnalPlotConfig(
   data = {
-    hour,
-    hour_mean,
-    yesterday,
-    today,
+    datetime,
+    pm25,
+    nowcast,
     locationName,
     timezone,
-    sunriseHour,
-    sunsetHour,
     title,
+    // unique to this chart
+    longitude,
+    latitude,
+    // hour,
+    hour_mean,
   }
 ) {
   // ----- Data preparation --------------------------------
 
   // Default to well defined y-axis limits for visual stability
   let ymin = 0;
-  let ymax = pm25ToYMax(
-    Math.max(...data.hour_mean, ...data.yesterday, ...data.today)
-  );
+  let ymax = pm25ToYMax(Math.max(...data.hour_mean, ...yesterday, ...today));
 
   let title = data.title;
   if (data.title === undefined) {
     title = data.locationName;
   }
+
+  // Calculate yesterday/today start/end
+  const localHours = data.datetime.map((o) =>
+    moment.tz(o, data.timezone).hours()
+  );
+  const lastHour = localHours[localHours.length - 1];
+  const today_end = localHours.length;
+  const today_start = localHours.length - 1 - lastHour;
+  const yesterday_end = today_start;
+  const yesterday_start = today_start - 24;
+  const yesterday = nowcast.slice(yesterday_start, yesterday_end);
+  const today = nowcast.slice(today_start, today_end);
+
+  // Calculate day/night shading times
+  const middleDatetime = data / datetime[Math.round(data.datetime.length / 2)];
+  const times = SunCalc.getTimes(
+    middleDatetime.valueOf(),
+    data.latitude,
+    data.longitude
+  );
+  const sunriseHour =
+    moment.tz(times.sunrise, data.timezone).hour() +
+    moment.tz(times.sunrise, data.timezone).minute() / 60;
+  const sunsetHour =
+    moment.tz(times.sunset, data.timezone).hour() +
+    moment.tz(times.sunset, data.timezone).minute() / 60;
 
   // Create colored series data
   // See:  https://stackoverflow.com/questions/35854947/how-do-i-change-a-specific-bar-color-in-highcharts-bar-chart
@@ -43,15 +69,15 @@ export function diurnalPlotConfig(
   // NOTE:  If the chart width specified in the component html  is too small,
   // NOTE:  large symbols that would bump into each other will not be drawn.
   let yesterdayData = [];
-  for (let i = 0; i < data.yesterday.length; i++) {
+  for (let i = 0; i < yesterday.length; i++) {
     yesterdayData[i] = {
-      y: data.yesterday[i],
-      color: pm25ToColor(data.yesterday[i]),
+      y: yesterday[i],
+      color: pm25ToColor(yesterday[i]),
     };
   }
   let todayData = [];
-  for (let i = 0; i < data.today.length; i++) {
-    todayData[i] = { y: data.today[i], color: pm25ToColor(data.today[i]) };
+  for (let i = 0; i < today.length; i++) {
+    todayData[i] = { y: today[i], color: pm25ToColor(today[i]) };
   }
 
   // ----- Chart configuration --------------------------------
@@ -97,8 +123,8 @@ export function diurnalPlotConfig(
         },
       },
       plotBands: [
-        { color: "rgb(0,0,0,0.1)", from: 0, to: data.sunriseHour },
-        { color: "rgb(0,0,0,0.1)", from: data.sunsetHour, to: 24 },
+        { color: "rgb(0,0,0,0.1)", from: 0, to: sunriseHour },
+        { color: "rgb(0,0,0,0.1)", from: sunsetHour, to: 24 },
       ],
     },
     yAxis: {
