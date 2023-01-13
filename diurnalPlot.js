@@ -37,8 +37,8 @@ export function diurnalPlotConfig(
   const today_start = localHours.length - 1 - lastHour;
   const yesterday_end = today_start;
   const yesterday_start = today_start - 24;
-  const yesterday = nowcast.slice(yesterday_start, yesterday_end);
-  const today = nowcast.slice(today_start, today_end);
+  const yesterday = data.nowcast.slice(yesterday_start, yesterday_end);
+  const today = data.nowcast.slice(today_start, today_end);
 
   // Calculate day/night shading times
   const middleDatetime = data / datetime[Math.round(data.datetime.length / 2)];
