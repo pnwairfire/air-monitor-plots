@@ -2,7 +2,7 @@
 import moment from "moment-timezone";
 
 // Utility functions
-import { pm25ToYMax } from "./plot-utils.js";
+import { pm25ToColor, pm25ToYMax } from "./plot-utils.js";
 
 /**
  * Returns a dailyBarplot chart configuration.
