@@ -5,7 +5,7 @@ import moment from "moment-timezone";
 import SunCalc from "suncalc";
 
 // Utility functions
-import { pm25ToColor, pm25ToYMax } from "./plot-utils.js";
+import { pm25ToColor, pm25ToYMax, pm25_AQILines } from "./plot-utils.js";
 
 /**
  * Returns a diurnalPlot chart configuration.
@@ -135,7 +135,7 @@ export function diurnalPlotConfig(
       title: {
         text: "PM2.5 (\u00b5g/m\u00b3)",
       },
-      //plotLines: this.AQI_pm25_lines // horizontal colored lines
+      plotlines: pm25_AQILines(2),
     },
     legend: {
       enabled: true,
@@ -288,6 +288,7 @@ export function small_diurnalPlotConfig(
       title: {
         text: "",
       },
+      plotlines: pm25_AQILines(1),
     },
     legend: {
       enabled: false,

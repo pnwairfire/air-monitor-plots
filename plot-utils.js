@@ -45,3 +45,26 @@ export function pm25ToYMax(pm25) {
 
   return ymax;
 }
+
+/**
+ * Returns an array of objects with {color, width, value} properties. These
+ * can be used to add colored AQI lines to plots with a PM2.5 axis measured
+ * in micrograms per meter cubed.
+ *
+ * Usage in a Highcharts configuration:
+ * ```
+ * yaxis: {
+ *   plotlines: pm25_AQILines(),
+ * }
+ * ```
+ * @param {number} width Line width in pixels.
+ */
+export function pm25_AQILines(width = 2) {
+  let lines = [
+    { color: "rgb(255,255,0)", width: width, value: 12 },
+    { color: "rgb(255,126,0)", width: width, value: 35.5 },
+    { color: "rgb(255,0,0)", width: width, value: 55.5 },
+    { color: "rgb(143,63,151)", width: width, value: 150.5 },
+    { color: "rgb(126,0,35)", width: width, value: 250.5 },
+  ];
+}

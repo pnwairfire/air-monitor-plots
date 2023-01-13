@@ -2,7 +2,7 @@
 import moment from "moment-timezone";
 
 // Utility functions
-import { pm25ToYMax } from "./plot-utils.js";
+import { pm25ToYMax, pm25_AQILines } from "./plot-utils.js";
 
 /**
  * Returns a timeseriesPlot chart configuration.
@@ -83,7 +83,7 @@ export function timeseriesPlotConfig(
       title: {
         text: "PM2.5 (\u00b5g/m\u00b3)",
       },
-      //plotLines: this.AQI_pm25_lines // horizontal colored lines
+      plotlines: pm25_AQILines(2),
     },
     legend: {
       enabled: true,
@@ -180,6 +180,7 @@ export function small_timeseriesPlotConfig(
       title: {
         text: "",
       },
+      plotlines: pm25_AQILines(1),
     },
     legend: {
       enabled: false,
