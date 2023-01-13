@@ -41,7 +41,8 @@ export function diurnalPlotConfig(
   const today = data.nowcast.slice(today_start, today_end);
 
   // Calculate day/night shading times
-  const middleDatetime = data / datetime[Math.round(data.datetime.length / 2)];
+  const middleDatetime =
+    data / data.datetime[Math.round(data.datetime.length / 2)];
   const times = SunCalc.getTimes(
     middleDatetime.valueOf(),
     data.latitude,
