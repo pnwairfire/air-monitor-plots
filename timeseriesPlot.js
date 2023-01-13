@@ -83,7 +83,7 @@ export function timeseriesPlotConfig(
       title: {
         text: "PM2.5 (\u00b5g/m\u00b3)",
       },
-      plotlines: pm25_AQILines(2),
+      plotLines: pm25_AQILines(2),
     },
     legend: {
       enabled: true,
@@ -180,7 +180,7 @@ export function small_timeseriesPlotConfig(
       title: {
         text: "",
       },
-      plotlines: pm25_AQILines(1),
+      plotLines: pm25_AQILines(1),
     },
     legend: {
       enabled: false,
