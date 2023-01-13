@@ -26,8 +26,11 @@
  * arrays and they can generate the same plot for a PurpleAir sensor.
  */
 
-export { dailyBarplotConfig } from "./dailyBarplot.js";
-export { diurnalPlotConfig } from "./diurnalPlot.js";
+export {
+  dailyBarplotConfig,
+  small_dailyBarplotConfig,
+} from "./dailyBarplot.js";
+export { diurnalPlotConfig, small_diurnalPlotConfig } from "./diurnalPlot.js";
 export {
   timeseriesPlotConfig,
   small_timeseriesPlotConfig,
