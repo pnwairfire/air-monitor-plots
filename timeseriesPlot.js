@@ -147,8 +147,6 @@ export function small_timeseriesPlotConfig(
     accessibility: { enabled: false },
     chart: {
       animation: false,
-      plotBorderColor: "#ddd",
-      plotBorderWidth: 1,
     },
     plotOptions: {
       series: {
@@ -167,33 +165,21 @@ export function small_timeseriesPlotConfig(
     },
     title: {
       text: title,
+      style: { color: "#333333", fontSize: "12px" },
     },
     time: {
       timezone: data.timezone,
     },
     xAxis: {
       type: "datetime",
-      labels: { enabled: false },
-      // gridLineColor: "#ddd",
-      // gridLineDashStyle: "Dash",
-      // gridLineWidth: 1,
-      // minorTicks: true,
-      // minorTickInterval: 3 * 3600 * 1000, // every 3 hrs
-      // minorGridLineColor: "#eee",
-      // minorGridLineDashStyle: "Dot",
-      // minorGridLineWidth: 1,
+      visible: false,
     },
     yAxis: {
       min: ymin,
       max: ymax,
-      labels: { enabled: false },
-      // gridLineColor: "#ddd",
-      // gridLineDashStyle: "Dash",
-      // gridLineWidth: 1,
-      // title: {
-      //   text: "PM2.5 (\u00b5g/m\u00b3)",
-      // },
-      //plotLines: this.AQI_pm25_lines // horizontal colored lines
+      title: {
+        text: "",
+      },
     },
     legend: {
       enabled: false,
@@ -209,7 +195,7 @@ export function small_timeseriesPlotConfig(
       {
         name: "Nowcast",
         type: "line",
-        lineWidth: 2,
+        lineWidth: 1,
         pointInterval: 3600 * 1000,
         pointStart: startTime.valueOf(), // milliseconds
         data: data.nowcast,
