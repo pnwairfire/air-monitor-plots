@@ -22,7 +22,6 @@ export function diurnalPlotConfig(
     // unique to this chart
     longitude,
     latitude,
-    // hour,
     hour_mean,
   }
 ) {
