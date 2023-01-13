@@ -75,7 +75,7 @@ export function pm25_AQILines(width = 2) {
  * The chart must already exist. This is not part of chart configuration.
  * @param {Highcharts.chart} chart
  */
-export function pm25_addAQIStackedBar(chart) {
+export function pm25_addAQIStackedBar(chart, width = 6) {
   // NOTE:  0, 0 is at the top left of the graphic with y increasing downward
 
   let xmin = chart.xAxis[0].min;
@@ -84,8 +84,8 @@ export function pm25_addAQIStackedBar(chart) {
   let ymax_px = chart.yAxis[0].toPixels(ymax);
 
   let xlo = chart.xAxis[0].left; // leftmost pixel of the plot area
-  let xhi = xlo + 8;
-  let width = Math.abs(xhi - xlo);
+  // let xhi = xlo + 8;
+  // let width = Math.abs(xhi - xlo);
 
   // Green
   let yhi = chart.yAxis[0].toPixels(0);
