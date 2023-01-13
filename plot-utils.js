@@ -69,3 +69,85 @@ export function pm25_AQILines(width = 2) {
   ];
   return lines;
 }
+
+/**
+ * Draws a stacked bar indicating pm25 AQI levels on the left side of a chart.
+ * The chart must already exist. This is not part of chart configuration.
+ * @param {Highcharts.chart} chart
+ */
+export function pm25_addAQIStackedBar(chart) {
+  // NOTE:  0, 0 is at the top left of the graphic with y increasing downward
+
+  let xmin = chart.xAxis[0].min;
+  let ymin = chart.yAxis[0].min;
+  let ymax = chart.yAxis[0].max;
+  let ymax_px = chart.yAxis[0].toPixels(ymax);
+
+  let xlo = chart.xAxis[0].left; // leftmost pixel of the plot area
+  let xhi = xlo + 8;
+  let width = Math.abs(xhi - xlo);
+
+  // Green
+  let yhi = chart.yAxis[0].toPixels(0);
+  let ylo = Math.max(chart.yAxis[0].toPixels(12), ymax_px);
+  let height = Math.abs(yhi - ylo);
+  chart.renderer
+    .rect(xlo, ylo, width, height, 1)
+    .attr({ fill: "rgb(0,255,0)", stroke: "transparent" })
+    .add();
+
+  // Yellow
+  yhi = chart.yAxis[0].toPixels(12);
+  if (yhi > ymax_px) {
+    ylo = Math.max(chart.yAxis[0].toPixels(35.5), ymax_px);
+    height = Math.abs(yhi - ylo);
+    chart.renderer
+      .rect(xlo, ylo, width, height, 1)
+      .attr({ fill: "rgb(255,255,0)", stroke: "transparent" })
+      .add();
+  }
+
+  // Orange
+  yhi = chart.yAxis[0].toPixels(35.5);
+  if (yhi > ymax_px) {
+    ylo = Math.max(chart.yAxis[0].toPixels(55.5), ymax_px);
+    height = Math.abs(yhi - ylo);
+    chart.renderer
+      .rect(xlo, ylo, width, height, 1)
+      .attr({ fill: "rgb(255,126,0)", stroke: "transparent" })
+      .add();
+  }
+
+  // Red
+  yhi = chart.yAxis[0].toPixels(55.5);
+  if (yhi > ymax_px) {
+    ylo = Math.max(chart.yAxis[0].toPixels(105.5), ymax_px);
+    height = Math.abs(yhi - ylo);
+    chart.renderer
+      .rect(xlo, ylo, width, height, 1)
+      .attr({ fill: "rgb(255,0,0)", stroke: "transparent" })
+      .add();
+  }
+
+  // Purple
+  yhi = chart.yAxis[0].toPixels(105.5);
+  if (yhi > ymax_px) {
+    ylo = Math.max(chart.yAxis[0].toPixels(250), ymax_px);
+    height = Math.abs(yhi - ylo);
+    chart.renderer
+      .rect(xlo, ylo, width, height, 1)
+      .attr({ fill: "rgb(143,63,151)", stroke: "transparent" })
+      .add();
+  }
+
+  // Maroon
+  yhi = chart.yAxis[0].toPixels(250);
+  if (yhi > ymax_px) {
+    ylo = Math.max(chart.yAxis[0].toPixels(5000), ymax_px);
+    height = Math.abs(yhi - ylo);
+    chart.renderer
+      .rect(xlo, ylo, width, height, 1)
+      .attr({ fill: "rgb(126,0,35)", stroke: "transparent" })
+      .add();
+  }
+}
