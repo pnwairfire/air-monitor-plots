@@ -312,7 +312,7 @@ export function small_diurnalPlotConfig(
           radius: 1,
           symbol: "circle",
           lineColor: "#888",
-          lineWidth: 0.5,
+          lineWidth: 0.3,
         },
       },
       {
@@ -325,7 +325,7 @@ export function small_diurnalPlotConfig(
           radius: 2,
           symbol: "circle",
           lineColor: "#333",
-          lineWidth: 1,
+          lineWidth: 0.5,
         },
       },
     ],

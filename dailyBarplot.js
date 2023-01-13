@@ -58,6 +58,7 @@ export function dailyBarplotConfig(
         animation: false,
         allowPointSelect: true,
         borderColor: "#666",
+        borderWidth: 1,
       },
     },
     title: {
@@ -148,6 +149,7 @@ export function small_dailyBarplotConfig(
         animation: false,
         allowPointSelect: true,
         borderColor: "#666",
+        borderWidth: 0.5,
       },
     },
     title: {
