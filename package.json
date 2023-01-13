@@ -1,0 +1,27 @@
+{
+  "name": "air-quality-plots",
+  "version": "1.0.0",
+  "description": "USFS AirFire standard plots for air quality data.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pnwairfire/air-quality-plots.git"
+  },
+  "keywords": [
+    "air-quality"
+  ],
+  "author": "Jonathan Callahan",
+  "license": "SEE LICENSE IN LICENSE",
+  "bugs": {
+    "url": "https://github.com/pnwairfire/air-quality-plots/issues"
+  },
+  "homepage": "https://github.com/pnwairfire/air-quality-plots#readme",
+  "dependencies": {
+    "moment-timezone": "^0.5.40",
+    "suncalc": "^1.9.0"
+  }
+}
