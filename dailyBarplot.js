@@ -20,15 +20,6 @@ export function dailyBarplotConfig(
 ) {
   // ----- Data preparation --------------------------------
 
-  // Default to well defined y-axis limits for visual stability
-  let ymin = 0;
-  let ymax = pm25ToYMax(Math.max(...data.daily_pm25));
-
-  let title = data.title;
-  if (data.title === undefined) {
-    title = data.locationName;
-  }
-
   // Create colored series data
   // See:  https://stackoverflow.com/questions/35854947/how-do-i-change-a-specific-bar-color-in-highcharts-bar-chart
 
@@ -46,6 +37,14 @@ export function dailyBarplotConfig(
     moment.tz(x, data.timezone).format("MMM DD")
   );
 
+  // Default to well defined y-axis limits for visual stability
+  let ymin = 0;
+  let ymax = pm25ToYMax(Math.max(...data.daily_pm25));
+
+  let title = data.title;
+  if (data.title === undefined) {
+    title = data.locationName;
+  }
   // ----- Chart configuration --------------------------------
 
   let chartConfig = {

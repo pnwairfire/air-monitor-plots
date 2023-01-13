@@ -28,15 +28,6 @@ export function diurnalPlotConfig(
 ) {
   // ----- Data preparation --------------------------------
 
-  // Default to well defined y-axis limits for visual stability
-  let ymin = 0;
-  let ymax = pm25ToYMax(Math.max(...data.hour_mean, ...yesterday, ...today));
-
-  let title = data.title;
-  if (data.title === undefined) {
-    title = data.locationName;
-  }
-
   // Calculate yesterday/today start/end
   const localHours = data.datetime.map((o) =>
     moment.tz(o, data.timezone).hours()
@@ -78,6 +69,15 @@ export function diurnalPlotConfig(
   let todayData = [];
   for (let i = 0; i < today.length; i++) {
     todayData[i] = { y: today[i], color: pm25ToColor(today[i]) };
+  }
+
+  // Default to well defined y-axis limits for visual stability
+  let ymin = 0;
+  let ymax = pm25ToYMax(Math.max(...data.hour_mean, ...yesterday, ...today));
+
+  let title = data.title;
+  if (data.title === undefined) {
+    title = data.locationName;
   }
 
   // ----- Chart configuration --------------------------------
