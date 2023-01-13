@@ -110,3 +110,112 @@ export function timeseriesPlotConfig(
 
   return chartConfig;
 }
+
+/**
+ * Returns a small_timeseriesPlot chart configuration.
+ * The 'small' version of this plot has no legend or axis labeling and is
+ * appropriate for use in a display with "small multiples".
+ * @param {Object} data The data required to create the chart.
+ */
+export function small_timeseriesPlotConfig(
+  data = {
+    datetime,
+    pm25,
+    nowcast,
+    locationName,
+    timezone,
+    title,
+  }
+) {
+  // ----- Data preparation --------------------------------
+
+  let startTime = data.datetime[0];
+  // let xAxis_title = 'Time (${data.timezone})';
+
+  // Default to well defined y-axis limits for visual stability
+  let ymin = 0;
+  let ymax = pm25ToYMax(Math.max(...data.pm25));
+
+  let title = data.title;
+  if (data.title === undefined) {
+    title = data.locationName;
+  }
+
+  // ----- Chart configuration --------------------------------
+
+  let chartConfig = {
+    accessibility: { enabled: false },
+    chart: {
+      animation: false,
+      plotBorderColor: "#ddd",
+      plotBorderWidth: 1,
+    },
+    plotOptions: {
+      series: {
+        animation: false,
+      },
+      scatter: {
+        animation: false,
+        marker: { radius: 2, symbol: "circle", fillColor: "#bbbbbb" },
+      },
+      line: {
+        animation: false,
+        color: "#000",
+        lineWidth: 0.5,
+        marker: { enabled: false },
+      },
+    },
+    title: {
+      text: title,
+    },
+    time: {
+      timezone: data.timezone,
+    },
+    xAxis: {
+      type: "datetime",
+      labels: { enabled: false },
+      // gridLineColor: "#ddd",
+      // gridLineDashStyle: "Dash",
+      // gridLineWidth: 1,
+      // minorTicks: true,
+      // minorTickInterval: 3 * 3600 * 1000, // every 3 hrs
+      // minorGridLineColor: "#eee",
+      // minorGridLineDashStyle: "Dot",
+      // minorGridLineWidth: 1,
+    },
+    yAxis: {
+      min: ymin,
+      max: ymax,
+      labels: { enabled: false },
+      // gridLineColor: "#ddd",
+      // gridLineDashStyle: "Dash",
+      // gridLineWidth: 1,
+      // title: {
+      //   text: "PM2.5 (\u00b5g/m\u00b3)",
+      // },
+      //plotLines: this.AQI_pm25_lines // horizontal colored lines
+    },
+    legend: {
+      enabled: false,
+    },
+    series: [
+      {
+        name: "Hourly PM2.5 Values",
+        type: "scatter",
+        pointInterval: 3600 * 1000,
+        pointStart: startTime.valueOf(), // milliseconds
+        data: data.pm25,
+      },
+      {
+        name: "Nowcast",
+        type: "line",
+        lineWidth: 2,
+        pointInterval: 3600 * 1000,
+        pointStart: startTime.valueOf(), // milliseconds
+        data: data.nowcast,
+      },
+    ],
+  };
+
+  return chartConfig;
+}

@@ -28,4 +28,7 @@
 
 export { dailyBarplotConfig } from "./dailyBarplot.js";
 export { diurnalPlotConfig } from "./diurnalPlot.js";
-export { timeseriesPlotConfig } from "./timeseriesPlot.js";
+export {
+  timeseriesPlotConfig,
+  small_timeseriesPlotConfig,
+} from "./timeseriesPlot.js";
