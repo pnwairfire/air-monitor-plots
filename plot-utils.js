@@ -67,4 +67,5 @@ export function pm25_AQILines(width = 2) {
     { color: "rgb(143,63,151)", width: width, value: 150.5 },
     { color: "rgb(126,0,35)", width: width, value: 250.5 },
   ];
+  return lines;
 }
