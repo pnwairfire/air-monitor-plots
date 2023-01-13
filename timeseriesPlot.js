@@ -112,7 +112,7 @@ export function timeseriesPlotConfig(
 }
 
 /**
- * Returns a small_timeseriesPlot chart configuration.
+ * Returns a timeseriesPlot chart configuration.
  * The 'small' version of this plot has no legend or axis labeling and is
  * appropriate for use in a display with "small multiples".
  * @param {Object} data The data required to create the chart.
