@@ -309,7 +309,7 @@ export function small_diurnalPlotConfig(
         color: "#888",
         lineWidth: 0.5,
         marker: {
-          radius: 1,
+          radius: 1.5,
           symbol: "circle",
           lineColor: "#888",
           lineWidth: 0.3,
