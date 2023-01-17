@@ -11,7 +11,7 @@ import { pm25ToColor, pm25ToYMax, pm25_AQILines } from "./plot-utils.js";
 export function dailyBarplotConfig(
   data = {
     daily_datetime,
-    daily_pm25,
+    daily_avg,
     daily_nowcast,
     locationName,
     timezone,
@@ -26,10 +26,10 @@ export function dailyBarplotConfig(
   // NOTE:  If the chart width specified in the component html  is too small,
   // NOTE:  large symbols that would bump into each other will not be drawn.
   let seriesData = [];
-  for (let i = 0; i < data.daily_pm25.length; i++) {
+  for (let i = 0; i < data.daily_avg.length; i++) {
     seriesData[i] = {
-      y: data.daily_pm25[i],
-      color: pm25ToColor(data.daily_pm25[i]),
+      y: data.daily_avg[i],
+      color: pm25ToColor(data.daily_avg[i]),
     };
   }
 
@@ -39,7 +39,7 @@ export function dailyBarplotConfig(
 
   // Default to well defined y-axis limits for visual stability
   let ymin = 0;
-  let ymax = pm25ToYMax(Math.max(...data.daily_pm25));
+  let ymax = pm25ToYMax(Math.max(...data.daily_avg));
 
   let title = data.title;
   if (data.title === undefined) {
@@ -103,7 +103,7 @@ export function dailyBarplotConfig(
 export function small_dailyBarplotConfig(
   data = {
     daily_datetime,
-    daily_pm25,
+    daily_avg,
     daily_nowcast,
     locationName,
     timezone,
@@ -118,10 +118,10 @@ export function small_dailyBarplotConfig(
   // NOTE:  If the chart width specified in the component html  is too small,
   // NOTE:  large symbols that would bump into each other will not be drawn.
   let seriesData = [];
-  for (let i = 0; i < data.daily_pm25.length; i++) {
+  for (let i = 0; i < data.daily_avg.length; i++) {
     seriesData[i] = {
-      y: data.daily_pm25[i],
-      color: pm25ToColor(data.daily_pm25[i]),
+      y: data.daily_avg[i],
+      color: pm25ToColor(data.daily_avg[i]),
     };
   }
 
@@ -131,7 +131,7 @@ export function small_dailyBarplotConfig(
 
   // Default to well defined y-axis limits for visual stability
   let ymin = 0;
-  let ymax = pm25ToYMax(Math.max(...data.daily_pm25));
+  let ymax = pm25ToYMax(Math.max(...data.daily_avg));
 
   let title = data.title;
   if (data.title === undefined) {
