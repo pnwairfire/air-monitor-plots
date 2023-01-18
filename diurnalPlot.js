@@ -22,7 +22,7 @@ export function diurnalPlotConfig(
     // unique to this chart
     longitude,
     latitude,
-    hour_avg,
+    hour_average,
   }
 ) {
   // ----- Data preparation --------------------------------
@@ -72,7 +72,7 @@ export function diurnalPlotConfig(
 
   // Default to well defined y-axis limits for visual stability
   let ymin = 0;
-  let ymax = pm25ToYMax(Math.max(...data.hour_avg, ...yesterday, ...today));
+  let ymax = pm25ToYMax(Math.max(...data.hour_average, ...yesterday, ...today));
 
   let title = data.title;
   if (data.title === undefined) {
@@ -145,7 +145,7 @@ export function diurnalPlotConfig(
       {
         name: "7 Day Mean",
         type: "line",
-        data: data.hour_avg,
+        data: data.hour_average,
         color: "#aaa",
         lineWidth: 10,
         marker: { radius: 1, symbol: "square", fillColor: "transparent" },
@@ -198,7 +198,7 @@ export function small_diurnalPlotConfig(
     title,
     longitude,
     latitude,
-    hour_avg,
+    hour_average,
   }
 ) {
   // ----- Data preparation --------------------------------
@@ -248,7 +248,7 @@ export function small_diurnalPlotConfig(
 
   // Default to well defined y-axis limits for visual stability
   let ymin = 0;
-  let ymax = pm25ToYMax(Math.max(...data.hour_avg, ...yesterday, ...today));
+  let ymax = pm25ToYMax(Math.max(...data.hour_average, ...yesterday, ...today));
 
   let title = data.title;
   if (data.title === undefined) {
@@ -297,7 +297,7 @@ export function small_diurnalPlotConfig(
       {
         name: "7 Day Mean",
         type: "line",
-        data: data.hour_avg,
+        data: data.hour_average,
         color: "#aaa",
         lineWidth: 5,
         marker: { enabled: false },
