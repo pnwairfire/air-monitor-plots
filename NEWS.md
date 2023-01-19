@@ -1,6 +1,11 @@
+# air-monitor-plots 1.0.3
+
+- Fixed package name in package.json from ~`air-quality-plots`~ to
+  `air-monitor-plots`.
+
 # air-monitor-plots 1.0.2
 
-- timeseriesPlot() now uses a local time x-axis
+- `timeseriesPlot()` now uses a local time x-axis
 
 # air-monitor-plots 1.0.1
 
