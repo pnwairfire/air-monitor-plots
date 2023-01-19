@@ -1,5 +1,5 @@
 /**
- * The air-quality-plots module contains functions that generate Highcharts plot
+ * The air-monitor-plots module contains functions that generate Highcharts plot
  * configurations for USFS AirFire "standard" air quality plots. Each ~Config()
  * function accepts arrays of data as well as a `locationName`, `timezone` and
  * `title` associated with the time series and returns a configuration Object

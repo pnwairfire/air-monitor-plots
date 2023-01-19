@@ -1,5 +1,5 @@
 {
-  "name": "air-quality-plots",
+  "name": "air-monitor-plots",
   "version": "1.0.2",
   "description": "USFS AirFire standard plots for air quality data.",
   "main": "index.js",
@@ -9,17 +9,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pnwairfire/air-quality-plots.git"
+    "url": "git+https://github.com/pnwairfire/air-monitor-plots.git"
   },
   "keywords": [
-    "air-quality"
+    "air-monitor"
   ],
   "author": "Jonathan Callahan",
   "license": "SEE LICENSE IN LICENSE",
   "bugs": {
-    "url": "https://github.com/pnwairfire/air-quality-plots/issues"
+    "url": "https://github.com/pnwairfire/air-monitor-plots/issues"
   },
-  "homepage": "https://github.com/pnwairfire/air-quality-plots#readme",
+  "homepage": "https://github.com/pnwairfire/air-monitor-plots#readme",
   "dependencies": {
     "moment-timezone": "^0.5.40",
     "suncalc": "^1.9.0"
