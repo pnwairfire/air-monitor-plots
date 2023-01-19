@@ -1,3 +1,7 @@
+# air-monitor-plots 1.0.2
+
+- timeseriesPlot() now uses a local time x-axis
+
 # air-monitor-plots 1.0.1
 
 Initial release includes the following HighCharts configurations:
