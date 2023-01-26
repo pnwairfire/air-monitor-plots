@@ -30,11 +30,19 @@ export {
   dailyBarplotConfig,
   small_dailyBarplotConfig,
 } from "./dailyBarplot.js";
+
+export {
+  dailyRangeBarplotConfig,
+  small_dailyRangeBarplotConfig,
+} from "./dailyRangeBarplot.js";
+
 export { diurnalPlotConfig, small_diurnalPlotConfig } from "./diurnalPlot.js";
+
 export {
   timeseriesPlotConfig,
   small_timeseriesPlotConfig,
 } from "./timeseriesPlot.js";
+
 export {
   pm25ToColor,
   pm25ToYMax,

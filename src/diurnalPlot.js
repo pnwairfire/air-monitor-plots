@@ -56,7 +56,7 @@ export function diurnalPlotConfig(
   // Create colored series data
   // See:  https://stackoverflow.com/questions/35854947/how-do-i-change-a-specific-bar-color-in-highcharts-bar-chart
 
-  // NOTE:  If the chart width specified in the component html  is too small,
+  // NOTE:  If the chart width specified in the component html is too small,
   // NOTE:  large symbols that would bump into each other will not be drawn.
   let yesterdayData = [];
   for (let i = 0; i < yesterday.length; i++) {
