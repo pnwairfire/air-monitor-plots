@@ -1,3 +1,8 @@
+# air-monitor-plots 1.0.4
+
+- Refactored to use docs/ src/ and test/ directories
+- Added `dailyRangeBarplot()` for extended time ranges.:wq
+
 # air-monitor-plots 1.0.3
 
 - Fixed package name in package.json from ~`air-quality-plots`~ to
