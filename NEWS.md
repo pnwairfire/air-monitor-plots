@@ -1,3 +1,7 @@
+# air-monitor-plots 1.0.5
+
+- Added `hourlyBarplot()`.
+
 # air-monitor-plots 1.0.4
 
 - Refactored to use docs/ src/ and test/ directories

@@ -32,6 +32,11 @@ export {
 } from "./dailyBarplot.js";
 
 export {
+  hourlyBarplotConfig,
+  small_hourlyBarplotConfig,
+} from "./hourlyBarplot.js";
+
+export {
   dailyRangeBarplotConfig,
   small_dailyRangeBarplotConfig,
 } from "./dailyRangeBarplot.js";
