@@ -92,9 +92,9 @@ export function diurnalPlotConfig(
         animation: false,
       },
     },
-    tooltip = {
+    tooltip: {
       shared: true,
-      headerFormat: '{point.key}:00<br/>'
+      headerFormat: "{point.key}:00<br/>",
     },
     title: {
       text: title,
