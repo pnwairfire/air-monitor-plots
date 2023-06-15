@@ -1,3 +1,7 @@
+# air-monitor-plots 1.0.6
+
+- Improved tooltip in `timeseriesPlot()`.
+
 # air-monitor-plots 1.0.5
 
 - Added `hourlyBarplot()`.

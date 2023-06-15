@@ -22,8 +22,8 @@ plotData = {
   title: undefined, // use default title
 };
 
-// chartConfig = timeseriesPlotConfig(plotData);
-chartConfig = hourlyBarplotConfig(plotData);
+chartConfig = timeseriesPlotConfig(plotData);
+// chartConfig = hourlyBarplotConfig(plotData);
 
 console.log(chartConfig);
 
