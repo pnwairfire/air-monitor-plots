@@ -45,16 +45,9 @@ export function timeseriesPlotConfig(
       series: {
         animation: false,
       },
-      scatter: {
-        animation: false,
-        marker: { radius: 3, symbol: "circle", fillColor: "#bbbbbb" },
-      },
-      line: {
-        animation: false,
-        color: "#000",
-        lineWidth: 1,
-        marker: { radius: 1, symbol: "square", fillColor: "transparent" },
-      },
+    },
+    tooltip: {
+      shared: true,
     },
     title: {
       text: title,
@@ -92,11 +85,19 @@ export function timeseriesPlotConfig(
     },
     series: [
       {
-        name: "Hourly PM2.5 Values",
-        type: "scatter",
+        name: "Hourly PM2.5",
+        type: "line",
         pointInterval: 3600 * 1000,
         pointStart: startTime.valueOf(), // milliseconds
         data: data.pm25,
+        lineWidth: 0,
+        color: "transparent",
+        marker: {
+          enabled: true,
+          radius: 3,
+          symbol: "circle",
+          fillColor: "#bbbbbb",
+        },
       },
       {
         name: "Nowcast",
@@ -105,6 +106,8 @@ export function timeseriesPlotConfig(
         pointInterval: 3600 * 1000,
         pointStart: startTime.valueOf(), // milliseconds
         data: data.nowcast,
+        color: "#000",
+        marker: { radius: 1, symbol: "square", fillColor: "transparent" },
       },
     ],
   };

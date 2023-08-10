@@ -1,6 +1,14 @@
-# air-monitor-plots 1.0.6
+# air-monitor-plots 1.0.8
 
 - Fix red-purple threshold. Was 105.5, corrected to 150.5.
+
+# air-monitor-plots 1.0.7
+
+- Version bump
+
+# air-monitor-plots 1.0.6
+
+- Improved tooltip in `timeseriesPlot()`.
 
 # air-monitor-plots 1.0.5
 
