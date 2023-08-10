@@ -1,3 +1,7 @@
+# air-monitor-plots 1.0.6
+
+- Fix red-purple threshold. Was 105.5, corrected to 150.5.
+
 # air-monitor-plots 1.0.5
 
 - Added `hourlyBarplot()`.

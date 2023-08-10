@@ -10,7 +10,7 @@ export function pm25ToColor(pm25) {
       ? "rgb(255,255,0)"
       : pm25 <= 55.5
       ? "rgb(255,126,0)"
-      : pm25 <= 105.5
+      : pm25 <= 150.5
       ? "rgb(255,0,0)"
       : pm25 <= 250
       ? "rgb(143,63,151)"
@@ -121,7 +121,7 @@ export function pm25_addAQIStackedBar(chart, width = 6) {
   // Red
   yhi = chart.yAxis[0].toPixels(55.5);
   if (yhi > ymax_px) {
-    ylo = Math.max(chart.yAxis[0].toPixels(105.5), ymax_px);
+    ylo = Math.max(chart.yAxis[0].toPixels(150.5), ymax_px);
     height = Math.abs(yhi - ylo);
     chart.renderer
       .rect(xlo, ylo, width, height, 1)
@@ -130,7 +130,7 @@ export function pm25_addAQIStackedBar(chart, width = 6) {
   }
 
   // Purple
-  yhi = chart.yAxis[0].toPixels(105.5);
+  yhi = chart.yAxis[0].toPixels(150.5);
   if (yhi > ymax_px) {
     ylo = Math.max(chart.yAxis[0].toPixels(250), ymax_px);
     height = Math.abs(yhi - ylo);
