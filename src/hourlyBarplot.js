@@ -87,7 +87,7 @@ export function hourlyBarplotConfig(
       title: {
         text: "NowCast PM2.5 (\u00b5g/m\u00b3)",
       },
-      plotLines: pm25_AQILines(2),
+      // plotLines: pm25_AQILines(2), // removed as default per Sim Larkin request
     },
     legend: {
       enabled: true,
@@ -183,7 +183,7 @@ export function small_hourlyBarplotConfig(
       title: {
         text: "",
       },
-      plotLines: pm25_AQILines(1),
+      // plotLines: pm25_AQILines(1), // removed as default per Sim Larkin request
     },
     legend: {
       enabled: false,

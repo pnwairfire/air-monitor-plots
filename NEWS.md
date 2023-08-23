@@ -1,3 +1,8 @@
+# air-monitor-plots 1.0.9
+
+- Removed colored lines as a default from hourlyBarplot. They can be added by
+  the calling function.
+
 # air-monitor-plots 1.0.8
 
 - Fix red-purple threshold. Was 105.5, corrected to 150.5.
