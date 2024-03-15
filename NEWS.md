@@ -1,3 +1,8 @@
+# air-monitor-plots 1.1.0
+
+- Updated to allow specification of "NAAQS" parameter -- either "PM2.5" or
+  "PM2.5_2024".
+
 # air-monitor-plots 1.0.9
 
 - Removed colored lines as a default from hourlyBarplot. They can be added by

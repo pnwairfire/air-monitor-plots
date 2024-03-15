@@ -1,20 +1,74 @@
 /**
+ * Returns the Air Quality Category (AQC) level associated a PM2.5 measurement.
+ * @param {number} pm25 PM2.5 value in ug/m3.
+ * @param {string} NAAQS Version of NAAQS to use ("PM2.5" or "PM2.5_2024").
+ */
+export function pm25ToCategory(pm25, NAAQS = "PM2.5") {
+  let catetgory;
+
+  if (NAAQS === "PM2.5") {
+    category =
+      pm25 <= 12
+        ? 1
+        : pm25 <= 35.5
+        ? 2
+        : pm25 <= 55.5
+        ? 3
+        : pm25 <= 150.5
+        ? 4
+        : pm25 <= 250
+        ? 5
+        : 6;
+  } else if (NAAQS === "PM2.5_2024") {
+    category =
+      pm25 <= 12
+        ? 1
+        : pm25 <= 35.5
+        ? 2
+        : pm25 <= 55.5
+        ? 3
+        : pm25 <= 150.5
+        ? 4
+        : pm25 <= 250
+        ? 5
+        : 6;
+  } else {
+    // Default to PM2.5_2024
+    category =
+      pm25 <= 12
+        ? 1
+        : pm25 <= 35.5
+        ? 2
+        : pm25 <= 55.5
+        ? 3
+        : pm25 <= 150.5
+        ? 4
+        : pm25 <= 250
+        ? 5
+        : 6;
+  }
+
+  return category;
+}
+
+/**
  * Returns the AQI color associated with a PM2.5 level.
  * @param {number} pm25 PM2.5 value in ug/m3.
+ * @param {string} NAAQS Version of NAAQS to use ("PM2.5" or "PM2.5_2024").
  */
-export function pm25ToColor(pm25) {
-  let color =
-    pm25 <= 12
-      ? "rgb(0,255,0)"
-      : pm25 <= 35.5
-      ? "rgb(255,255,0)"
-      : pm25 <= 55.5
-      ? "rgb(255,126,0)"
-      : pm25 <= 150.5
-      ? "rgb(255,0,0)"
-      : pm25 <= 250
-      ? "rgb(143,63,151)"
-      : "rgb(126,0,35)";
+export function pm25ToColor(pm25, NAAQS = "PM2.5") {
+  const colors = [
+    "rgb(0,255,0)",
+    "rgb(255,255,0)",
+    "rgb(255,126,0)",
+    "rgb(255,0,0)",
+    "rgb(143,63,151)",
+    "rgb(126,0,35)",
+  ];
+
+  const AQC = pm25ToAQC(pm25, NAAQS);
+
+  const color = colors[AQC - 1];
 
   return color;
 }
@@ -58,14 +112,22 @@ export function pm25ToYMax(pm25) {
  * }
  * ```
  * @param {number} width Line width in pixels.
+ * @param {string} NAAQS Version of NAAQS to use ("PM2.5" or "PM2.5_2024").
  */
-export function pm25_AQILines(width = 2) {
+export function pm25_AQILines(width = 2, NAAQS = "PM2.5") {
+  const NAAQS_thresholds = {
+    "PM2.5": [0, 12, 35, 55, 150, 250],
+    "PM2.5_2024": [0, 9, 35, 55, 125, 225],
+  };
+
+  const thresholds = NAAQS_thresholds[NAAQS];
+
   let lines = [
-    { color: "rgb(255,255,0)", width: width, value: 12 },
-    { color: "rgb(255,126,0)", width: width, value: 35.5 },
-    { color: "rgb(255,0,0)", width: width, value: 55.5 },
-    { color: "rgb(143,63,151)", width: width, value: 150.5 },
-    { color: "rgb(126,0,35)", width: width, value: 250.5 },
+    { color: "rgb(255,255,0)", width: width, value: thresholds[1] },
+    { color: "rgb(255,126,0)", width: width, value: thresholds[2] },
+    { color: "rgb(255,0,0)", width: width, value: thresholds[3] },
+    { color: "rgb(143,63,151)", width: width, value: thresholds[4] },
+    { color: "rgb(126,0,35)", width: width, value: thresholds[5] },
   ];
   return lines;
 }
@@ -74,9 +136,17 @@ export function pm25_AQILines(width = 2) {
  * Draws a stacked bar indicating pm25 AQI levels on the left side of a chart.
  * The chart must already exist. This is not part of chart configuration.
  * @param {Highcharts.chart} chart
+ * @param {string} NAAQS Version of NAAQS to use ("PM2.5" or "PM2.5_2024").
  */
-export function pm25_addAQIStackedBar(chart, width = 6) {
+export function pm25_addAQIStackedBar(chart, width = 6, NAAQS = "PM2.5") {
   // NOTE:  0, 0 is at the top left of the graphic with y increasing downward
+
+  const NAAQS_thresholds = {
+    "PM2.5": [0, 12, 35, 55, 150, 250],
+    "PM2.5_2024": [0, 9, 35, 55, 125, 225],
+  };
+
+  const thresholds = NAAQS_threshold[NAAQS];
 
   let xmin = chart.xAxis[0].min;
   let ymin = chart.yAxis[0].min;
@@ -89,7 +159,7 @@ export function pm25_addAQIStackedBar(chart, width = 6) {
 
   // Green
   let yhi = chart.yAxis[0].toPixels(0);
-  let ylo = Math.max(chart.yAxis[0].toPixels(12), ymax_px);
+  let ylo = Math.max(chart.yAxis[0].toPixels(thresholds[1]), ymax_px);
   let height = Math.abs(yhi - ylo);
   chart.renderer
     .rect(xlo, ylo, width, height, 1)
@@ -97,9 +167,9 @@ export function pm25_addAQIStackedBar(chart, width = 6) {
     .add();
 
   // Yellow
-  yhi = chart.yAxis[0].toPixels(12);
+  yhi = chart.yAxis[0].toPixels(thresholds[1]);
   if (yhi > ymax_px) {
-    ylo = Math.max(chart.yAxis[0].toPixels(35.5), ymax_px);
+    ylo = Math.max(chart.yAxis[0].toPixels(thresholds[2]), ymax_px);
     height = Math.abs(yhi - ylo);
     chart.renderer
       .rect(xlo, ylo, width, height, 1)
@@ -108,9 +178,9 @@ export function pm25_addAQIStackedBar(chart, width = 6) {
   }
 
   // Orange
-  yhi = chart.yAxis[0].toPixels(35.5);
+  yhi = chart.yAxis[0].toPixels(thresholds[2]);
   if (yhi > ymax_px) {
-    ylo = Math.max(chart.yAxis[0].toPixels(55.5), ymax_px);
+    ylo = Math.max(chart.yAxis[0].toPixels(thresholds[3]), ymax_px);
     height = Math.abs(yhi - ylo);
     chart.renderer
       .rect(xlo, ylo, width, height, 1)
@@ -119,9 +189,9 @@ export function pm25_addAQIStackedBar(chart, width = 6) {
   }
 
   // Red
-  yhi = chart.yAxis[0].toPixels(55.5);
+  yhi = chart.yAxis[0].toPixels(thresholds[3]);
   if (yhi > ymax_px) {
-    ylo = Math.max(chart.yAxis[0].toPixels(150.5), ymax_px);
+    ylo = Math.max(chart.yAxis[0].toPixels(thresholds[4]), ymax_px);
     height = Math.abs(yhi - ylo);
     chart.renderer
       .rect(xlo, ylo, width, height, 1)
@@ -130,9 +200,9 @@ export function pm25_addAQIStackedBar(chart, width = 6) {
   }
 
   // Purple
-  yhi = chart.yAxis[0].toPixels(150.5);
+  yhi = chart.yAxis[0].toPixels(thresholds[4]);
   if (yhi > ymax_px) {
-    ylo = Math.max(chart.yAxis[0].toPixels(250), ymax_px);
+    ylo = Math.max(chart.yAxis[0].toPixels(thresholds[5]), ymax_px);
     height = Math.abs(yhi - ylo);
     chart.renderer
       .rect(xlo, ylo, width, height, 1)
@@ -141,7 +211,7 @@ export function pm25_addAQIStackedBar(chart, width = 6) {
   }
 
   // Maroon
-  yhi = chart.yAxis[0].toPixels(250);
+  yhi = chart.yAxis[0].toPixels(thresholds[5]);
   if (yhi > ymax_px) {
     ylo = Math.max(chart.yAxis[0].toPixels(5000), ymax_px);
     height = Math.abs(yhi - ylo);
