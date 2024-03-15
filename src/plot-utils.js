@@ -146,7 +146,7 @@ export function pm25_addAQIStackedBar(chart, width = 6, NAAQS = "PM2.5") {
     "PM2.5_2024": [0, 9, 35, 55, 125, 225],
   };
 
-  const thresholds = NAAQS_threshold[NAAQS];
+  const thresholds = NAAQS_thresholds[NAAQS];
 
   let xmin = chart.xAxis[0].min;
   let ymin = chart.yAxis[0].min;
