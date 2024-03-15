@@ -4,7 +4,7 @@
  * @param {string} NAAQS Version of NAAQS to use ("PM2.5" or "PM2.5_2024").
  */
 export function pm25ToAQC(pm25, NAAQS = "PM2.5") {
-  let catetgory;
+  let category;
 
   if (NAAQS === "PM2.5") {
     category =
