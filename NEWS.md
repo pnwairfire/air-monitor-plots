@@ -1,4 +1,4 @@
-# air-monitor-plots 1.1.1
+# air-monitor-plots 1.1.4
 
 - Fixed levels when "NAAQS" parameter = "PM2.5_2024".
 
@@ -24,7 +24,7 @@
 
 - Improved tooltip in `timeseriesPlot()`.
 
-# air-monitor-plots 1.0.5
+# air-monitor-plots 1.0.5:wq
 
 - Added `hourlyBarplot()`.
 
