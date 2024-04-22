@@ -10,26 +10,26 @@ export function pm25ToAQC(pm25, NAAQS = "PM2.5") {
     category =
       pm25 <= 12
         ? 1
-        : pm25 <= 35.5
+        : pm25 <= 35
         ? 2
-        : pm25 <= 55.5
+        : pm25 <= 55
         ? 3
-        : pm25 <= 150.5
+        : pm25 <= 150
         ? 4
         : pm25 <= 250
         ? 5
         : 6;
   } else if (NAAQS === "PM2.5_2024") {
     category =
-      pm25 <= 12
+      pm25 <= 9
         ? 1
-        : pm25 <= 35.5
+        : pm25 <= 35
         ? 2
-        : pm25 <= 55.5
+        : pm25 <= 55
         ? 3
-        : pm25 <= 150.5
+        : pm25 <= 125
         ? 4
-        : pm25 <= 250
+        : pm25 <= 225
         ? 5
         : 6;
   } else {
@@ -37,11 +37,11 @@ export function pm25ToAQC(pm25, NAAQS = "PM2.5") {
     category =
       pm25 <= 12
         ? 1
-        : pm25 <= 35.5
+        : pm25 <= 35
         ? 2
-        : pm25 <= 55.5
+        : pm25 <= 55
         ? 3
-        : pm25 <= 150.5
+        : pm25 <= 150
         ? 4
         : pm25 <= 250
         ? 5

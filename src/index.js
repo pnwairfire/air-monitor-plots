@@ -49,6 +49,7 @@ export {
 } from "./timeseriesPlot.js";
 
 export {
+  pm25ToAQC,
   pm25ToColor,
   pm25ToYMax,
   pm25_AQILines,

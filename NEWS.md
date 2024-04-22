@@ -1,3 +1,7 @@
+# air-monitor-plots 1.1.1
+
+- Fixed levels when "NAAQS" parameter = "PM2.5_2024".
+
 # air-monitor-plots 1.1.0
 
 - Updated to allow specification of "NAAQS" parameter -- either "PM2.5" or
