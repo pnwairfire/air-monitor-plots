@@ -3,7 +3,7 @@
 - Switching default NAAQS levels from "PM2.5" to "PM2.5_2024" in preparation
 for the May 06, 2024 switch mandated by the US EPA.
 
-# air-monitor-plots 1.1.1
+# air-monitor-plots 1.1.4
 
 - Fixed levels when "NAAQS" parameter = "PM2.5_2024".
 
