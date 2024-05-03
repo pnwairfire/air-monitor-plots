@@ -3,7 +3,7 @@
  * @param {number} pm25 PM2.5 value in ug/m3.
  * @param {string} NAAQS Version of NAAQS to use ("PM2.5" or "PM2.5_2024").
  */
-export function pm25ToAQC(pm25, NAAQS = "PM2.5") {
+export function pm25ToAQC(pm25, NAAQS = "PM2.5_2024") {
   let category;
 
   if (NAAQS === "PM2.5") {
@@ -56,7 +56,7 @@ export function pm25ToAQC(pm25, NAAQS = "PM2.5") {
  * @param {number} pm25 PM2.5 value in ug/m3.
  * @param {string} NAAQS Version of NAAQS to use ("PM2.5" or "PM2.5_2024").
  */
-export function pm25ToColor(pm25, NAAQS = "PM2.5") {
+export function pm25ToColor(pm25, NAAQS = "PM2.5_2024") {
   const colors = [
     "rgb(0,255,0)",
     "rgb(255,255,0)",
@@ -114,7 +114,7 @@ export function pm25ToYMax(pm25) {
  * @param {number} width Line width in pixels.
  * @param {string} NAAQS Version of NAAQS to use ("PM2.5" or "PM2.5_2024").
  */
-export function pm25_AQILines(width = 2, NAAQS = "PM2.5") {
+export function pm25_AQILines(width = 2, NAAQS = "PM2.5_2024") {
   const NAAQS_thresholds = {
     "PM2.5": [0, 12, 35, 55, 150, 250],
     "PM2.5_2024": [0, 9, 35, 55, 125, 225],
@@ -138,7 +138,7 @@ export function pm25_AQILines(width = 2, NAAQS = "PM2.5") {
  * @param {Highcharts.chart} chart
  * @param {string} NAAQS Version of NAAQS to use ("PM2.5" or "PM2.5_2024").
  */
-export function pm25_addAQIStackedBar(chart, width = 6, NAAQS = "PM2.5") {
+export function pm25_addAQIStackedBar(chart, width = 6, NAAQS = "PM2.5_2024") {
   // NOTE:  0, 0 is at the top left of the graphic with y increasing downward
 
   const NAAQS_thresholds = {
