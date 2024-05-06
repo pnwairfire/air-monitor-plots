@@ -1,3 +1,7 @@
+# air-monitor-plots 1.2.1
+
+- Fixing PM2.5_2024 NAAQS levels.
+
 # air-monitor-plots 1.2.0
 
 - Switching default NAAQS levels from "PM2.5" to "PM2.5_2024" in preparation

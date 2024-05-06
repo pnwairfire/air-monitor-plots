@@ -10,40 +10,40 @@ export function pm25ToAQC(pm25, NAAQS = "PM2.5_2024") {
     category =
       pm25 <= 12
         ? 1
-        : pm25 <= 35
+        : pm25 <= 35.4
         ? 2
-        : pm25 <= 55
+        : pm25 <= 55.4
         ? 3
-        : pm25 <= 150
+        : pm25 <= 150.4
         ? 4
-        : pm25 <= 250
+        : pm25 <= 250.4
         ? 5
         : 6;
   } else if (NAAQS === "PM2.5_2024") {
     category =
       pm25 <= 9
         ? 1
-        : pm25 <= 35
+        : pm25 <= 35.4
         ? 2
-        : pm25 <= 55
+        : pm25 <= 55.4
         ? 3
-        : pm25 <= 125
+        : pm25 <= 125.4
         ? 4
-        : pm25 <= 225
+        : pm25 <= 225.4
         ? 5
         : 6;
   } else {
     // Default to PM2.5_2024
     category =
-      pm25 <= 12
+      pm25 <= 9
         ? 1
-        : pm25 <= 35
+        : pm25 <= 35.4
         ? 2
-        : pm25 <= 55
+        : pm25 <= 55.4
         ? 3
-        : pm25 <= 150
+        : pm25 <= 125.4
         ? 4
-        : pm25 <= 250
+        : pm25 <= 225.4
         ? 5
         : 6;
   }
@@ -116,8 +116,8 @@ export function pm25ToYMax(pm25) {
  */
 export function pm25_AQILines(width = 2, NAAQS = "PM2.5_2024") {
   const NAAQS_thresholds = {
-    "PM2.5": [0, 12, 35, 55, 150, 250],
-    "PM2.5_2024": [0, 9, 35, 55, 125, 225],
+    "PM2.5": [0, 12, 35.4, 55.4, 150.4, 250.4],
+    "PM2.5_2024": [0, 9, 35.4, 55.4, 125.4, 225.4],
   };
 
   const thresholds = NAAQS_thresholds[NAAQS];
@@ -142,8 +142,8 @@ export function pm25_addAQIStackedBar(chart, width = 6, NAAQS = "PM2.5_2024") {
   // NOTE:  0, 0 is at the top left of the graphic with y increasing downward
 
   const NAAQS_thresholds = {
-    "PM2.5": [0, 12, 35, 55, 150, 250],
-    "PM2.5_2024": [0, 9, 35, 55, 125, 225],
+    "PM2.5": [0, 12, 35.4, 55.4, 150.4, 250.4],
+    "PM2.5_2024": [0, 9, 35.4, 55.4, 125.4, 225.4],
   };
 
   const thresholds = NAAQS_thresholds[NAAQS];
