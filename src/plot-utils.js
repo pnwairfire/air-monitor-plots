@@ -40,7 +40,10 @@ export function pm25ToColor(pm25) {
 
   const AQC = pm25ToAQC(pm25);
 
-  const color = colors[AQC - 1];
+  const color =
+    AQC == null
+      ? "rgb(187,187,187)" // #bbb
+      : colors[AQC - 1];
 
   return color;
 }

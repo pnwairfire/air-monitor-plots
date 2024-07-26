@@ -1,3 +1,7 @@
+# air-monitor-plots 1.2.4
+
+- pm25ToColor() now returns light gray for null values.
+
 # air-monitor-plots 1.2.3
 
 - Remove NAAQS argument and, instead, always use 2024 PM2.5 NAAQS levels.
