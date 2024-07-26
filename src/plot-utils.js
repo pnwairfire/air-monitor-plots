@@ -1,52 +1,25 @@
 /**
  * Returns the Air Quality Category (AQC) level associated a PM2.5 measurement.
  * @param {number} pm25 PM2.5 value in ug/m3.
- * @param {string} NAAQS Version of NAAQS to use ("PM2.5" or "PM2.5_2024").
  */
-export function pm25ToAQC(pm25, NAAQS = "PM2.5") {
+export function pm25ToAQC(pm25) {
   let category;
 
-  if (NAAQS === "PM2.5") {
-    category =
-      pm25 <= 12
-        ? 1
-        : pm25 <= 35
-        ? 2
-        : pm25 <= 55
-        ? 3
-        : pm25 <= 150
-        ? 4
-        : pm25 <= 250
-        ? 5
-        : 6;
-  } else if (NAAQS === "PM2.5_2024") {
-    category =
-      pm25 <= 9
-        ? 1
-        : pm25 <= 35
-        ? 2
-        : pm25 <= 55
-        ? 3
-        : pm25 <= 125
-        ? 4
-        : pm25 <= 225
-        ? 5
-        : 6;
-  } else {
-    // Default to PM2.5_2024
-    category =
-      pm25 <= 12
-        ? 1
-        : pm25 <= 35
-        ? 2
-        : pm25 <= 55
-        ? 3
-        : pm25 <= 150
-        ? 4
-        : pm25 <= 250
-        ? 5
-        : 6;
-  }
+  // New, 2024 NAAQS levels
+  category =
+    pm25 == null
+      ? null
+      : pm25 <= 9
+      ? 1
+      : pm25 <= 35.4
+      ? 2
+      : pm25 <= 55.4
+      ? 3
+      : pm25 <= 125.4
+      ? 4
+      : pm25 <= 225.4
+      ? 5
+      : 6;
 
   return category;
 }
@@ -54,9 +27,8 @@ export function pm25ToAQC(pm25, NAAQS = "PM2.5") {
 /**
  * Returns the AQI color associated with a PM2.5 level.
  * @param {number} pm25 PM2.5 value in ug/m3.
- * @param {string} NAAQS Version of NAAQS to use ("PM2.5" or "PM2.5_2024").
  */
-export function pm25ToColor(pm25, NAAQS = "PM2.5") {
+export function pm25ToColor(pm25) {
   const colors = [
     "rgb(0,255,0)",
     "rgb(255,255,0)",
@@ -66,7 +38,7 @@ export function pm25ToColor(pm25, NAAQS = "PM2.5") {
     "rgb(126,0,35)",
   ];
 
-  const AQC = pm25ToAQC(pm25, NAAQS);
+  const AQC = pm25ToAQC(pm25);
 
   const color = colors[AQC - 1];
 
@@ -112,15 +84,10 @@ export function pm25ToYMax(pm25) {
  * }
  * ```
  * @param {number} width Line width in pixels.
- * @param {string} NAAQS Version of NAAQS to use ("PM2.5" or "PM2.5_2024").
  */
-export function pm25_AQILines(width = 2, NAAQS = "PM2.5") {
-  const NAAQS_thresholds = {
-    "PM2.5": [0, 12, 35, 55, 150, 250],
-    "PM2.5_2024": [0, 9, 35, 55, 125, 225],
-  };
-
-  const thresholds = NAAQS_thresholds[NAAQS];
+export function pm25_AQILines(width = 2) {
+  // New, 2024 NAAQS levels
+  const thresholds = [0, 9, 35.4, 55.4, 125.4, 225.4];
 
   let lines = [
     { color: "rgb(255,255,0)", width: width, value: thresholds[1] },
@@ -136,17 +103,11 @@ export function pm25_AQILines(width = 2, NAAQS = "PM2.5") {
  * Draws a stacked bar indicating pm25 AQI levels on the left side of a chart.
  * The chart must already exist. This is not part of chart configuration.
  * @param {Highcharts.chart} chart
- * @param {string} NAAQS Version of NAAQS to use ("PM2.5" or "PM2.5_2024").
  */
-export function pm25_addAQIStackedBar(chart, width = 6, NAAQS = "PM2.5") {
+export function pm25_addAQIStackedBar(chart, width = 6) {
   // NOTE:  0, 0 is at the top left of the graphic with y increasing downward
 
-  const NAAQS_thresholds = {
-    "PM2.5": [0, 12, 35, 55, 150, 250],
-    "PM2.5_2024": [0, 9, 35, 55, 125, 225],
-  };
-
-  const thresholds = NAAQS_thresholds[NAAQS];
+  const thresholds = [0, 9, 35.4, 55.4, 125.4, 225.4];
 
   let xmin = chart.xAxis[0].min;
   let ymin = chart.yAxis[0].min;
