@@ -1,6 +1,18 @@
-# air-monitor-plots 1.2.2
+# air-monitor-plots 1.2.5
 
 - Fixed timezone display bug in timeseries and hourly plots.
+
+# air-monitor-plots 1.2.4
+
+- pm25ToColor() now returns light gray for null values.
+
+# air-monitor-plots 1.2.3
+
+- Remove NAAQS argument and, instead, always use 2024 PM2.5 NAAQS levels.
+
+# air-monitor-plots 1.2.2
+
+code merge
 
 # air-monitor-plots 1.2.1
 
@@ -9,7 +21,7 @@
 # air-monitor-plots 1.2.0
 
 - Switching default NAAQS levels from "PM2.5" to "PM2.5_2024" in preparation
-for the May 06, 2024 switch mandated by the US EPA.
+  for the May 06, 2024 switch mandated by the US EPA.
 
 # air-monitor-plots 1.1.4
 

@@ -1,6 +1,10 @@
 {
   "name": "air-monitor-plots",
+<<<<<<< HEAD
   "version": "1.2.2",
+=======
+  "version": "1.2.4",
+>>>>>>> 29f3c4cd5a4b25a74da89d5cf3926046aa76d92f
   "description": "USFS AirFire standard plots for air quality data.",
   "main": "./src/index.js",
   "type": "module",
