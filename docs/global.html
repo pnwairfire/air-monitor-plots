@@ -515,7 +515,304 @@
     
 
     
-    <h4 class="name" id="pm25ToColor"><span class="type-signature"></span>pm25ToColor<span class="signature">(pm25)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="hourlyBarplotConfig"><span class="type-signature"></span>hourlyBarplotConfig<span class="signature">(data)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Returns a timeseriesPlot chart configuration.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The data required to create the chart.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="hourlyBarplot.js.html">hourlyBarplot.js</a>, <a href="hourlyBarplot.js.html#line11">line 11</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="pm25ToAQC"><span class="type-signature"></span>pm25ToAQC<span class="signature">(pm25, NAAQS)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Returns the Air Quality Category (AQC) level associated a PM2.5 measurement.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>pm25</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>PM2.5 value in ug/m3.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>NAAQS</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Version of NAAQS to use (&quot;PM2.5&quot; or &quot;PM2.5_2024&quot;).</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="plot-utils.js.html">plot-utils.js</a>, <a href="plot-utils.js.html#line6">line 6</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="pm25ToColor"><span class="type-signature"></span>pm25ToColor<span class="signature">(pm25, NAAQS)</span><span class="type-signature"></span></h4>
     
 
     
@@ -579,6 +876,29 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>NAAQS</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Version of NAAQS to use (&quot;PM2.5&quot; or &quot;PM2.5_2024&quot;).</p></td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -616,7 +936,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="plot-utils.js.html">plot-utils.js</a>, <a href="plot-utils.js.html#line5">line 5</a>
+        <a href="plot-utils.js.html">plot-utils.js</a>, <a href="plot-utils.js.html#line59">line 59</a>
     </li></ul></dd>
     
 
@@ -754,7 +1074,7 @@ Having a finite set of ymax values prevents the y-scale from jumping around too 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="plot-utils.js.html">plot-utils.js</a>, <a href="plot-utils.js.html#line27">line 27</a>
+        <a href="plot-utils.js.html">plot-utils.js</a>, <a href="plot-utils.js.html#line81">line 81</a>
     </li></ul></dd>
     
 
@@ -790,7 +1110,7 @@ Having a finite set of ymax values prevents the y-scale from jumping around too 
     
 
     
-    <h4 class="name" id="pm25_AQILines"><span class="type-signature"></span>pm25_AQILines<span class="signature">(width)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="pm25_AQILines"><span class="type-signature"></span>pm25_AQILines<span class="signature">(width, NAAQS)</span><span class="type-signature"></span></h4>
     
 
     
@@ -861,6 +1181,29 @@ in micrograms per meter cubed.</p>
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>NAAQS</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Version of NAAQS to use (&quot;PM2.5&quot; or &quot;PM2.5_2024&quot;).</p></td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -898,7 +1241,7 @@ in micrograms per meter cubed.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="plot-utils.js.html">plot-utils.js</a>, <a href="plot-utils.js.html#line62">line 62</a>
+        <a href="plot-utils.js.html">plot-utils.js</a>, <a href="plot-utils.js.html#line117">line 117</a>
     </li></ul></dd>
     
 
@@ -934,7 +1277,7 @@ in micrograms per meter cubed.</p>
     
 
     
-    <h4 class="name" id="pm25_addAQIStackedBar"><span class="type-signature"></span>pm25_addAQIStackedBar<span class="signature">(chart)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="pm25_addAQIStackedBar"><span class="type-signature"></span>pm25_addAQIStackedBar<span class="signature">(chart, NAAQS)</span><span class="type-signature"></span></h4>
     
 
     
@@ -999,6 +1342,29 @@ The chart must already exist. This is not part of chart configuration.</p>
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>NAAQS</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Version of NAAQS to use (&quot;PM2.5&quot; or &quot;PM2.5_2024&quot;).</p></td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -1036,7 +1402,7 @@ The chart must already exist. This is not part of chart configuration.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="plot-utils.js.html">plot-utils.js</a>, <a href="plot-utils.js.html#line78">line 78</a>
+        <a href="plot-utils.js.html">plot-utils.js</a>, <a href="plot-utils.js.html#line141">line 141</a>
     </li></ul></dd>
     
 
@@ -1453,7 +1819,146 @@ appropriate for use in a display with &quot;small multiples&quot;.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="diurnalPlot.js.html">diurnalPlot.js</a>, <a href="diurnalPlot.js.html#line191">line 191</a>
+        <a href="diurnalPlot.js.html">diurnalPlot.js</a>, <a href="diurnalPlot.js.html#line195">line 195</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="small_hourlyBarplotConfig"><span class="type-signature"></span>small_hourlyBarplotConfig<span class="signature">(data)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Returns a timeseriesPlot chart configuration.
+The 'small' version of this plot has no legend or axis labeling and is
+appropriate for use in a display with &quot;small multiples&quot;.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The data required to create the chart.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="hourlyBarplot.js.html">hourlyBarplot.js</a>, <a href="hourlyBarplot.js.html#line116">line 116</a>
     </li></ul></dd>
     
 
@@ -1592,7 +2097,7 @@ appropriate for use in a display with &quot;small multiples&quot;.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="timeseriesPlot.js.html">timeseriesPlot.js</a>, <a href="timeseriesPlot.js.html#line121">line 121</a>
+        <a href="timeseriesPlot.js.html">timeseriesPlot.js</a>, <a href="timeseriesPlot.js.html#line124">line 124</a>
     </li></ul></dd>
     
 
@@ -1775,13 +2280,13 @@ appropriate for use in a display with &quot;small multiples&quot;.</p>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#dailyBarplotConfig">dailyBarplotConfig</a></li><li><a href="global.html#dailyRangeBarplotConfig">dailyRangeBarplotConfig</a></li><li><a href="global.html#diurnalPlotConfig">diurnalPlotConfig</a></li><li><a href="global.html#pm25ToColor">pm25ToColor</a></li><li><a href="global.html#pm25ToYMax">pm25ToYMax</a></li><li><a href="global.html#pm25_AQILines">pm25_AQILines</a></li><li><a href="global.html#pm25_addAQIStackedBar">pm25_addAQIStackedBar</a></li><li><a href="global.html#small_dailyBarplotConfig">small_dailyBarplotConfig</a></li><li><a href="global.html#small_dailyRangeBarplotConfig">small_dailyRangeBarplotConfig</a></li><li><a href="global.html#small_diurnalPlotConfig">small_diurnalPlotConfig</a></li><li><a href="global.html#small_timeseriesPlotConfig">small_timeseriesPlotConfig</a></li><li><a href="global.html#timeseriesPlotConfig">timeseriesPlotConfig</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#dailyBarplotConfig">dailyBarplotConfig</a></li><li><a href="global.html#dailyRangeBarplotConfig">dailyRangeBarplotConfig</a></li><li><a href="global.html#diurnalPlotConfig">diurnalPlotConfig</a></li><li><a href="global.html#hourlyBarplotConfig">hourlyBarplotConfig</a></li><li><a href="global.html#pm25ToAQC">pm25ToAQC</a></li><li><a href="global.html#pm25ToColor">pm25ToColor</a></li><li><a href="global.html#pm25ToYMax">pm25ToYMax</a></li><li><a href="global.html#pm25_AQILines">pm25_AQILines</a></li><li><a href="global.html#pm25_addAQIStackedBar">pm25_addAQIStackedBar</a></li><li><a href="global.html#small_dailyBarplotConfig">small_dailyBarplotConfig</a></li><li><a href="global.html#small_dailyRangeBarplotConfig">small_dailyRangeBarplotConfig</a></li><li><a href="global.html#small_diurnalPlotConfig">small_diurnalPlotConfig</a></li><li><a href="global.html#small_hourlyBarplotConfig">small_hourlyBarplotConfig</a></li><li><a href="global.html#small_timeseriesPlotConfig">small_timeseriesPlotConfig</a></li><li><a href="global.html#timeseriesPlotConfig">timeseriesPlotConfig</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Thu Jan 26 2023 10:38:10 GMT-0800 (Pacific Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Thu Aug 22 2024 15:39:02 GMT+0200 (Central European Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

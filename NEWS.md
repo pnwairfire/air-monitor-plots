@@ -1,3 +1,7 @@
+# air-monitor-plots 1.2.2
+
+- Fixed timezone display bug in timeseries and hourly plots.
+
 # air-monitor-plots 1.2.1
 
 - Fixing PM2.5_2024 NAAQS levels.

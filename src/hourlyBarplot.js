@@ -67,7 +67,7 @@ export function hourlyBarplotConfig(
     },
     time: {
       timezone: data.timezone,
-      useUTC: false,
+      useUTC: true,
     },
     xAxis: {
       type: "datetime",
@@ -171,7 +171,7 @@ export function small_hourlyBarplotConfig(
     },
     time: {
       timezone: data.timezone,
-      useUTC: false,
+      useUTC: true,
     },
     xAxis: {
       type: "datetime",

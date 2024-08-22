@@ -54,7 +54,7 @@ export function timeseriesPlotConfig(
     },
     time: {
       timezone: data.timezone,
-      useUTC: false,
+      useUTC: true,
     },
     xAxis: {
       type: "datetime",
@@ -173,7 +173,7 @@ export function small_timeseriesPlotConfig(
     },
     time: {
       timezone: data.timezone,
-      useUTC: false,
+      useUTC: true,
     },
     xAxis: {
       type: "datetime",
