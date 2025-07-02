@@ -37,10 +37,7 @@ export function hourlyBarplotConfig(
   let ymin = 0;
   let ymax = pm25ToYMax(Math.max(...data.nowcast));
 
-  let title = data.title;
-  if (data.title === undefined) {
-    title = data.locationName;
-  }
+  const title = data.title ?? data.locationName;
 
   // ----- Chart configuration --------------------------------
 
@@ -142,10 +139,7 @@ export function small_hourlyBarplotConfig(
   let ymin = 0;
   let ymax = pm25ToYMax(Math.max(...data.nowcast));
 
-  let title = data.title;
-  if (data.title === undefined) {
-    title = data.locationName;
-  }
+  const title = data.title ?? data.locationName;
 
   // ----- Chart configuration --------------------------------
 

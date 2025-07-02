@@ -43,15 +43,15 @@
 
 // =============================================================================
 
-import { pm25ToAQC, pm25ToColor } from "../src/index.js";
+// import { pm25ToAQC, pm25ToColor } from "../src/index.js";
 
-const pm25 = [0, null, 9, 10, 30, 40, null, 50, 60, 180, 300];
+// const pm25 = [0, null, 9, 10, 30, 40, null, 50, 60, 180, 300];
 
-let a, b;
-for (let i = 0; i < pm25.length; i++) {
-  a = pm25ToColor(pm25[i]);
-}
+// let a, b;
+// for (let i = 0; i < pm25.length; i++) {
+//   a = pm25ToColor(pm25[i]);
+// }
 
-b = pm25.map((o) => pm25ToColor(o));
+// b = pm25.map((o) => pm25ToColor(o));
 
-let c = 1;
+// let c = 1;

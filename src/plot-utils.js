@@ -134,3 +134,57 @@ export function pm25_addAQIStackedBar(chart, width = 6) {
   }
 }
 
+/**
+ * Validate the input data arrays for hourly or time series plots.
+ *
+ * @param {Date[]} datetime - Array of JavaScript Date objects in UTC.
+ * @param {(number|null)[]} pm25 - Array of PM2.5 values (finite or null).
+ * @param {(number|null)[]} nowcast - Array of NowCast values (finite or null).
+ * @throws {Error} If input is invalid in structure or type.
+ */
+export function validatePlotArrays(datetime, pm25, nowcast) {
+  // Presence check
+  if (!Array.isArray(datetime) || !Array.isArray(pm25) || !Array.isArray(nowcast)) {
+    throw new Error("Input arrays must be defined and of type Array");
+  }
+
+  // Length check
+  const len = datetime.length;
+  if (pm25.length !== len || nowcast.length !== len) {
+    throw new Error(`All arrays must have the same length. Got: datetime(${len}), pm25(${pm25.length}), nowcast(${nowcast.length})`);
+  }
+
+  // Datetime: must be Date objects and in UTC
+  for (let i = 0; i < len; i++) {
+    const d = datetime[i];
+    if (!(d instanceof Date) || isNaN(d.getTime())) {
+      throw new Error(`Invalid datetime at index ${i}: expected Date object, got ${d}`);
+    }
+    if (d.getTimezoneOffset() !== 0) {
+      throw new Error(`Datetime at index ${i} is not in UTC: offset=${d.getTimezoneOffset()} minutes`);
+    }
+  }
+
+  // Check if datetimes are increasing
+  let warned = false;
+  for (let i = 1; i < len; i++) {
+    if (datetime[i].getTime() <= datetime[i - 1].getTime()) {
+      if (!warned) {
+        console.warn("⚠️ Warning: datetime array is not strictly increasing");
+        warned = true;
+      }
+      console.warn(`↳ Non-increasing at index ${i - 1} → ${i}: ${datetime[i - 1].toISOString()} >= ${datetime[i].toISOString()}`);
+    }
+  }
+
+  // pm25 and nowcast must be finite numbers or null
+  const isValidValue = (v) => v === null || (typeof v === "number" && isFinite(v));
+  for (let i = 0; i < len; i++) {
+    if (!isValidValue(pm25[i])) {
+      throw new Error(`Invalid pm25 value at index ${i}: ${pm25[i]}`);
+    }
+    if (!isValidValue(nowcast[i])) {
+      throw new Error(`Invalid nowcast value at index ${i}: ${nowcast[i]}`);
+    }
+  }
+}
