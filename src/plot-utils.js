@@ -1,187 +1,136 @@
 /**
- * Returns the Air Quality Category (AQC) level associated a PM2.5 measurement.
- * @param {number} pm25 PM2.5 value in ug/m3.
+ * Utilities for mapping PM2.5 values to Air Quality Categories (AQC),
+ * AQI colors, y-axis limits, and visual elements in Highcharts plots.
+ */
+
+// ------------------------------------------------------------------
+// Constants
+// ------------------------------------------------------------------
+
+/**
+ * 2024 NAAQS PM2.5 thresholds in µg/m³ for AQI categories.
+ */
+const AQI_THRESHOLDS = [0, 9, 35.4, 55.4, 125.4, 225.4];
+
+/**
+ * RGB colors corresponding to AQI categories 1 through 6.
+ */
+const AQI_COLORS = [
+  "rgb(0,255,0)",      // Green
+  "rgb(255,255,0)",    // Yellow
+  "rgb(255,126,0)",    // Orange
+  "rgb(255,0,0)",      // Red
+  "rgb(143,63,151)",   // Purple
+  "rgb(126,0,35)",     // Maroon
+];
+
+/**
+ * Returns true if the given value is a finite number.
+ * @param {*} value
+ * @returns {boolean}
+ */
+function isValidPM25(value) {
+  return typeof value === 'number' && isFinite(value);
+}
+
+// ------------------------------------------------------------------
+// Core Utilities
+// ------------------------------------------------------------------
+
+/**
+ * Returns the Air Quality Category (AQC) level associated with a PM2.5 measurement.
+ * Categories range from 1 (Good) to 6 (Hazardous).
+ *
+ * @param {number} pm25 - PM2.5 concentration in µg/m³.
+ * @returns {number|null} AQC level (1–6), or null if input is invalid.
  */
 export function pm25ToAQC(pm25) {
-  let category;
+  if (!isValidPM25(pm25)) return null;
 
-  // New, 2024 NAAQS levels
-  category =
-    pm25 == null
-      ? null
-      : pm25 <= 9
-      ? 1
-      : pm25 <= 35.4
-      ? 2
-      : pm25 <= 55.4
-      ? 3
-      : pm25 <= 125.4
-      ? 4
-      : pm25 <= 225.4
-      ? 5
-      : 6;
-
-  return category;
+  if (pm25 <= 9) return 1;
+  if (pm25 <= 35.4) return 2;
+  if (pm25 <= 55.4) return 3;
+  if (pm25 <= 125.4) return 4;
+  if (pm25 <= 225.4) return 5;
+  return 6;
 }
 
 /**
  * Returns the AQI color associated with a PM2.5 level.
- * @param {number} pm25 PM2.5 value in ug/m3.
+ *
+ * @param {number} pm25 - PM2.5 concentration in µg/m³.
+ * @returns {string} RGB color string.
  */
 export function pm25ToColor(pm25) {
-  const colors = [
-    "rgb(0,255,0)",
-    "rgb(255,255,0)",
-    "rgb(255,126,0)",
-    "rgb(255,0,0)",
-    "rgb(143,63,151)",
-    "rgb(126,0,35)",
-  ];
-
   const AQC = pm25ToAQC(pm25);
-
-  const color =
-    AQC == null
-      ? "rgb(187,187,187)" // #bbb
-      : colors[AQC - 1];
-
-  return color;
+  return AQC == null ? "rgb(187,187,187)" : AQI_COLORS[AQC - 1];
 }
 
 /**
  * Returns the ymax value appropriate for a maximum PM2.5 level.
- * Having a finite set of ymax values prevents the y-scale from jumping around too much.
- * @param {number} pm25 Maximum PM2.5 value in ug/m3.
+ * Uses fixed breakpoints to prevent charts from autoscaling too wildly.
+ *
+ * @param {number} pm25 - Maximum PM2.5 value in µg/m³.
+ * @returns {number} Suggested y-axis maximum.
  */
 export function pm25ToYMax(pm25) {
-  // See:  https://github.com/MazamaScience/AirMonitorPlots/blob/5482843e8e0ccfe1e30ccf21509d0df01fe45bca/R/custom_pm25TimeseriesScales.R#L103
-  let ymax =
-    pm25 <= 50
-      ? 50
-      : pm25 <= 100
-      ? 100
-      : pm25 <= 200
-      ? 200
-      : pm25 <= 400
-      ? 500
-      : pm25 <= 600
-      ? 600
-      : pm25 <= 1000
-      ? 1000
-      : pm25 <= 1500
-      ? 1500
-      : 1.05 * pm25;
+  if (!isValidPM25(pm25)) return 50;
 
-  return ymax;
+  if (pm25 <= 50) return 50;
+  if (pm25 <= 100) return 100;
+  if (pm25 <= 200) return 200;
+  if (pm25 <= 400) return 500;
+  if (pm25 <= 600) return 600;
+  if (pm25 <= 1000) return 1000;
+  if (pm25 <= 1500) return 1500;
+
+  return 1.05 * pm25;
 }
 
 /**
- * Returns an array of objects with {color, width, value} properties. These
- * can be used to add colored AQI lines to plots with a PM2.5 axis measured
- * in micrograms per meter cubed.
+ * Returns an array of plotLine objects for overlaying AQI thresholds on a Highcharts yAxis.
  *
- * Usage in a Highcharts configuration:
- * ```
- * yaxis: {
- *   plotlines: pm25_AQILines(),
- * }
- * ```
- * @param {number} width Line width in pixels.
+ * @param {number} [width=2] - Line width in pixels.
+ * @returns {Array<Object>} Highcharts-compatible `plotLines` array.
  */
 export function pm25_AQILines(width = 2) {
-  // New, 2024 NAAQS levels
-  const thresholds = [0, 9, 35.4, 55.4, 125.4, 225.4];
-
-  let lines = [
-    { color: "rgb(255,255,0)", width: width, value: thresholds[1] },
-    { color: "rgb(255,126,0)", width: width, value: thresholds[2] },
-    { color: "rgb(255,0,0)", width: width, value: thresholds[3] },
-    { color: "rgb(143,63,151)", width: width, value: thresholds[4] },
-    { color: "rgb(126,0,35)", width: width, value: thresholds[5] },
-  ];
-  return lines;
+  return AQI_THRESHOLDS.slice(1).map((value, i) => ({
+    color: AQI_COLORS[i + 1], // start from yellow
+    width,
+    value,
+  }));
 }
 
 /**
- * Draws a stacked bar indicating pm25 AQI levels on the left side of a chart.
- * The chart must already exist. This is not part of chart configuration.
- * @param {Highcharts.chart} chart
+ * Adds a colored AQI stacked bar to the left side of an existing Highcharts chart.
+ * Intended to provide a visual reference for AQI zones.
+ *
+ * @param {Highcharts.Chart} chart - A fully rendered Highcharts chart.
+ * @param {number} [width=6] - Width of the AQI bar in pixels.
  */
 export function pm25_addAQIStackedBar(chart, width = 6) {
-  // NOTE:  0, 0 is at the top left of the graphic with y increasing downward
-
-  const thresholds = [0, 9, 35.4, 55.4, 125.4, 225.4];
-
-  let xmin = chart.xAxis[0].min;
-  let ymin = chart.yAxis[0].min;
-  let ymax = chart.yAxis[0].max;
-  let ymax_px = chart.yAxis[0].toPixels(ymax);
-
-  let xlo = chart.xAxis[0].left; // leftmost pixel of the plot area
-  // let xhi = xlo + 8;
-  // let width = Math.abs(xhi - xlo);
-
-  // Green
-  let yhi = chart.yAxis[0].toPixels(0);
-  let ylo = Math.max(chart.yAxis[0].toPixels(thresholds[1]), ymax_px);
-  let height = Math.abs(yhi - ylo);
-  chart.renderer
-    .rect(xlo, ylo, width, height, 1)
-    .attr({ fill: "rgb(0,255,0)", stroke: "transparent" })
-    .add();
-
-  // Yellow
-  yhi = chart.yAxis[0].toPixels(thresholds[1]);
-  if (yhi > ymax_px) {
-    ylo = Math.max(chart.yAxis[0].toPixels(thresholds[2]), ymax_px);
-    height = Math.abs(yhi - ylo);
-    chart.renderer
-      .rect(xlo, ylo, width, height, 1)
-      .attr({ fill: "rgb(255,255,0)", stroke: "transparent" })
-      .add();
+  if (!chart?.xAxis?.[0] || !chart?.yAxis?.[0] || !chart?.renderer) {
+    console.warn("Invalid chart object passed to pm25_addAQIStackedBar.");
+    return;
   }
 
-  // Orange
-  yhi = chart.yAxis[0].toPixels(thresholds[2]);
-  if (yhi > ymax_px) {
-    ylo = Math.max(chart.yAxis[0].toPixels(thresholds[3]), ymax_px);
-    height = Math.abs(yhi - ylo);
-    chart.renderer
-      .rect(xlo, ylo, width, height, 1)
-      .attr({ fill: "rgb(255,126,0)", stroke: "transparent" })
-      .add();
-  }
+  width = Math.max(1, Number(width) || 6);
 
-  // Red
-  yhi = chart.yAxis[0].toPixels(thresholds[3]);
-  if (yhi > ymax_px) {
-    ylo = Math.max(chart.yAxis[0].toPixels(thresholds[4]), ymax_px);
-    height = Math.abs(yhi - ylo);
-    chart.renderer
-      .rect(xlo, ylo, width, height, 1)
-      .attr({ fill: "rgb(255,0,0)", stroke: "transparent" })
-      .add();
-  }
+  const yAxis = chart.yAxis[0];
+  const xlo = chart.xAxis[0].left;
+  const ymax_px = yAxis.toPixels(yAxis.max);
 
-  // Purple
-  yhi = chart.yAxis[0].toPixels(thresholds[4]);
-  if (yhi > ymax_px) {
-    ylo = Math.max(chart.yAxis[0].toPixels(thresholds[5]), ymax_px);
-    height = Math.abs(yhi - ylo);
-    chart.renderer
-      .rect(xlo, ylo, width, height, 1)
-      .attr({ fill: "rgb(143,63,151)", stroke: "transparent" })
-      .add();
-  }
-
-  // Maroon
-  yhi = chart.yAxis[0].toPixels(thresholds[5]);
-  if (yhi > ymax_px) {
-    ylo = Math.max(chart.yAxis[0].toPixels(5000), ymax_px);
-    height = Math.abs(yhi - ylo);
-    chart.renderer
-      .rect(xlo, ylo, width, height, 1)
-      .attr({ fill: "rgb(126,0,35)", stroke: "transparent" })
-      .add();
+  for (let i = 0; i < AQI_THRESHOLDS.length - 1; i++) {
+    const yhi = yAxis.toPixels(AQI_THRESHOLDS[i]);
+    const nextThreshold = AQI_THRESHOLDS[i + 1] ?? 5000;
+    if (yhi > ymax_px) {
+      const ylo = Math.max(yAxis.toPixels(nextThreshold), ymax_px);
+      const height = Math.abs(yhi - ylo);
+      chart.renderer
+        .rect(xlo, ylo, width, height, 1)
+        .attr({ fill: AQI_COLORS[i], stroke: "transparent" })
+        .add();
+    }
   }
 }
+

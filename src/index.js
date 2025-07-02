@@ -41,7 +41,10 @@ export {
   small_dailyRangeBarplotConfig,
 } from "./dailyRangeBarplot.js";
 
-export { diurnalPlotConfig, small_diurnalPlotConfig } from "./diurnalPlot.js";
+export {
+  diurnalPlotConfig,
+  small_diurnalPlotConfig
+} from "./diurnalPlot.js";
 
 export {
   timeseriesPlotConfig,
