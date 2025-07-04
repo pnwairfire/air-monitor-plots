@@ -11,7 +11,9 @@
   "scripts": {
     "docs": "jsdoc src -d docs -R ./README.md -c ./jsdoc.conf.json",
     "test": "uvu tests",
-    "test:playwright": "playwright test playwright"
+    "test:playwright": "playwright test playwright",
+    "serve:examples": "http-server . -p 3001",
+    "serve:examples:open": "npm run serve:examples & npx open-cli http://localhost:3000"
   },
   "files": [
     "src",
@@ -37,6 +39,8 @@
   },
   "devDependencies": {
     "air-monitor": "^1.2.0",
+    "esbuild": "^0.25.5",
+    "http-server": "^14.1.1",
     "playwright": "^1.53.2",
     "uvu": "^0.5.6"
   },

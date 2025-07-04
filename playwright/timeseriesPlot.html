@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Time Series Plot</title>
+  <script src="./vendor/highcharts.js"></script>
+  <script type="module">
+    import timeseriesPlotConfig from './vendor/timeseriesPlot.js';
+    import Monitor from './vendor/air-monitor/src/index.js';
+
+    const container = document.getElementById('container');
+    const t0 = performance.now();
+
+    const monitor = new Monitor();
+    await monitor.loadLatest("airnow");
+
+    const id = monitor
+      .filterByValue('locationName', 'Entiat')
+      .getIDs();
+
+    const data = {
+      datetime: monitor.getDatetime(),
+      pm25: monitor.getPM25(id),
+      nowcast: monitor.getNowcast(id),
+      locationName: monitor.getMetadata(id, 'locationName'),
+      timezone: monitor.getMetadata(id, 'timezone'),
+      title: undefined
+    };
+
+    const config = timeseriesPlotConfig(data);
+    config.chart = {
+      ...config.chart,
+      renderTo: container,
+      events: {
+        load: () => {
+          const t1 = performance.now();
+          const elapsed = (t1 - t0).toFixed(2);
+          console.log(`Time series chart rendered in ${elapsed} ms`);
+          window.highchartsRenderTime = elapsed;
+        }
+      }
+    };
+
+    Highcharts.chart(config);
+  </script>
+  <style>
+    html, body, #container {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="container"></div>
+</body>
+</html>
