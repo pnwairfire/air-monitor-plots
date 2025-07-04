@@ -1,0 +1,41 @@
+<!-- playwright/dummy.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dummy Chart</title>
+  <script src="./vendor/highcharts.js"></script>
+  <style>
+    html, body, #container { margin: 0; height: 100%; width: 100%; }
+  </style>
+</head>
+<body>
+  <div id="container"></div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const t0 = performance.now();
+
+      Highcharts.chart('container', {
+        chart: {
+          type: 'bar',
+          events: {
+            load: function () {
+              const t1 = performance.now();
+              const elapsed = (t1 - t0).toFixed(2);
+              console.log(`Highcharts rendered in ${elapsed} ms`);
+              window.highchartsRenderTime = elapsed;
+            }
+          }
+        },
+        title: { text: 'Fruit Consumption' },
+        xAxis: { categories: ['Apples', 'Bananas', 'Oranges'] },
+        yAxis: { title: { text: 'Fruit eaten' } },
+        series: [
+          { name: 'Jane', data: [1, 0, 4] },
+          { name: 'John', data: [5, 7, 3] }
+        ]
+      });
+    });
+  </script>
+</body>
+</html>

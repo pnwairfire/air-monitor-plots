@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <script src="./vendor/highcharts.js"></script>
+    <script type="module">
+      import { timeseriesPlotConfig } from '../src/timeseriesPlot.js';
+
+      import Monitor from 'air-monitor';
+      const monitor = new Monitor();
+      await monitor.loadLatest("airnow");
+      const id = monitor
+        .filterByValue('locationName', 'Entiat')
+        .getIDs();
+
+      window.renderChart = () => {
+        // Assemble required plot data
+        const data = {
+          datetime: monitor.getDatetime(),
+          pm25: monitor.getPM25(id),
+          nowcast: monitor.getNowcast(id),
+          locationName: monitor.getMetadata(id, 'locationName'),
+          timezone: monitor.getMetadata(id, 'timezone'),
+          title: undefined // use default title
+        }
+
+        const config = timeseriesPlotConfig(data);
+        config.chart.renderTo = 'container';
+        Highcharts.chart(config);
+      };
+    </script>
+  </head>
+  <body onload="renderChart()">
+    <div id="container" style="width:600px; height:300px"></div>
+  </body>
+</html>

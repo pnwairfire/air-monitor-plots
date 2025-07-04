@@ -114,3 +114,4 @@ dist
 
 # playwright test results
 test-results/
+playwright/*.png
