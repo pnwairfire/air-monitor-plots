@@ -10,7 +10,8 @@
   },
   "scripts": {
     "docs": "jsdoc src -d docs -R ./README.md -c ./jsdoc.conf.json",
-    "test": "uvu tests"
+    "test": "uvu tests",
+    "test:playwright": "playwright test playwright"
   },
   "files": [
     "src",
@@ -31,13 +32,14 @@
   },
   "homepage": "https://github.com/pnwairfire/air-monitor-plots#readme",
   "dependencies": {
-    "moment-timezone": "0.5.40",
+    "luxon": "3.6.1",
     "suncalc": "1.9.0"
   },
   "devDependencies": {
+    "playwright": "^1.53.2",
     "uvu": "^0.5.6"
   },
   "peerDependencies": {
-    "highcharts": "12.2.0"
+    "highcharts": "12.3.0"
   }
 }

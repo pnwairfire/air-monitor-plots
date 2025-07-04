@@ -108,3 +108,9 @@ dist
 
 # Mac files
 .DS_Store
+
+
+##### Project specific stuff #####
+
+# playwright test results
+test-results/

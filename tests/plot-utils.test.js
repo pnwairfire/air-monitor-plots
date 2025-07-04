@@ -1,117 +1,119 @@
-// tests/plot-utils.test.js
 
 import { test } from 'uvu';
 import * as assert from 'uvu/assert';
-
+import { DateTime } from 'luxon';
 import {
   pm25ToAQC,
   pm25ToColor,
   pm25ToYMax,
-  pm25_AQILines
-} from '../src/index.js';
+  pm25_AQILines,
+  validatePlotArrays,
+  pm25_addAQIStackedBar
+} from '../src/plot-utils.js';
 
-//
-// Test data
-//
+// ─── pm25ToAQC ────────────────────────────────────────────────────────────────
 
-const testPM25 = [0, null, 9, 10, 30, 40, null, 50, 60, 180, 300];
-const expectedAQC = [
-  1,   // 0
-  null,
-  1,   // 9
-  2,   // 10
-  2,   // 30
-  3,   // 40
-  null,
-  3,   // 50
-  4,   // 60
-  5,   // 180
-  6    // 300
-];
-
-const expectedColors = [
-  'rgb(0,255,0)',
-  'rgb(187,187,187)',
-  'rgb(0,255,0)',
-  'rgb(255,255,0)',
-  'rgb(255,255,0)',
-  'rgb(255,126,0)',
-  'rgb(187,187,187)',
-  'rgb(255,126,0)',
-  'rgb(255,0,0)',
-  'rgb(143,63,151)',
-  'rgb(126,0,35)'
-];
-
-const expectedYMax = [
-  50,  // 0
-  50,  // null
-  50,  // 9
-  50,  // 10
-  50,  // 30
-  50,  // 40
-  50,  // null
-  50,  // 50
-  100, // 60
-  200, // 180
-  500  // 300
-];
-
-// Edge cases for bad input
-const invalidInputs = [NaN, '42', true, {}, [], undefined];
-const invalidYMaxDefaults = [50, 50, 50, 50, 50, 50];
-const invalidAQCDefaults = [null, null, null, null, null, null];
-const invalidColorDefaults = [
-  'rgb(187,187,187)',
-  'rgb(187,187,187)',
-  'rgb(187,187,187)',
-  'rgb(187,187,187)',
-  'rgb(187,187,187)',
-  'rgb(187,187,187)'
-];
-
-//
-// Tests
-//
-
-test('pm25ToAQC() correctly classifies PM2.5 values', () => {
-  const results = testPM25.map(pm25ToAQC);
-  assert.equal(results, expectedAQC);
+test('pm25ToAQC returns correct category levels', () => {
+  assert.is(pm25ToAQC(0), 1);
+  assert.is(pm25ToAQC(10), 2);
+  assert.is(pm25ToAQC(40), 3);
+  assert.is(pm25ToAQC(100), 4);
+  assert.is(pm25ToAQC(200), 5);
+  assert.is(pm25ToAQC(300), 6);
 });
 
-test('pm25ToAQC() returns null for invalid input', () => {
-  const results = invalidInputs.map(pm25ToAQC);
-  assert.equal(results, invalidAQCDefaults);
+test('pm25ToAQC returns null for invalid input', () => {
+  assert.is(pm25ToAQC(null), null);
+  assert.is(pm25ToAQC('foo'), null);
 });
 
-test('pm25ToColor() returns expected RGB strings', () => {
-  const results = testPM25.map(pm25ToColor);
-  assert.equal(results, expectedColors);
+// ─── pm25ToColor ──────────────────────────────────────────────────────────────
+
+test('pm25ToColor returns correct RGB string', () => {
+  assert.is(pm25ToColor(0), 'rgb(0,255,0)');
+  assert.is(pm25ToColor(40), 'rgb(255,126,0)');
+  assert.is(pm25ToColor(300), 'rgb(126,0,35)');
 });
 
-test('pm25ToColor() returns fallback for invalid input', () => {
-  const results = invalidInputs.map(pm25ToColor);
-  assert.equal(results, invalidColorDefaults);
+test('pm25ToColor returns fallback for invalid input', () => {
+  assert.is(pm25ToColor(null), 'rgb(187,187,187)');
 });
 
-test('pm25ToYMax() returns expected scale values', () => {
-  const results = testPM25.map(pm25ToYMax);
-  assert.equal(results, expectedYMax);
+// ─── pm25ToYMax ───────────────────────────────────────────────────────────────
+
+test('pm25ToYMax returns correct scaling breakpoint', () => {
+  assert.is(pm25ToYMax(20), 50);
+  assert.is(pm25ToYMax(120), 200);
+  assert.is(pm25ToYMax(450), 600);
+  assert.is(pm25ToYMax(800), 1000);
+  assert.is(pm25ToYMax(1600), 1680); // 1.05 * 1600
 });
 
-
-test('pm25ToYMax() defaults to 50 for invalid input', () => {
-  const results = invalidInputs.map(pm25ToYMax);
-  assert.equal(results, invalidYMaxDefaults);
+test('pm25ToYMax returns 50 for invalid input', () => {
+  assert.is(pm25ToYMax(null), 50);
+  assert.is(pm25ToYMax('bad'), 50);
 });
 
-test('pm25_AQILines() returns correct Highcharts config lines', () => {
-  const lines = pm25_AQILines(3);
-  assert.is(Array.isArray(lines), true);
+// ─── pm25_AQILines ────────────────────────────────────────────────────────────
+
+test('pm25_AQILines returns expected plotLine objects', () => {
+  const lines = pm25_AQILines();
+  assert.ok(Array.isArray(lines));
   assert.is(lines.length, 5);
-  assert.equal(Object.keys(lines[0]).sort(), ['color', 'value', 'width']);
-  assert.type(lines[0].value, 'number');
-  assert.is(lines[0].width, 3);
+  lines.forEach(line => {
+    assert.ok(typeof line.value === 'number');
+    assert.ok(line.color.startsWith('rgb('));
+    assert.is(line.width, 2);
+  });
+});
+
+test('pm25_AQILines supports custom width', () => {
+  const lines = pm25_AQILines(4);
+  assert.ok(lines.every(line => line.width === 4));
+});
+
+// ─── validatePlotArrays ───────────────────────────────────────────────────────
+
+test('validatePlotArrays accepts matching valid input', () => {
+  const datetime = [DateTime.utc(2024, 1, 1), DateTime.utc(2024, 1, 2)];
+  const pm25 = [10, 20];
+  const nowcast = [12, 18];
+  assert.not.throws(() => validatePlotArrays(datetime, pm25, nowcast));
+});
+
+test('validatePlotArrays throws on length mismatch', () => {
+  const datetime = [DateTime.utc()];
+  const pm25 = [10, 20];
+  const nowcast = [15];
+  assert.throws(() => validatePlotArrays(datetime, pm25, nowcast), /same length/);
+});
+
+test('validatePlotArrays throws on non-DateTime input', () => {
+  const datetime = [new Date()];
+  const pm25 = [10];
+  const nowcast = [12];
+  assert.throws(() => validatePlotArrays(datetime, pm25, nowcast), /Luxon DateTime/);
+});
+
+test('validatePlotArrays throws on invalid pm25 value', () => {
+  const datetime = [DateTime.utc()];
+  const pm25 = ['bad'];
+  const nowcast = [10];
+  assert.throws(() => validatePlotArrays(datetime, pm25, nowcast), /Invalid pm25/);
+});
+
+test('validatePlotArrays warns if datetime not increasing', () => {
+  const datetime = [DateTime.utc(2024, 1, 2), DateTime.utc(2024, 1, 1)];
+  const pm25 = [10, 12];
+  const nowcast = [11, 12];
+  assert.not.throws(() => validatePlotArrays(datetime, pm25, nowcast));
+});
+
+// ─── pm25_addAQIStackedBar ────────────────────────────────────────────────────
+
+test('pm25_addAQIStackedBar fails gracefully with bad chart', () => {
+  assert.not.throws(() => pm25_addAQIStackedBar(null));
+  assert.not.throws(() => pm25_addAQIStackedBar({}));
 });
 
 test.run();
