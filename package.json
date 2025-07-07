@@ -2,20 +2,24 @@
   "name": "air-monitor-plots",
   "version": "1.3.0",
   "description": "USFS AirFire standard plots for air quality data.",
-  "main": "./src/index.js",
-  "type": "module",
-  "module": "./src/index.js",
+  "main": "./dist/air-monitor-plots.umd.js",
+  "module": "./dist/air-monitor-plots.js",
   "exports": {
-    ".": "./src/index.js"
+    "import": "./dist/air-monitor-plots.js",
+    "require": "./dist/air-monitor-plots.umd.js"
   },
+  "type": "module",
   "scripts": {
+    "build": "rollup -c",
     "docs": "jsdoc src -d docs -R ./README.md -c ./jsdoc.conf.json",
+    "copy-to-vendor": "cp node_modules/air-monitor-algorithms/dist/air-monitor-algorithms.umd.js node_modules/air-monitor/dist/air-monitor.umd.js playwright/vendor/",
     "test": "uvu tests",
     "test:playwright": "playwright test playwright",
     "serve:examples": "http-server . -p 3001",
-    "serve:examples:open": "npm run serve:examples & npx open-cli http://localhost:3000"
+    "serve:examples:open": "npm run serve:examples & npx open-cli http://localhost:3001"
   },
   "files": [
+    "dist",
     "src",
     "README.md",
     "LICENSE"
@@ -25,7 +29,10 @@
     "url": "git+https://github.com/pnwairfire/air-monitor-plots.git"
   },
   "keywords": [
-    "air quality"
+    "air quality",
+    "visualization",
+    "highcharts",
+    "air-monitor"
   ],
   "author": "Jonathan Callahan",
   "license": "GPL-3.0-or-later",
@@ -38,10 +45,15 @@
     "suncalc": "1.9.0"
   },
   "devDependencies": {
-    "air-monitor": "^1.2.0",
-    "esbuild": "^0.25.5",
+    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-terser": "^0.4.4",
+    "air-monitor-algorithms": "1.2.2",
+    "air-monitor": "^1.2.1",
     "http-server": "^14.1.1",
     "playwright": "^1.53.2",
+    "rollup": "^4.17.3",
     "uvu": "^0.5.6"
   },
   "peerDependencies": {
