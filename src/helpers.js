@@ -17,7 +17,7 @@ export function requireLuxonDateTime(dt, name = 'datetime') {
  * @param {Array} arr - Array to validate.
  * @param {string} name - Name of the array for clearer error messages.
  */
-export function requireLuxonDateTimeArray(arr, name = 'datetime array') {
+export function requireLuxonDateTimeArray(arr, name = 'datetime') {
   if (!Array.isArray(arr)) {
     throw new Error(`Expected '${name}' to be an array`);
   }

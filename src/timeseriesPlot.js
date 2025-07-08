@@ -114,6 +114,7 @@ export function small_timeseriesPlotConfig(data) {
   const startTime = data.datetime[0];
   const ymin = 0;
   const ymax = pm25ToYMax(Math.max(...data.pm25));
+
   const title = data.title ?? data.locationName;
 
   return {

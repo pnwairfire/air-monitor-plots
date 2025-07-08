@@ -1,4 +1,6 @@
+// Utility functions
 import { pm25ToColor, pm25ToYMax, pm25_AQILines } from "./plot-utils.js";
+import { requireLuxonDateTimeArray } from "./helpers.js";
 
 /**
  * Returns a daily barplot chart configuration.
@@ -10,6 +12,8 @@ import { pm25ToColor, pm25ToYMax, pm25_AQILines } from "./plot-utils.js";
  * @param {string} [data.title] - Optional custom title.
  */
 export function dailyBarplotConfig(data) {
+  requireLuxonDateTimeArray(data.daily_datetime, "daily_datetime");
+
   const title = data.title ?? data.locationName;
   const ymin = 0;
   const ymax = pm25ToYMax(Math.max(...data.daily_mean));
@@ -32,7 +36,6 @@ export function dailyBarplotConfig(data) {
     plotOptions: {
       column: {
         animation: false,
-        allowPointSelect: true,
         borderColor: "#666",
         borderWidth: 1
       }
@@ -69,6 +72,8 @@ export function dailyBarplotConfig(data) {
  * @param {Object} data Same structure as `dailyBarplotConfig`.
  */
 export function small_dailyBarplotConfig(data) {
+  requireLuxonDateTimeArray(data.daily_datetime, "daily_datetime");
+
   const title = data.title ?? data.locationName;
   const ymin = 0;
   const ymax = pm25ToYMax(Math.max(...data.daily_mean));
@@ -90,7 +95,6 @@ export function small_dailyBarplotConfig(data) {
     plotOptions: {
       column: {
         animation: false,
-        allowPointSelect: true,
         borderColor: "#666",
         borderWidth: 0.5
       }

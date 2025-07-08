@@ -9,7 +9,6 @@
   <script src="https://cdn.jsdelivr.net/npm/suncalc@1.9.0/suncalc.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/arquero@latest/dist/arquero.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/highcharts@12.3.0/highcharts.js"></script>
-
   <script src="https://cdn.jsdelivr.net/npm/highcharts@12.3.0/highcharts-more.js"></script>
 
   <!-- Your UMD builds (in order) -->
@@ -42,56 +41,55 @@
   <div id="container"></div>
   <div id="small_container"></div>
 
-  <script>
+  <script type="module">
     const container = document.getElementById('container');
     const small_container = document.getElementById('small_container');
     const t0 = performance.now();
 
     const monitor = new Monitor();
-    monitor.loadLatest("airnow").then(() => {
-      const ids = monitor
-        .filterByValue('locationName', 'Entiat')
-        .getIDs();
-      const id = ids[0];
+    await monitor.loadLatest("airnow");
 
-      // Special method to get an object containing daily averages
-      const daily = monitor.getDailyStats(id);
+    const ids = monitor
+      .filterByValue('locationName', 'Entiat')
+      .getIDs();
+    const id = ids[0];
 
-      // Assemble required plot data
-      const data = {
-        daily_datetime: daily.datetime,
-        daily_min: daily.min,
-        daily_mean: daily.mean,
-        daily_max: daily.max,
-        locationName: monitor.getMetadata(id, 'locationName'),
-        timezone: monitor.getMetadata(id, 'timezone'),
-        title: '' // use default title
-      }
+    // Special method to get an object containing daily averages
+    const daily = monitor.getDailyStats(id);
 
-      // Standard chart
-      const config = AirMonitorPlots.dailyRangeBarplotConfig(data);
-      config.chart = {
-        ...config.chart,
-        renderTo: container,
-        events: {
-          load: () => {
-            const t1 = performance.now();
-            const elapsed = (t1 - t0).toFixed(2);
-            console.log(`Daily range barplot rendered in ${elapsed} ms`);
-            window.highchartsRenderTime = elapsed;
-          }
+    const data = {
+      daily_datetime: daily.datetime,
+      daily_min: daily.min,
+      daily_mean: daily.mean,
+      daily_max: daily.max,
+      locationName: monitor.getMetadata(id, 'locationName'),
+      timezone: monitor.getMetadata(id, 'timezone'),
+      title: '' // use default title
+    };
+
+    // Standard chart
+    const config = AirMonitorPlots.dailyRangeBarplotConfig(data);
+    config.chart = {
+      ...config.chart,
+      renderTo: container,
+      events: {
+        load: () => {
+          const t1 = performance.now();
+          const elapsed = (t1 - t0).toFixed(2);
+          console.log(`Daily range barplot rendered in ${elapsed} ms`);
+          window.highchartsRenderTime = elapsed;
         }
-      };
-      Highcharts.chart(config);
+      }
+    };
+    Highcharts.chart(config);
 
-      // Small chart
-      const small_config = AirMonitorPlots.small_dailyRangeBarplotConfig(data);
-      small_config.chart = {
-        ...small_config.chart,
-        renderTo: small_container
-      };
-      Highcharts.chart(small_config);
-    });
+    // Small chart
+    const small_config = AirMonitorPlots.small_dailyRangeBarplotConfig(data);
+    small_config.chart = {
+      ...small_config.chart,
+      renderTo: small_container
+    };
+    Highcharts.chart(small_config);
   </script>
 </body>
 </html>

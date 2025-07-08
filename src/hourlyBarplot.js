@@ -1,4 +1,6 @@
+// Utility functions
 import { pm25ToYMax, pm25ToColor } from "./plot-utils.js";
+import { requireLuxonDateTimeArray } from "./helpers.js";
 
 /**
  * Returns a Highcharts chart configuration for a full-sized hourly NowCast barplot.
@@ -12,10 +14,13 @@ import { pm25ToYMax, pm25ToColor } from "./plot-utils.js";
  * @returns {Object} Highcharts chart config object.
  */
 export function hourlyBarplotConfig(data) {
+  requireLuxonDateTimeArray(data.datetime, "datetime");
+
   const startTime = data.datetime[0]; // Luxon DateTime
-  const title = data.title ?? data.locationName;
   const ymin = 0;
   const ymax = pm25ToYMax(Math.max(...data.nowcast));
+
+  const title = data.title ?? data.locationName;
 
   const seriesData = data.nowcast.map(v => ({
     y: v,
@@ -32,7 +37,6 @@ export function hourlyBarplotConfig(data) {
     plotOptions: {
       column: {
         animation: false,
-        allowPointSelect: true,
         pointPadding: 0,
         borderColor: "#4a4a4a",
         borderWidth: 0.1,
@@ -84,10 +88,13 @@ export function hourlyBarplotConfig(data) {
  * @param {Object} data Same structure as for hourlyBarplotConfig.
  */
 export function small_hourlyBarplotConfig(data) {
+  requireLuxonDateTimeArray(data.datetime, "datetime");
+
   const startTime = data.datetime[0];
-  const title = data.title ?? data.locationName;
   const ymin = 0;
   const ymax = pm25ToYMax(Math.max(...data.nowcast));
+
+  const title = data.title ?? data.locationName;
 
   const seriesData = data.nowcast.map(v => ({
     y: v,
@@ -100,7 +107,6 @@ export function small_hourlyBarplotConfig(data) {
     plotOptions: {
       column: {
         animation: false,
-        allowPointSelect: true,
         pointPadding: 0,
         borderColor: "#4a4a4a",
         borderWidth: 0.1,

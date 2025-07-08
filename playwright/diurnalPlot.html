@@ -8,8 +8,6 @@
   <script src="https://cdn.jsdelivr.net/npm/luxon@3.6.1/build/global/luxon.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/suncalc@1.9.0/suncalc.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/arquero@latest/dist/arquero.min.js"></script>
-
-  <!-- Highcharts core -->
   <script src="https://cdn.jsdelivr.net/npm/highcharts@12.3.0/highcharts.js"></script>
 
   <!-- Load these in order: algorithms first, then plots -->
@@ -42,67 +40,64 @@
   <div id="container"></div>
   <div id="small_container"></div>
 
-  <script>
+  <script type="module">
     const container = document.getElementById('container');
     const small_container = document.getElementById('small_container');
     const t0 = performance.now();
 
     const monitor = new Monitor();
-    monitor.loadLatest("airnow").then(() => {
-      const ids = monitor
-        .filterByValue('locationName', 'Entiat')
-        .getIDs();
-      const id = ids[0];
+    await monitor.loadLatest("airnow");
 
-      // Special method to get an object containing diurnal averages
-      const diurnal = monitor.getDiurnalStats(id);
+    const ids = monitor
+      .filterByValue('locationName', 'Entiat')
+      .getIDs();
+    const id = ids[0];
 
-      // Assemble required plot data
-      const data = {
-        datetime: monitor.getDatetime(),
-        pm25: monitor.getPM25(id),
-        nowcast: monitor.getNowcast(id),
-        locationName: monitor.getMetadata(id, 'locationName'),
-        timezone: monitor.getMetadata(id, 'timezone'),
-        title: undefined, // use default title
-        // unique to this chart
-        hour_average: diurnal.mean,
-        longitude: monitor.getMetadata(id, 'longitude'),
-        latitude: monitor.getMetadata(id, 'latitude'),
+    const diurnal = monitor.getDiurnalStats(id);
+
+    const data = {
+      datetime: monitor.getDatetime(),
+      pm25: monitor.getPM25(id),
+      nowcast: monitor.getNowcast(id),
+      locationName: monitor.getMetadata(id, 'locationName'),
+      timezone: monitor.getMetadata(id, 'timezone'),
+      title: undefined,
+      hour_average: diurnal.mean,
+      longitude: monitor.getMetadata(id, 'longitude'),
+      latitude: monitor.getMetadata(id, 'latitude'),
+    };
+
+    // Standard chart
+    const config = AirMonitorPlots.diurnalPlotConfig(data);
+    config.chart = {
+      ...config.chart,
+      renderTo: container,
+      events: {
+        load: () => {
+          const t1 = performance.now();
+          const elapsed = (t1 - t0).toFixed(2);
+          console.log(`Diurnal chart rendered in ${elapsed} ms`);
+          window.highchartsRenderTime = elapsed;
+        }
       }
+    };
+    Highcharts.chart(config);
 
-      // Standard chart
-      const config = AirMonitorPlots.diurnalPlotConfig(data);
-      config.chart = {
-        ...config.chart,
-        renderTo: container,
-        events: {
-          load: () => {
-            const t1 = performance.now();
-            const elapsed = (t1 - t0).toFixed(2);
-            console.log(`Diurnal chart rendered in ${elapsed} ms`);
-            window.highchartsRenderTime = elapsed;
-          }
+    // Small chart
+    const small_config = AirMonitorPlots.small_diurnalPlotConfig(data);
+    small_config.chart = {
+      ...small_config.chart,
+      renderTo: small_container,
+      events: {
+        load: () => {
+          const t1 = performance.now();
+          const elapsed = (t1 - t0).toFixed(2);
+          console.log(`Small diurnal chart rendered in ${elapsed} ms`);
+          window.highchartsRenderTime = elapsed;
         }
-      };
-      Highcharts.chart(config);
-
-      // Small chart
-      const small_config = AirMonitorPlots.small_diurnalPlotConfig(data);
-      small_config.chart = {
-        ...small_config.chart,
-        renderTo: small_container,
-        events: {
-          load: () => {
-            const t1 = performance.now();
-            const elapsed = (t1 - t0).toFixed(2);
-            console.log(`Small diurnal chart rendered in ${elapsed} ms`);
-            window.highchartsRenderTime = elapsed;
-          }
-        }
-      };
-      Highcharts.chart(small_config);
-    });
+      }
+    };
+    Highcharts.chart(small_config);
   </script>
 </body>
 </html>

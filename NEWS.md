@@ -1,3 +1,7 @@
+# air-monitor-plots 1.3.0
+
+Refactoring to require luxon DateTime objects in UTC for all timestamps.
+
 # air-monitor-plots 1.2.5
 
 - Fixed timezone display bug in timeseries and hourly plots.

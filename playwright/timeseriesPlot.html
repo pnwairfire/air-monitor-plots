@@ -40,63 +40,62 @@
   <div id="container"></div>
   <div id="small_container"></div>
 
-  <script>
+  <script type="module">
     const container = document.getElementById('container');
     const small_container = document.getElementById('small_container');
     const t0 = performance.now();
 
     const monitor = new Monitor();
-    monitor.loadLatest("airnow").then(() => {
-      const ids = monitor
-        .filterByValue('locationName', 'Entiat')
-        .getIDs();
+    await monitor.loadLatest("airnow");
 
-      let id = ids[0];
+    const ids = monitor
+      .filterByValue('locationName', 'Entiat')
+      .getIDs();
 
-      const data = {
-        datetime: monitor.getDatetime(),
-        pm25: monitor.getPM25(id),
-        nowcast: monitor.getNowcast(id),
-        locationName: monitor.getMetadata(id, 'locationName'),
-        timezone: monitor.getMetadata(id, 'timezone'),
-        title: undefined
-      };
+    const id = ids[0];
 
-      // Standard chart
-      const config = AirMonitorPlots.timeseriesPlotConfig(data);
-      config.chart = {
-        ...config.chart,
-        renderTo: container,
-        events: {
-          load: () => {
-            const t1 = performance.now();
-            const elapsed = (t1 - t0).toFixed(2);
-            console.log(`Time series chart rendered in ${elapsed} ms`);
-            window.highchartsRenderTime = elapsed;
-          }
+    const data = {
+      datetime: monitor.getDatetime(),
+      pm25: monitor.getPM25(id),
+      nowcast: monitor.getNowcast(id),
+      locationName: monitor.getMetadata(id, 'locationName'),
+      timezone: monitor.getMetadata(id, 'timezone'),
+      title: undefined
+    };
+
+    // Standard chart
+    const config = AirMonitorPlots.timeseriesPlotConfig(data);
+    config.chart = {
+      ...config.chart,
+      renderTo: container,
+      events: {
+        load: () => {
+          const t1 = performance.now();
+          const elapsed = (t1 - t0).toFixed(2);
+          console.log(`Time series chart rendered in ${elapsed} ms`);
+          window.highchartsRenderTime = elapsed;
         }
-      };
+      }
+    };
 
-      Highcharts.chart(config);
+    Highcharts.chart(config);
 
-      // Small chart
-      const small_config = AirMonitorPlots.small_timeseriesPlotConfig(data);
-      small_config.chart = {
-        ...small_config.chart,
-        renderTo: small_container,
-        events: {
-          load: () => {
-            const t1 = performance.now();
-            const elapsed = (t1 - t0).toFixed(2);
-            console.log(`Time series chart rendered in ${elapsed} ms`);
-            window.highchartsRenderTime = elapsed;
-          }
+    // Small chart
+    const small_config = AirMonitorPlots.small_timeseriesPlotConfig(data);
+    small_config.chart = {
+      ...small_config.chart,
+      renderTo: small_container,
+      events: {
+        load: () => {
+          const t1 = performance.now();
+          const elapsed = (t1 - t0).toFixed(2);
+          console.log(`Time series chart rendered in ${elapsed} ms`);
+          window.highchartsRenderTime = elapsed;
         }
-      };
+      }
+    };
 
-      Highcharts.chart(small_config);
-
-    });
+    Highcharts.chart(small_config);
   </script>
 </body>
 </html>

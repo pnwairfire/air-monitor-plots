@@ -1,20 +1,28 @@
 # air-monitor-plots
 
-USFS AirFire standard plots for hourly and daily air quality time series data.
+USFS AirFire standard plots for display of hourly air quality time series data.
 
-This package provides functions that generate [Highcharts](https://www.highcharts.com/) configuration objects for plotting PM2.5 data in formats used by the U.S. Forest Service AirFire team.
+This package provides functions that generate
+[Highcharts](https://www.highcharts.com/) configuration objects for creating
+PM2.5 air quality visualizations used by the U.S. Forest Service
+[AirFire team](https://www.airfire.org/).
 
-## ✨ Features
+Built for use with [air-monitor](https://www.npmjs.com/package/air-monitor) and
+[air-monitor-algorithms](https://www.npmjs.com/package/air-monitor-algorithms),
+these chart generators output Highcharts config objects with consistent styles
+and accurate timezone handling.
+
+ ## ✨ Features
 
 - Returns Highcharts config objects (does not render charts)
-- Supports hourly and daily air quality summaries
+- Works with hourly PM2.5 air quality data
 - Built for use with `air-monitor` + `air-monitor-algorithms`
 - Supports "small multiples" with `small_*` chart variants
 - Fully timezone-aware using Luxon `DateTime` objects
 
-## 📈 Available Plot Types
+## Available Plot Types
 
-Each has a full and "small" version:
+Each plot type has a full and `small_~` version:
 
 | Function Name                  | Description                             |
 |-------------------------------|-----------------------------------------|
@@ -24,78 +32,61 @@ Each has a full and "small" version:
 | `dailyRangeBarplotConfig`     | Min/max columnrange + daily means       |
 | `diurnalPlotConfig`           | Diurnal cycle by hour of day            |
 
-## 🌐 Browser Usage (UMD)
 
-```html
-<!-- Required Highcharts libraries -->
-<script src="https://code.highcharts.com/12.3.0/highcharts.js"></script>
-<script src="https://code.highcharts.com/12.3.0/modules/time.js"></script>
-<script src="https://code.highcharts.com/12.3.0/highcharts-more.js"></script>
-<script src="https://code.highcharts.com/12.3.0/modules/columnrange.js"></script>
+## Usage Example (with `timeseriesPlotConfig`)
 
-<!-- UMD bundles -->
-<script src="path/to/air-monitor-algorithms.umd.js"></script>
-<script src="path/to/air-monitor.umd.js"></script>
-<script src="path/to/air-monitor-plots.umd.js"></script>
-
-<script>
-  const config = AirMonitorPlots.timeseriesPlotConfig({
-    datetime: [...], // Luxon DateTime[]
-    pm25: [...],
-    nowcast: [...],
-    locationName: 'Entiat',
-    timezone: 'America/Los_Angeles'
-  });
-
-  Highcharts.chart('container', config);
-</script>
-```
-
-## 🛠️ Node / ESM Usage
-
-Install dependencies:
-
-```sh
-npm install air-monitor air-monitor-algorithms air-monitor-plots highcharts luxon
-```
+Within the `<script></script>` portion of a web page, you might have:
 
 ```js
-import Highcharts from 'highcharts';
-import more from 'highcharts/highcharts-more';
-import columnrange from 'highcharts/modules/columnrange';
+const monitor = new Monitor();
+await monitor.loadLatest("airnow");
 
-import {
-  dailyRangeBarplotConfig,
-  timeseriesPlotConfig
-} from 'air-monitor-plots';
+const ids = monitor
+  .filterByValue('locationName', 'Entiat')
+  .getIDs();
 
-more(Highcharts);
-columnrange(Highcharts);
+const id = ids[0];
 
-const config = dailyRangeBarplotConfig({
-  daily_datetime: [...], // Luxon DateTime[]
-  daily_min: [...],
-  daily_max: [...],
-  daily_mean: [...],
-  locationName: 'Boise',
-  timezone: 'America/Boise'
-});
+const data = {
+  datetime: monitor.getDatetime(),
+  pm25: monitor.getPM25(id),
+  nowcast: monitor.getNowcast(id),
+  locationName: monitor.getMetadata(id, 'locationName'),
+  timezone: monitor.getMetadata(id, 'timezone'),
+  title: undefined  // Optional override
+};
 
+const config = AirMonitorPlots.timeseriesPlotConfig(data);
 Highcharts.chart('container', config);
 ```
 
-## 📦 Peer Dependencies
+This assumes:
+- The `highcharts`, `air-monitor` and `air-monitor-plots` packages have been loaded
+- `<div id="container">` exists in the web page
 
-This package expects the following to be installed in the parent project:
+## HTML Example Demos
 
-```json
-"peerDependencies": {
-  "highcharts": "12.3.0",
-  "air-monitor-algorithms": "^1.2.2"
-}
+All demo `.html` files in the `playwright/` directory use this approach,
+with `await` inside `<script type="module">`. You can load them directly in a
+browser or use them with Playwright tests.
+
+## Testing
+
+- Unit tests: `npm run test`
+- Playwright visual tests: `npm run test:playwright`
+
+To view charts manually in a browser:
+
+```bash
+npm run serve:examples:open
 ```
 
-## 📄 License
+## Related Packages
+
+- [air-monitor](https://www.npmjs.com/package/air-monitor)
+- [air-monitor-algorithms](https://www.npmjs.com/package/air-monitor-algorithms)
+
+## License
 
 GPL-3.0-or-later
 © 2024–2025 Jonathan Callahan / USFS AirFire
