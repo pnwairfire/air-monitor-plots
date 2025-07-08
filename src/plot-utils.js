@@ -140,8 +140,8 @@ export function pm25_addAQIStackedBar(chart, width = 6) {
  * Validate the input data arrays for hourly or time series plots.
  *
  * @param {DateTime[]} datetime - Array of Luxon DateTime objects (assumed UTC).
- * @param {(number|null)[]} pm25 - Array of PM2.5 values (finite or null).
- * @param {(number|null)[]} nowcast - Array of NowCast values (finite or null).
+ * @param {Array<number|null>} pm25 - Array of PM2.5 values (finite or null).
+ * @param {Array<number|null>} nowcast - Array of NowCast values (finite or null).
  * @throws {Error} If input is invalid in structure or type.
  */
 export function validatePlotArrays(datetime, pm25, nowcast) {

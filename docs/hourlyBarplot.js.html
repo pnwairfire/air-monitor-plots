@@ -26,53 +26,36 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>// moment for timezone-aware date handling
-import moment from "moment-timezone";
-
-// Utility functions
-import { pm25ToYMax, pm25ToColor, pm25_AQILines } from "./plot-utils.js";
+            <pre class="prettyprint source linenums"><code>// Utility functions
+import { pm25ToYMax, pm25ToColor } from "./plot-utils.js";
+import { requireLuxonDateTimeArray } from "./helpers.js";
 
 /**
- * Returns a timeseriesPlot chart configuration.
- * @param {Object} data The data required to create the chart.
+ * Returns a Highcharts chart configuration for a full-sized hourly NowCast barplot.
+ * @param {Object} data
+ * @param {DateTime[]} data.datetime - Array of Luxon DateTime objects (UTC).
+ * @param {number[]} data.pm25 - Raw hourly PM2.5 data.
+ * @param {number[]} data.nowcast - NowCast values.
+ * @param {string} data.locationName - Label for the chart.
+ * @param {string} data.timezone - IANA timezone for display.
+ * @param {string} [data.title] - Optional custom title.
+ * @returns {Object} Highcharts chart config object.
  */
-export function hourlyBarplotConfig(
-  data = {
-    datetime,
-    pm25,
-    nowcast,
-    locationName,
-    timezone,
-    title,
-  }
-) {
-  // ----- Data preparation --------------------------------
+export function hourlyBarplotConfig(data) {
+  requireLuxonDateTimeArray(data.datetime, "datetime");
 
-  // NOTE:  If the chart width specified in the component html is too small,
-  // NOTE:  large symbols that would bump into each other will not be drawn.
-  let seriesData = [];
-  for (let i = 0; i &lt; data.nowcast.length; i++) {
-    seriesData[i] = {
-      y: data.nowcast[i],
-      color: pm25ToColor(data.nowcast[i]),
-    };
-  }
+  const startTime = data.datetime[0]; // Luxon DateTime
+  const ymin = 0;
+  const ymax = pm25ToYMax(Math.max(...data.nowcast));
 
-  let startTime = data.datetime[0];
-  // let xAxis_title = 'Time (${data.timezone})';
+  const title = data.title ?? data.locationName;
 
-  // Default to well defined y-axis limits for visual stability
-  let ymin = 0;
-  let ymax = pm25ToYMax(Math.max(...data.nowcast));
+  const seriesData = data.nowcast.map(v => ({
+    y: v,
+    color: pm25ToColor(v),
+  }));
 
-  let title = data.title;
-  if (data.title === undefined) {
-    title = data.locationName;
-  }
-
-  // ----- Chart configuration --------------------------------
-
-  let chartConfig = {
+  return {
     accessibility: { enabled: false },
     chart: {
       animation: false,
@@ -82,7 +65,6 @@ export function hourlyBarplotConfig(
     plotOptions: {
       column: {
         animation: false,
-        allowPointSelect: true,
         pointPadding: 0,
         borderColor: "#4a4a4a",
         borderWidth: 0.1,
@@ -90,21 +72,18 @@ export function hourlyBarplotConfig(
         minPointLength: 3,
       },
     },
-    title: {
-      text: title,
-    },
+    title: { text: title },
     time: {
       timezone: data.timezone,
-      useUTC: true,
+      useUTC: false, // LOCAL time display
     },
     xAxis: {
       type: "datetime",
-      // title: {margin: 20, style: { "color": "#333", "fontSize": "16px" }, text: xAxis_title},
       gridLineColor: "#ddd",
       gridLineDashStyle: "Dash",
       gridLineWidth: 1,
       minorTicks: true,
-      minorTickInterval: 3 * 3600 * 1000, // every 3 hrs
+      minorTickInterval: 3 * 3600 * 1000,
       minorGridLineColor: "#eee",
       minorGridLineDashStyle: "Dot",
       minorGridLineWidth: 1,
@@ -115,7 +94,6 @@ export function hourlyBarplotConfig(
       title: {
         text: "NowCast PM2.5 (\u00b5g/m\u00b3)",
       },
-      // plotLines: pm25_AQILines(2), // removed as default per Sim Larkin request
     },
     legend: {
       enabled: true,
@@ -126,66 +104,37 @@ export function hourlyBarplotConfig(
         name: "Hourly NowCast",
         type: "column",
         pointInterval: 3600 * 1000,
-        pointStart: startTime.valueOf(), // milliseconds
+        pointStart: startTime.toMillis(),
         data: seriesData,
       },
     ],
   };
-
-  return chartConfig;
 }
 
 /**
- * Returns a timeseriesPlot chart configuration.
- * The 'small' version of this plot has no legend or axis labeling and is
- * appropriate for use in a display with "small multiples".
- * @param {Object} data The data required to create the chart.
+ * Returns a Highcharts config for a small-multiples-style hourly NowCast barplot.
+ * @param {Object} data Same structure as for hourlyBarplotConfig.
  */
-export function small_hourlyBarplotConfig(
-  data = {
-    datetime,
-    pm25,
-    nowcast,
-    locationName,
-    timezone,
-    title,
-  }
-) {
-  // ----- Data preparation --------------------------------
+export function small_hourlyBarplotConfig(data) {
+  requireLuxonDateTimeArray(data.datetime, "datetime");
 
-  // NOTE:  If the chart width specified in the component html is too small,
-  // NOTE:  large symbols that would bump into each other will not be drawn.
-  let seriesData = [];
-  for (let i = 0; i &lt; data.nowcast.length; i++) {
-    seriesData[i] = {
-      y: data.nowcast[i],
-      color: pm25ToColor(data.nowcast[i]),
-    };
-  }
+  const startTime = data.datetime[0];
+  const ymin = 0;
+  const ymax = pm25ToYMax(Math.max(...data.nowcast));
 
-  let startTime = data.datetime[0];
-  // let xAxis_title = 'Time (${data.timezone})';
+  const title = data.title ?? data.locationName;
 
-  // Default to well defined y-axis limits for visual stability
-  let ymin = 0;
-  let ymax = pm25ToYMax(Math.max(...data.nowcast));
+  const seriesData = data.nowcast.map(v => ({
+    y: v,
+    color: pm25ToColor(v),
+  }));
 
-  let title = data.title;
-  if (data.title === undefined) {
-    title = data.locationName;
-  }
-
-  // ----- Chart configuration --------------------------------
-
-  let chartConfig = {
+  return {
     accessibility: { enabled: false },
-    chart: {
-      animation: false,
-    },
+    chart: { animation: false },
     plotOptions: {
       column: {
         animation: false,
-        allowPointSelect: true,
         pointPadding: 0,
         borderColor: "#4a4a4a",
         borderWidth: 0.1,
@@ -199,7 +148,7 @@ export function small_hourlyBarplotConfig(
     },
     time: {
       timezone: data.timezone,
-      useUTC: true,
+      useUTC: false,
     },
     xAxis: {
       type: "datetime",
@@ -208,26 +157,19 @@ export function small_hourlyBarplotConfig(
     yAxis: {
       min: ymin,
       max: ymax,
-      title: {
-        text: "",
-      },
-      // plotLines: pm25_AQILines(1), // removed as default per Sim Larkin request
+      title: { text: "" },
     },
-    legend: {
-      enabled: false,
-    },
+    legend: { enabled: false },
     series: [
       {
         name: "Hourly NowCast",
         type: "column",
         pointInterval: 3600 * 1000,
-        pointStart: startTime.valueOf(), // milliseconds
+        pointStart: startTime.toMillis(),
         data: seriesData,
       },
     ],
   };
-
-  return chartConfig;
 }
 </code></pre>
         </article>
@@ -239,13 +181,13 @@ export function small_hourlyBarplotConfig(
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#dailyBarplotConfig">dailyBarplotConfig</a></li><li><a href="global.html#dailyRangeBarplotConfig">dailyRangeBarplotConfig</a></li><li><a href="global.html#diurnalPlotConfig">diurnalPlotConfig</a></li><li><a href="global.html#hourlyBarplotConfig">hourlyBarplotConfig</a></li><li><a href="global.html#pm25ToAQC">pm25ToAQC</a></li><li><a href="global.html#pm25ToColor">pm25ToColor</a></li><li><a href="global.html#pm25ToYMax">pm25ToYMax</a></li><li><a href="global.html#pm25_AQILines">pm25_AQILines</a></li><li><a href="global.html#pm25_addAQIStackedBar">pm25_addAQIStackedBar</a></li><li><a href="global.html#small_dailyBarplotConfig">small_dailyBarplotConfig</a></li><li><a href="global.html#small_dailyRangeBarplotConfig">small_dailyRangeBarplotConfig</a></li><li><a href="global.html#small_diurnalPlotConfig">small_diurnalPlotConfig</a></li><li><a href="global.html#small_hourlyBarplotConfig">small_hourlyBarplotConfig</a></li><li><a href="global.html#small_timeseriesPlotConfig">small_timeseriesPlotConfig</a></li><li><a href="global.html#timeseriesPlotConfig">timeseriesPlotConfig</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AQI_COLORS">AQI_COLORS</a></li><li><a href="global.html#AQI_THRESHOLDS">AQI_THRESHOLDS</a></li><li><a href="global.html#dailyBarplotConfig">dailyBarplotConfig</a></li><li><a href="global.html#dailyRangeBarplotConfig">dailyRangeBarplotConfig</a></li><li><a href="global.html#diurnalPlotConfig">diurnalPlotConfig</a></li><li><a href="global.html#hourlyBarplotConfig">hourlyBarplotConfig</a></li><li><a href="global.html#isValidPM25">isValidPM25</a></li><li><a href="global.html#pm25ToAQC">pm25ToAQC</a></li><li><a href="global.html#pm25ToColor">pm25ToColor</a></li><li><a href="global.html#pm25ToYMax">pm25ToYMax</a></li><li><a href="global.html#pm25_AQILines">pm25_AQILines</a></li><li><a href="global.html#pm25_addAQIStackedBar">pm25_addAQIStackedBar</a></li><li><a href="global.html#requireLuxonDateTime">requireLuxonDateTime</a></li><li><a href="global.html#requireLuxonDateTimeArray">requireLuxonDateTimeArray</a></li><li><a href="global.html#small_dailyBarplotConfig">small_dailyBarplotConfig</a></li><li><a href="global.html#small_dailyRangeBarplotConfig">small_dailyRangeBarplotConfig</a></li><li><a href="global.html#small_diurnalPlotConfig">small_diurnalPlotConfig</a></li><li><a href="global.html#small_hourlyBarplotConfig">small_hourlyBarplotConfig</a></li><li><a href="global.html#small_timeseriesPlotConfig">small_timeseriesPlotConfig</a></li><li><a href="global.html#timeseriesPlotConfig">timeseriesPlotConfig</a></li><li><a href="global.html#validatePlotArrays">validatePlotArrays</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Thu Aug 22 2024 15:39:02 GMT+0200 (Central European Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Tue Jul 08 2025 12:37:24 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

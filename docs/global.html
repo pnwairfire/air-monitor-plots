@@ -94,6 +94,134 @@
     
 
     
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="AQI_COLORS"><span class="type-signature">(constant) </span>AQI_COLORS<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    <p>RGB colors corresponding to AQI categories 1 through 6.</p>
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="plot-utils.js.html">plot-utils.js</a>, <a href="plot-utils.js.html#line20">line 20</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="AQI_THRESHOLDS"><span class="type-signature">(constant) </span>AQI_THRESHOLDS<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    <p>2024 NAAQS PM2.5 thresholds in µg/m³ for AQI categories.</p>
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="plot-utils.js.html">plot-utils.js</a>, <a href="plot-utils.js.html#line15">line 15</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
 
     
         <h3 class="subsection-title">Methods</h3>
@@ -112,7 +240,7 @@
 
 
 <div class="description">
-    <p>Returns a dailyBarplot chart configuration.</p>
+    <p>Returns a daily barplot chart configuration.</p>
 </div>
 
 
@@ -164,7 +292,192 @@
 
             
 
-            <td class="description last"><p>The data required to create the chart.</p></td>
+            <td class="description last">
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>daily_datetime</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;DateTime></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Luxon DateTime[] in UTC.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>daily_mean</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Daily PM2.5 mean values.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>locationName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Label for chart title.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>timezone</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>IANA time zone string.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>title</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Optional custom title.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -205,7 +518,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dailyBarplot.js.html">dailyBarplot.js</a>, <a href="dailyBarplot.js.html#line11">line 11</a>
+        <a href="dailyBarplot.js.html">dailyBarplot.js</a>, <a href="dailyBarplot.js.html#line14">line 14</a>
     </li></ul></dd>
     
 
@@ -301,7 +614,254 @@
 
             
 
-            <td class="description last"><p>The data required to create the chart.</p></td>
+            <td class="description last">
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>daily_datetime</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;DateTime></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Luxon DateTime[] in UTC.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>daily_min</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Daily PM2.5 minimum values.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>daily_mean</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Daily PM2.5 mean values.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>daily_max</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Daily PM2.5 maximum values.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>locationName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Label for chart title.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>timezone</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>IANA time zone string (e.g. &quot;America/Los_Angeles&quot;).</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>title</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Optional override for chart title.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -342,7 +902,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dailyRangeBarplot.js.html">dailyRangeBarplot.js</a>, <a href="dailyRangeBarplot.js.html#line11">line 11</a>
+        <a href="dailyRangeBarplot.js.html">dailyRangeBarplot.js</a>, <a href="dailyRangeBarplot.js.html#line16">line 16</a>
     </li></ul></dd>
     
 
@@ -479,7 +1039,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="diurnalPlot.js.html">diurnalPlot.js</a>, <a href="diurnalPlot.js.html#line14">line 14</a>
+        <a href="diurnalPlot.js.html">diurnalPlot.js</a>, <a href="diurnalPlot.js.html#line13">line 13</a>
     </li></ul></dd>
     
 
@@ -515,7 +1075,7 @@
     
 
     
-    <h4 class="name" id="hourlyBarplotConfig"><span class="type-signature"></span>hourlyBarplotConfig<span class="signature">(data)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="hourlyBarplotConfig"><span class="type-signature"></span>hourlyBarplotConfig<span class="signature">(data)</span><span class="type-signature"> &rarr; {Object}</span></h4>
     
 
     
@@ -523,7 +1083,7 @@
 
 
 <div class="description">
-    <p>Returns a timeseriesPlot chart configuration.</p>
+    <p>Returns a Highcharts chart configuration for a full-sized hourly NowCast barplot.</p>
 </div>
 
 
@@ -575,7 +1135,223 @@
 
             
 
-            <td class="description last"><p>The data required to create the chart.</p></td>
+            <td class="description last">
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>datetime</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;DateTime></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Array of Luxon DateTime objects (UTC).</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>pm25</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Raw hourly PM2.5 data.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>nowcast</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>NowCast values.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>locationName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Label for the chart.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>timezone</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>IANA timezone for display.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>title</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Optional custom title.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -616,7 +1392,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="hourlyBarplot.js.html">hourlyBarplot.js</a>, <a href="hourlyBarplot.js.html#line11">line 11</a>
+        <a href="hourlyBarplot.js.html">hourlyBarplot.js</a>, <a href="hourlyBarplot.js.html#line16">line 16</a>
     </li></ul></dd>
     
 
@@ -641,6 +1417,28 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Highcharts chart config object.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -652,7 +1450,7 @@
     
 
     
-    <h4 class="name" id="pm25ToAQC"><span class="type-signature"></span>pm25ToAQC<span class="signature">(pm25, NAAQS)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="isValidPM25"><span class="type-signature"></span>isValidPM25<span class="signature">(value)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
     
 
     
@@ -660,7 +1458,163 @@
 
 
 <div class="description">
-    <p>Returns the Air Quality Category (AQC) level associated a PM2.5 measurement.</p>
+    <p>Returns true if the given value is a finite number.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="plot-utils.js.html">plot-utils.js</a>, <a href="plot-utils.js.html#line34">line 34</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="pm25ToAQC"><span class="type-signature"></span>pm25ToAQC<span class="signature">(pm25)</span><span class="type-signature"> &rarr; {number|null}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Returns the Air Quality Category (AQC) level associated with a PM2.5 measurement.
+Categories range from 1 (Good) to 6 (Hazardous).</p>
 </div>
 
 
@@ -712,30 +1666,7 @@
 
             
 
-            <td class="description last"><p>PM2.5 value in ug/m3.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>NAAQS</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Version of NAAQS to use (&quot;PM2.5&quot; or &quot;PM2.5_2024&quot;).</p></td>
+            <td class="description last"><p>PM2.5 concentration in µg/m³.</p></td>
         </tr>
 
     
@@ -776,7 +1707,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="plot-utils.js.html">plot-utils.js</a>, <a href="plot-utils.js.html#line6">line 6</a>
+        <a href="plot-utils.js.html">plot-utils.js</a>, <a href="plot-utils.js.html#line49">line 49</a>
     </li></ul></dd>
     
 
@@ -801,6 +1732,31 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>AQC level (1–6), or null if input is invalid.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+|
+
+<span class="param-type">null</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -812,7 +1768,7 @@
     
 
     
-    <h4 class="name" id="pm25ToColor"><span class="type-signature"></span>pm25ToColor<span class="signature">(pm25, NAAQS)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="pm25ToColor"><span class="type-signature"></span>pm25ToColor<span class="signature">(pm25)</span><span class="type-signature"> &rarr; {string}</span></h4>
     
 
     
@@ -872,30 +1828,7 @@
 
             
 
-            <td class="description last"><p>PM2.5 value in ug/m3.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>NAAQS</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Version of NAAQS to use (&quot;PM2.5&quot; or &quot;PM2.5_2024&quot;).</p></td>
+            <td class="description last"><p>PM2.5 concentration in µg/m³.</p></td>
         </tr>
 
     
@@ -936,7 +1869,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="plot-utils.js.html">plot-utils.js</a>, <a href="plot-utils.js.html#line59">line 59</a>
+        <a href="plot-utils.js.html">plot-utils.js</a>, <a href="plot-utils.js.html#line66">line 66</a>
     </li></ul></dd>
     
 
@@ -961,6 +1894,28 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>RGB color string.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -972,7 +1927,7 @@
     
 
     
-    <h4 class="name" id="pm25ToYMax"><span class="type-signature"></span>pm25ToYMax<span class="signature">(pm25)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="pm25ToYMax"><span class="type-signature"></span>pm25ToYMax<span class="signature">(pm25)</span><span class="type-signature"> &rarr; {number}</span></h4>
     
 
     
@@ -981,7 +1936,7 @@
 
 <div class="description">
     <p>Returns the ymax value appropriate for a maximum PM2.5 level.
-Having a finite set of ymax values prevents the y-scale from jumping around too much.</p>
+Uses fixed breakpoints to prevent charts from autoscaling too wildly.</p>
 </div>
 
 
@@ -1033,7 +1988,7 @@ Having a finite set of ymax values prevents the y-scale from jumping around too 
 
             
 
-            <td class="description last"><p>Maximum PM2.5 value in ug/m3.</p></td>
+            <td class="description last"><p>Maximum PM2.5 value in µg/m³.</p></td>
         </tr>
 
     
@@ -1074,7 +2029,7 @@ Having a finite set of ymax values prevents the y-scale from jumping around too 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="plot-utils.js.html">plot-utils.js</a>, <a href="plot-utils.js.html#line81">line 81</a>
+        <a href="plot-utils.js.html">plot-utils.js</a>, <a href="plot-utils.js.html#line78">line 78</a>
     </li></ul></dd>
     
 
@@ -1099,6 +2054,28 @@ Having a finite set of ymax values prevents the y-scale from jumping around too 
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Suggested y-axis maximum.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -1110,7 +2087,7 @@ Having a finite set of ymax values prevents the y-scale from jumping around too 
     
 
     
-    <h4 class="name" id="pm25_AQILines"><span class="type-signature"></span>pm25_AQILines<span class="signature">(width, NAAQS)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="pm25_AQILines"><span class="type-signature"></span>pm25_AQILines<span class="signature">(width<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Array.&lt;Object>}</span></h4>
     
 
     
@@ -1118,14 +2095,7 @@ Having a finite set of ymax values prevents the y-scale from jumping around too 
 
 
 <div class="description">
-    <p>Returns an array of objects with {color, width, value} properties. These
-can be used to add colored AQI lines to plots with a PM2.5 axis measured
-in micrograms per meter cubed.</p>
-<p>Usage in a Highcharts configuration:</p>
-<pre class="prettyprint source"><code>yaxis: {
-  plotlines: pm25_AQILines(),
-}
-</code></pre>
+    <p>Returns an array of plotLine objects for overlaying AQI thresholds on a Highcharts yAxis.</p>
 </div>
 
 
@@ -1149,7 +2119,11 @@ in micrograms per meter cubed.</p>
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -1174,33 +2148,26 @@ in micrograms per meter cubed.</p>
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
 
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    2
+                
+                </td>
             
 
             <td class="description last"><p>Line width in pixels.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>NAAQS</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Version of NAAQS to use (&quot;PM2.5&quot; or &quot;PM2.5_2024&quot;).</p></td>
         </tr>
 
     
@@ -1241,7 +2208,222 @@ in micrograms per meter cubed.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="plot-utils.js.html">plot-utils.js</a>, <a href="plot-utils.js.html#line117">line 117</a>
+        <a href="plot-utils.js.html">plot-utils.js</a>, <a href="plot-utils.js.html#line98">line 98</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Highcharts-compatible <code>plotLines</code> array.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="pm25_addAQIStackedBar"><span class="type-signature"></span>pm25_addAQIStackedBar<span class="signature">(chart, width<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Adds a colored AQI stacked bar to the left side of an existing Highcharts chart.
+Intended to provide a visual reference for AQI zones.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>chart</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Highcharts.Chart</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>A fully rendered Highcharts chart.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>width</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    6
+                
+                </td>
+            
+
+            <td class="description last"><p>Width of the AQI bar in pixels.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="plot-utils.js.html">plot-utils.js</a>, <a href="plot-utils.js.html#line113">line 113</a>
     </li></ul></dd>
     
 
@@ -1277,7 +2459,7 @@ in micrograms per meter cubed.</p>
     
 
     
-    <h4 class="name" id="pm25_addAQIStackedBar"><span class="type-signature"></span>pm25_addAQIStackedBar<span class="signature">(chart, NAAQS)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="requireLuxonDateTime"><span class="type-signature"></span>requireLuxonDateTime<span class="signature">(dt, name)</span><span class="type-signature"></span></h4>
     
 
     
@@ -1285,8 +2467,7 @@ in micrograms per meter cubed.</p>
 
 
 <div class="description">
-    <p>Draws a stacked bar indicating pm25 AQI levels on the left side of a chart.
-The chart must already exist. This is not part of chart configuration.</p>
+    <p>Throws an error if the input is not a Luxon DateTime object.</p>
 </div>
 
 
@@ -1322,13 +2503,13 @@ The chart must already exist. This is not part of chart configuration.</p>
 
         <tr>
             
-                <td class="name"><code>chart</code></td>
+                <td class="name"><code>dt</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Highcharts.chart</span>
+<span class="param-type">*</span>
 
 
             
@@ -1338,14 +2519,14 @@ The chart must already exist. This is not part of chart configuration.</p>
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>The value to validate.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>NAAQS</code></td>
+                <td class="name"><code>name</code></td>
             
 
             <td class="type">
@@ -1361,7 +2542,7 @@ The chart must already exist. This is not part of chart configuration.</p>
 
             
 
-            <td class="description last"><p>Version of NAAQS to use (&quot;PM2.5&quot; or &quot;PM2.5_2024&quot;).</p></td>
+            <td class="description last"><p>Name of the variable for clearer error messages.</p></td>
         </tr>
 
     
@@ -1402,7 +2583,167 @@ The chart must already exist. This is not part of chart configuration.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="plot-utils.js.html">plot-utils.js</a>, <a href="plot-utils.js.html#line141">line 141</a>
+        <a href="helpers.js.html">helpers.js</a>, <a href="helpers.js.html#line9">line 9</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="requireLuxonDateTimeArray"><span class="type-signature"></span>requireLuxonDateTimeArray<span class="signature">(arr, name)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Throws an error if any element in the array is not a Luxon DateTime object.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>arr</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Array to validate.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Name of the array for clearer error messages.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="helpers.js.html">helpers.js</a>, <a href="helpers.js.html#line20">line 20</a>
     </li></ul></dd>
     
 
@@ -1446,9 +2787,7 @@ The chart must already exist. This is not part of chart configuration.</p>
 
 
 <div class="description">
-    <p>Returns a dailyBarplot chart configuration.
-The 'small' version of this plot has no legend or axis labeling and is
-appropriate for use in a display with &quot;small multiples&quot;.</p>
+    <p>Returns a daily barplot chart configuration for small-multiples display.</p>
 </div>
 
 
@@ -1500,7 +2839,7 @@ appropriate for use in a display with &quot;small multiples&quot;.</p>
 
             
 
-            <td class="description last"><p>The data required to create the chart.</p></td>
+            <td class="description last"><p>Same structure as <code>dailyBarplotConfig</code>.</p></td>
         </tr>
 
     
@@ -1541,7 +2880,7 @@ appropriate for use in a display with &quot;small multiples&quot;.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dailyBarplot.js.html">dailyBarplot.js</a>, <a href="dailyBarplot.js.html#line103">line 103</a>
+        <a href="dailyBarplot.js.html">dailyBarplot.js</a>, <a href="dailyBarplot.js.html#line74">line 74</a>
     </li></ul></dd>
     
 
@@ -1585,9 +2924,7 @@ appropriate for use in a display with &quot;small multiples&quot;.</p>
 
 
 <div class="description">
-    <p>Returns a dailyRangeBarplot chart configuration.
-The 'small' version of this plot has no legend or axis labeling and is
-appropriate for use in a display with &quot;small multiples&quot;.</p>
+    <p>Returns a compact dailyRangeBarplot config for use in small-multiples display.</p>
 </div>
 
 
@@ -1639,7 +2976,7 @@ appropriate for use in a display with &quot;small multiples&quot;.</p>
 
             
 
-            <td class="description last"><p>The data required to create the chart.</p></td>
+            <td class="description last"><p>See <code>dailyRangeBarplotConfig</code> for structure.</p></td>
         </tr>
 
     
@@ -1680,7 +3017,7 @@ appropriate for use in a display with &quot;small multiples&quot;.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dailyRangeBarplot.js.html">dailyRangeBarplot.js</a>, <a href="dailyRangeBarplot.js.html#line120">line 120</a>
+        <a href="dailyRangeBarplot.js.html">dailyRangeBarplot.js</a>, <a href="dailyRangeBarplot.js.html#line90">line 90</a>
     </li></ul></dd>
     
 
@@ -1819,7 +3156,7 @@ appropriate for use in a display with &quot;small multiples&quot;.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="diurnalPlot.js.html">diurnalPlot.js</a>, <a href="diurnalPlot.js.html#line195">line 195</a>
+        <a href="diurnalPlot.js.html">diurnalPlot.js</a>, <a href="diurnalPlot.js.html#line143">line 143</a>
     </li></ul></dd>
     
 
@@ -1863,9 +3200,7 @@ appropriate for use in a display with &quot;small multiples&quot;.</p>
 
 
 <div class="description">
-    <p>Returns a timeseriesPlot chart configuration.
-The 'small' version of this plot has no legend or axis labeling and is
-appropriate for use in a display with &quot;small multiples&quot;.</p>
+    <p>Returns a Highcharts config for a small-multiples-style hourly NowCast barplot.</p>
 </div>
 
 
@@ -1917,7 +3252,7 @@ appropriate for use in a display with &quot;small multiples&quot;.</p>
 
             
 
-            <td class="description last"><p>The data required to create the chart.</p></td>
+            <td class="description last"><p>Same structure as for hourlyBarplotConfig.</p></td>
         </tr>
 
     
@@ -1958,7 +3293,7 @@ appropriate for use in a display with &quot;small multiples&quot;.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="hourlyBarplot.js.html">hourlyBarplot.js</a>, <a href="hourlyBarplot.js.html#line116">line 116</a>
+        <a href="hourlyBarplot.js.html">hourlyBarplot.js</a>, <a href="hourlyBarplot.js.html#line90">line 90</a>
     </li></ul></dd>
     
 
@@ -1994,7 +3329,7 @@ appropriate for use in a display with &quot;small multiples&quot;.</p>
     
 
     
-    <h4 class="name" id="small_timeseriesPlotConfig"><span class="type-signature"></span>small_timeseriesPlotConfig<span class="signature">(data)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="small_timeseriesPlotConfig"><span class="type-signature"></span>small_timeseriesPlotConfig<span class="signature">(data)</span><span class="type-signature"> &rarr; {Object}</span></h4>
     
 
     
@@ -2002,9 +3337,9 @@ appropriate for use in a display with &quot;small multiples&quot;.</p>
 
 
 <div class="description">
-    <p>Returns a timeseriesPlot chart configuration.
-The 'small' version of this plot has no legend or axis labeling and is
-appropriate for use in a display with &quot;small multiples&quot;.</p>
+    <p>Returns a simplified version of the timeseries plot configuration.
+This small variant disables legends and axis labels for use in
+small-multiples or compact visual displays.</p>
 </div>
 
 
@@ -2056,7 +3391,223 @@ appropriate for use in a display with &quot;small multiples&quot;.</p>
 
             
 
-            <td class="description last"><p>The data required to create the chart.</p></td>
+            <td class="description last"><p>The data required to create the chart.</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>datetime</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;DateTime></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Array of Luxon DateTime objects in UTC.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>pm25</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>PM2.5 values aligned with datetime.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>nowcast</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>NowCast values aligned with datetime.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>locationName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Site or label name.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>timezone</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>IANA timezone string for x-axis display.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>title</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Optional custom chart title.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -2097,7 +3648,7 @@ appropriate for use in a display with &quot;small multiples&quot;.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="timeseriesPlot.js.html">timeseriesPlot.js</a>, <a href="timeseriesPlot.js.html#line124">line 124</a>
+        <a href="timeseriesPlot.js.html">timeseriesPlot.js</a>, <a href="timeseriesPlot.js.html#line111">line 111</a>
     </li></ul></dd>
     
 
@@ -2122,6 +3673,28 @@ appropriate for use in a display with &quot;small multiples&quot;.</p>
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Highcharts chart config.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -2133,7 +3706,7 @@ appropriate for use in a display with &quot;small multiples&quot;.</p>
     
 
     
-    <h4 class="name" id="timeseriesPlotConfig"><span class="type-signature"></span>timeseriesPlotConfig<span class="signature">(data)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="timeseriesPlotConfig"><span class="type-signature"></span>timeseriesPlotConfig<span class="signature">(data)</span><span class="type-signature"> &rarr; {Object}</span></h4>
     
 
     
@@ -2193,7 +3766,223 @@ appropriate for use in a display with &quot;small multiples&quot;.</p>
 
             
 
-            <td class="description last"><p>The data required to create the chart.</p></td>
+            <td class="description last"><p>The data required to create the chart.</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>datetime</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;DateTime></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Array of Luxon DateTime objects in UTC.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>pm25</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>PM2.5 values aligned with datetime.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>nowcast</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>NowCast values aligned with datetime.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>locationName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Site or label name.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>timezone</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>IANA timezone string for x-axis display.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>title</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Optional custom chart title.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -2234,7 +4023,7 @@ appropriate for use in a display with &quot;small multiples&quot;.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="timeseriesPlot.js.html">timeseriesPlot.js</a>, <a href="timeseriesPlot.js.html#line11">line 11</a>
+        <a href="timeseriesPlot.js.html">timeseriesPlot.js</a>, <a href="timeseriesPlot.js.html#line16">line 16</a>
     </li></ul></dd>
     
 
@@ -2259,6 +4048,240 @@ appropriate for use in a display with &quot;small multiples&quot;.</p>
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Highcharts chart config.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="validatePlotArrays"><span class="type-signature"></span>validatePlotArrays<span class="signature">(datetime, pm25, nowcast)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Validate the input data arrays for hourly or time series plots.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>datetime</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;DateTime></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Array of Luxon DateTime objects (assumed UTC).</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>pm25</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;(number|null)></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Array of PM2.5 values (finite or null).</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>nowcast</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;(number|null)></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Array of NowCast values (finite or null).</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="plot-utils.js.html">plot-utils.js</a>, <a href="plot-utils.js.html#line147">line 147</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Throws:</h5>
+
+        
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        <p>If input is invalid in structure or type.</p>
+        </div>
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type">Error</span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
+
+    
+
+
 
 
 
@@ -2280,13 +4303,13 @@ appropriate for use in a display with &quot;small multiples&quot;.</p>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#dailyBarplotConfig">dailyBarplotConfig</a></li><li><a href="global.html#dailyRangeBarplotConfig">dailyRangeBarplotConfig</a></li><li><a href="global.html#diurnalPlotConfig">diurnalPlotConfig</a></li><li><a href="global.html#hourlyBarplotConfig">hourlyBarplotConfig</a></li><li><a href="global.html#pm25ToAQC">pm25ToAQC</a></li><li><a href="global.html#pm25ToColor">pm25ToColor</a></li><li><a href="global.html#pm25ToYMax">pm25ToYMax</a></li><li><a href="global.html#pm25_AQILines">pm25_AQILines</a></li><li><a href="global.html#pm25_addAQIStackedBar">pm25_addAQIStackedBar</a></li><li><a href="global.html#small_dailyBarplotConfig">small_dailyBarplotConfig</a></li><li><a href="global.html#small_dailyRangeBarplotConfig">small_dailyRangeBarplotConfig</a></li><li><a href="global.html#small_diurnalPlotConfig">small_diurnalPlotConfig</a></li><li><a href="global.html#small_hourlyBarplotConfig">small_hourlyBarplotConfig</a></li><li><a href="global.html#small_timeseriesPlotConfig">small_timeseriesPlotConfig</a></li><li><a href="global.html#timeseriesPlotConfig">timeseriesPlotConfig</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AQI_COLORS">AQI_COLORS</a></li><li><a href="global.html#AQI_THRESHOLDS">AQI_THRESHOLDS</a></li><li><a href="global.html#dailyBarplotConfig">dailyBarplotConfig</a></li><li><a href="global.html#dailyRangeBarplotConfig">dailyRangeBarplotConfig</a></li><li><a href="global.html#diurnalPlotConfig">diurnalPlotConfig</a></li><li><a href="global.html#hourlyBarplotConfig">hourlyBarplotConfig</a></li><li><a href="global.html#isValidPM25">isValidPM25</a></li><li><a href="global.html#pm25ToAQC">pm25ToAQC</a></li><li><a href="global.html#pm25ToColor">pm25ToColor</a></li><li><a href="global.html#pm25ToYMax">pm25ToYMax</a></li><li><a href="global.html#pm25_AQILines">pm25_AQILines</a></li><li><a href="global.html#pm25_addAQIStackedBar">pm25_addAQIStackedBar</a></li><li><a href="global.html#requireLuxonDateTime">requireLuxonDateTime</a></li><li><a href="global.html#requireLuxonDateTimeArray">requireLuxonDateTimeArray</a></li><li><a href="global.html#small_dailyBarplotConfig">small_dailyBarplotConfig</a></li><li><a href="global.html#small_dailyRangeBarplotConfig">small_dailyRangeBarplotConfig</a></li><li><a href="global.html#small_diurnalPlotConfig">small_diurnalPlotConfig</a></li><li><a href="global.html#small_hourlyBarplotConfig">small_hourlyBarplotConfig</a></li><li><a href="global.html#small_timeseriesPlotConfig">small_timeseriesPlotConfig</a></li><li><a href="global.html#timeseriesPlotConfig">timeseriesPlotConfig</a></li><li><a href="global.html#validatePlotArrays">validatePlotArrays</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Thu Aug 22 2024 15:39:02 GMT+0200 (Central European Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Tue Jul 08 2025 12:37:24 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

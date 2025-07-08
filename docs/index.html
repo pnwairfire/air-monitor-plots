@@ -44,7 +44,103 @@
 
     <section>
         <article><h1>air-monitor-plots</h1>
-<p>USFS AirFire standard plots for hourly air quality time series data.</p></article>
+<p>USFS AirFire standard plots for display of hourly air quality time series data.</p>
+<p>This package provides functions that generate
+<a href="https://www.highcharts.com/">Highcharts</a> configuration objects for creating
+PM2.5 air quality visualizations used by the U.S. Forest Service
+<a href="https://www.airfire.org/">AirFire team</a>.</p>
+<p>Built for use with <a href="https://www.npmjs.com/package/air-monitor">air-monitor</a> and
+<a href="https://www.npmjs.com/package/air-monitor-algorithms">air-monitor-algorithms</a>,
+these chart generators output Highcharts config objects with consistent styles
+and accurate timezone handling.</p>
+<h2>✨ Features</h2>
+<ul>
+<li>Returns Highcharts config objects (does not render charts)</li>
+<li>Works with hourly PM2.5 air quality data</li>
+<li>Built for use with <code>air-monitor</code> + <code>air-monitor-algorithms</code></li>
+<li>Supports &quot;small multiples&quot; with <code>small_*</code> chart variants</li>
+<li>Fully timezone-aware using Luxon <code>DateTime</code> objects</li>
+</ul>
+<h2>Available Plot Types</h2>
+<p>Each plot type has a full and <code>small_~</code> version:</p>
+<table>
+<thead>
+<tr>
+<th>Function Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>timeseriesPlotConfig</code></td>
+<td>Line chart for hourly PM2.5 and NowCast</td>
+</tr>
+<tr>
+<td><code>hourlyBarplotConfig</code></td>
+<td>Barplot for NowCast values</td>
+</tr>
+<tr>
+<td><code>dailyBarplotConfig</code></td>
+<td>Barplot for daily means</td>
+</tr>
+<tr>
+<td><code>dailyRangeBarplotConfig</code></td>
+<td>Min/max columnrange + daily means</td>
+</tr>
+<tr>
+<td><code>diurnalPlotConfig</code></td>
+<td>Diurnal cycle by hour of day</td>
+</tr>
+</tbody>
+</table>
+<h2>Usage Example (with <code>timeseriesPlotConfig</code>)</h2>
+<p>Within the <code>&lt;script&gt;&lt;/script&gt;</code> portion of a web page, you might have:</p>
+<pre class="prettyprint source lang-js"><code>const monitor = new Monitor();
+await monitor.loadLatest(&quot;airnow&quot;);
+
+const ids = monitor
+  .filterByValue('locationName', 'Entiat')
+  .getIDs();
+
+const id = ids[0];
+
+const data = {
+  datetime: monitor.getDatetime(),
+  pm25: monitor.getPM25(id),
+  nowcast: monitor.getNowcast(id),
+  locationName: monitor.getMetadata(id, 'locationName'),
+  timezone: monitor.getMetadata(id, 'timezone'),
+  title: undefined  // Optional override
+};
+
+const config = AirMonitorPlots.timeseriesPlotConfig(data);
+Highcharts.chart('container', config);
+</code></pre>
+<p>This assumes:</p>
+<ul>
+<li>The <code>highcharts</code>, <code>air-monitor</code> and <code>air-monitor-plots</code> packages have been loaded</li>
+<li><code>&lt;div id=&quot;container&quot;&gt;</code> exists in the web page</li>
+</ul>
+<h2>HTML Example Demos</h2>
+<p>All demo <code>.html</code> files in the <code>playwright/</code> directory use this approach,
+with <code>await</code> inside <code>&lt;script type=&quot;module&quot;&gt;</code>. You can load them directly in a
+browser or use them with Playwright tests.</p>
+<h2>Testing</h2>
+<ul>
+<li>Unit tests: <code>npm run test</code></li>
+<li>Playwright visual tests: <code>npm run test:playwright</code></li>
+</ul>
+<p>To view charts manually in a browser:</p>
+<pre class="prettyprint source lang-bash"><code>npm run serve:examples:open
+</code></pre>
+<h2>Related Packages</h2>
+<ul>
+<li><a href="https://www.npmjs.com/package/air-monitor">air-monitor</a></li>
+<li><a href="https://www.npmjs.com/package/air-monitor-algorithms">air-monitor-algorithms</a></li>
+</ul>
+<h2>License</h2>
+<p>GPL-3.0-or-later
+© 2024–2025 Jonathan Callahan / USFS AirFire</p></article>
     </section>
 
 
@@ -55,13 +151,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#dailyBarplotConfig">dailyBarplotConfig</a></li><li><a href="global.html#dailyRangeBarplotConfig">dailyRangeBarplotConfig</a></li><li><a href="global.html#diurnalPlotConfig">diurnalPlotConfig</a></li><li><a href="global.html#hourlyBarplotConfig">hourlyBarplotConfig</a></li><li><a href="global.html#pm25ToAQC">pm25ToAQC</a></li><li><a href="global.html#pm25ToColor">pm25ToColor</a></li><li><a href="global.html#pm25ToYMax">pm25ToYMax</a></li><li><a href="global.html#pm25_AQILines">pm25_AQILines</a></li><li><a href="global.html#pm25_addAQIStackedBar">pm25_addAQIStackedBar</a></li><li><a href="global.html#small_dailyBarplotConfig">small_dailyBarplotConfig</a></li><li><a href="global.html#small_dailyRangeBarplotConfig">small_dailyRangeBarplotConfig</a></li><li><a href="global.html#small_diurnalPlotConfig">small_diurnalPlotConfig</a></li><li><a href="global.html#small_hourlyBarplotConfig">small_hourlyBarplotConfig</a></li><li><a href="global.html#small_timeseriesPlotConfig">small_timeseriesPlotConfig</a></li><li><a href="global.html#timeseriesPlotConfig">timeseriesPlotConfig</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AQI_COLORS">AQI_COLORS</a></li><li><a href="global.html#AQI_THRESHOLDS">AQI_THRESHOLDS</a></li><li><a href="global.html#dailyBarplotConfig">dailyBarplotConfig</a></li><li><a href="global.html#dailyRangeBarplotConfig">dailyRangeBarplotConfig</a></li><li><a href="global.html#diurnalPlotConfig">diurnalPlotConfig</a></li><li><a href="global.html#hourlyBarplotConfig">hourlyBarplotConfig</a></li><li><a href="global.html#isValidPM25">isValidPM25</a></li><li><a href="global.html#pm25ToAQC">pm25ToAQC</a></li><li><a href="global.html#pm25ToColor">pm25ToColor</a></li><li><a href="global.html#pm25ToYMax">pm25ToYMax</a></li><li><a href="global.html#pm25_AQILines">pm25_AQILines</a></li><li><a href="global.html#pm25_addAQIStackedBar">pm25_addAQIStackedBar</a></li><li><a href="global.html#requireLuxonDateTime">requireLuxonDateTime</a></li><li><a href="global.html#requireLuxonDateTimeArray">requireLuxonDateTimeArray</a></li><li><a href="global.html#small_dailyBarplotConfig">small_dailyBarplotConfig</a></li><li><a href="global.html#small_dailyRangeBarplotConfig">small_dailyRangeBarplotConfig</a></li><li><a href="global.html#small_diurnalPlotConfig">small_diurnalPlotConfig</a></li><li><a href="global.html#small_hourlyBarplotConfig">small_hourlyBarplotConfig</a></li><li><a href="global.html#small_timeseriesPlotConfig">small_timeseriesPlotConfig</a></li><li><a href="global.html#timeseriesPlotConfig">timeseriesPlotConfig</a></li><li><a href="global.html#validatePlotArrays">validatePlotArrays</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Thu Aug 22 2024 15:39:02 GMT+0200 (Central European Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Tue Jul 08 2025 12:37:24 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

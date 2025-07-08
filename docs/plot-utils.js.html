@@ -27,226 +27,189 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * Returns the Air Quality Category (AQC) level associated a PM2.5 measurement.
- * @param {number} pm25 PM2.5 value in ug/m3.
- * @param {string} NAAQS Version of NAAQS to use ("PM2.5" or "PM2.5_2024").
+ * Utilities for mapping PM2.5 values to Air Quality Categories (AQC),
+ * AQI colors, y-axis limits, and visual elements in Highcharts plots.
  */
-export function pm25ToAQC(pm25, NAAQS = "PM2.5_2024") {
-  let category;
 
-  if (NAAQS === "PM2.5") {
-    category =
-      pm25 &lt;= 12
-        ? 1
-        : pm25 &lt;= 35.4
-        ? 2
-        : pm25 &lt;= 55.4
-        ? 3
-        : pm25 &lt;= 150.4
-        ? 4
-        : pm25 &lt;= 250.4
-        ? 5
-        : 6;
-  } else if (NAAQS === "PM2.5_2024") {
-    category =
-      pm25 &lt;= 9
-        ? 1
-        : pm25 &lt;= 35.4
-        ? 2
-        : pm25 &lt;= 55.4
-        ? 3
-        : pm25 &lt;= 125.4
-        ? 4
-        : pm25 &lt;= 225.4
-        ? 5
-        : 6;
-  } else {
-    // Default to PM2.5_2024
-    category =
-      pm25 &lt;= 9
-        ? 1
-        : pm25 &lt;= 35.4
-        ? 2
-        : pm25 &lt;= 55.4
-        ? 3
-        : pm25 &lt;= 125.4
-        ? 4
-        : pm25 &lt;= 225.4
-        ? 5
-        : 6;
-  }
+import { requireLuxonDateTimeArray } from './helpers.js';
 
-  return category;
+// ------------------------------------------------------------------
+// Constants
+// ------------------------------------------------------------------
+
+/**
+ * 2024 NAAQS PM2.5 thresholds in µg/m³ for AQI categories.
+ */
+const AQI_THRESHOLDS = [0, 9, 35.4, 55.4, 125.4, 225.4];
+
+/**
+ * RGB colors corresponding to AQI categories 1 through 6.
+ */
+const AQI_COLORS = [
+  "rgb(0,255,0)",      // Green
+  "rgb(255,255,0)",    // Yellow
+  "rgb(255,126,0)",    // Orange
+  "rgb(255,0,0)",      // Red
+  "rgb(143,63,151)",   // Purple
+  "rgb(126,0,35)",     // Maroon
+];
+
+/**
+ * Returns true if the given value is a finite number.
+ * @param {*} value
+ * @returns {boolean}
+ */
+function isValidPM25(value) {
+  return typeof value === 'number' &amp;&amp; isFinite(value);
+}
+
+// ------------------------------------------------------------------
+// Core Utilities
+// ------------------------------------------------------------------
+
+/**
+ * Returns the Air Quality Category (AQC) level associated with a PM2.5 measurement.
+ * Categories range from 1 (Good) to 6 (Hazardous).
+ *
+ * @param {number} pm25 - PM2.5 concentration in µg/m³.
+ * @returns {number|null} AQC level (1–6), or null if input is invalid.
+ */
+export function pm25ToAQC(pm25) {
+  if (!isValidPM25(pm25)) return null;
+
+  if (pm25 &lt;= 9) return 1;
+  if (pm25 &lt;= 35.4) return 2;
+  if (pm25 &lt;= 55.4) return 3;
+  if (pm25 &lt;= 125.4) return 4;
+  if (pm25 &lt;= 225.4) return 5;
+  return 6;
 }
 
 /**
  * Returns the AQI color associated with a PM2.5 level.
- * @param {number} pm25 PM2.5 value in ug/m3.
- * @param {string} NAAQS Version of NAAQS to use ("PM2.5" or "PM2.5_2024").
+ *
+ * @param {number} pm25 - PM2.5 concentration in µg/m³.
+ * @returns {string} RGB color string.
  */
-export function pm25ToColor(pm25, NAAQS = "PM2.5_2024") {
-  const colors = [
-    "rgb(0,255,0)",
-    "rgb(255,255,0)",
-    "rgb(255,126,0)",
-    "rgb(255,0,0)",
-    "rgb(143,63,151)",
-    "rgb(126,0,35)",
-  ];
-
-  const AQC = pm25ToAQC(pm25, NAAQS);
-
-  const color = colors[AQC - 1];
-
-  return color;
+export function pm25ToColor(pm25) {
+  const AQC = pm25ToAQC(pm25);
+  return AQC == null ? "rgb(187,187,187)" : AQI_COLORS[AQC - 1];
 }
 
 /**
  * Returns the ymax value appropriate for a maximum PM2.5 level.
- * Having a finite set of ymax values prevents the y-scale from jumping around too much.
- * @param {number} pm25 Maximum PM2.5 value in ug/m3.
+ * Uses fixed breakpoints to prevent charts from autoscaling too wildly.
+ *
+ * @param {number} pm25 - Maximum PM2.5 value in µg/m³.
+ * @returns {number} Suggested y-axis maximum.
  */
 export function pm25ToYMax(pm25) {
-  // See:  https://github.com/MazamaScience/AirMonitorPlots/blob/5482843e8e0ccfe1e30ccf21509d0df01fe45bca/R/custom_pm25TimeseriesScales.R#L103
-  let ymax =
-    pm25 &lt;= 50
-      ? 50
-      : pm25 &lt;= 100
-      ? 100
-      : pm25 &lt;= 200
-      ? 200
-      : pm25 &lt;= 400
-      ? 500
-      : pm25 &lt;= 600
-      ? 600
-      : pm25 &lt;= 1000
-      ? 1000
-      : pm25 &lt;= 1500
-      ? 1500
-      : 1.05 * pm25;
+  if (!isValidPM25(pm25)) return 50;
 
-  return ymax;
+  if (pm25 &lt;= 50) return 50;
+  if (pm25 &lt;= 100) return 100;
+  if (pm25 &lt;= 200) return 200;
+  if (pm25 &lt;= 400) return 500;
+  if (pm25 &lt;= 600) return 600;
+  if (pm25 &lt;= 1000) return 1000;
+  if (pm25 &lt;= 1500) return 1500;
+
+  return 1.05 * pm25;
 }
 
 /**
- * Returns an array of objects with {color, width, value} properties. These
- * can be used to add colored AQI lines to plots with a PM2.5 axis measured
- * in micrograms per meter cubed.
+ * Returns an array of plotLine objects for overlaying AQI thresholds on a Highcharts yAxis.
  *
- * Usage in a Highcharts configuration:
- * ```
- * yaxis: {
- *   plotlines: pm25_AQILines(),
- * }
- * ```
- * @param {number} width Line width in pixels.
- * @param {string} NAAQS Version of NAAQS to use ("PM2.5" or "PM2.5_2024").
+ * @param {number} [width=2] - Line width in pixels.
+ * @returns {Array&lt;Object>} Highcharts-compatible `plotLines` array.
  */
-export function pm25_AQILines(width = 2, NAAQS = "PM2.5_2024") {
-  const NAAQS_thresholds = {
-    "PM2.5": [0, 12, 35.4, 55.4, 150.4, 250.4],
-    "PM2.5_2024": [0, 9, 35.4, 55.4, 125.4, 225.4],
-  };
-
-  const thresholds = NAAQS_thresholds[NAAQS];
-
-  let lines = [
-    { color: "rgb(255,255,0)", width: width, value: thresholds[1] },
-    { color: "rgb(255,126,0)", width: width, value: thresholds[2] },
-    { color: "rgb(255,0,0)", width: width, value: thresholds[3] },
-    { color: "rgb(143,63,151)", width: width, value: thresholds[4] },
-    { color: "rgb(126,0,35)", width: width, value: thresholds[5] },
-  ];
-  return lines;
+export function pm25_AQILines(width = 2) {
+  return AQI_THRESHOLDS.slice(1).map((value, i) => ({
+    color: AQI_COLORS[i + 1], // start from yellow
+    width,
+    value,
+  }));
 }
 
 /**
- * Draws a stacked bar indicating pm25 AQI levels on the left side of a chart.
- * The chart must already exist. This is not part of chart configuration.
- * @param {Highcharts.chart} chart
- * @param {string} NAAQS Version of NAAQS to use ("PM2.5" or "PM2.5_2024").
+ * Adds a colored AQI stacked bar to the left side of an existing Highcharts chart.
+ * Intended to provide a visual reference for AQI zones.
+ *
+ * @param {Highcharts.Chart} chart - A fully rendered Highcharts chart.
+ * @param {number} [width=6] - Width of the AQI bar in pixels.
  */
-export function pm25_addAQIStackedBar(chart, width = 6, NAAQS = "PM2.5_2024") {
-  // NOTE:  0, 0 is at the top left of the graphic with y increasing downward
-
-  const NAAQS_thresholds = {
-    "PM2.5": [0, 12, 35.4, 55.4, 150.4, 250.4],
-    "PM2.5_2024": [0, 9, 35.4, 55.4, 125.4, 225.4],
-  };
-
-  const thresholds = NAAQS_thresholds[NAAQS];
-
-  let xmin = chart.xAxis[0].min;
-  let ymin = chart.yAxis[0].min;
-  let ymax = chart.yAxis[0].max;
-  let ymax_px = chart.yAxis[0].toPixels(ymax);
-
-  let xlo = chart.xAxis[0].left; // leftmost pixel of the plot area
-  // let xhi = xlo + 8;
-  // let width = Math.abs(xhi - xlo);
-
-  // Green
-  let yhi = chart.yAxis[0].toPixels(0);
-  let ylo = Math.max(chart.yAxis[0].toPixels(thresholds[1]), ymax_px);
-  let height = Math.abs(yhi - ylo);
-  chart.renderer
-    .rect(xlo, ylo, width, height, 1)
-    .attr({ fill: "rgb(0,255,0)", stroke: "transparent" })
-    .add();
-
-  // Yellow
-  yhi = chart.yAxis[0].toPixels(thresholds[1]);
-  if (yhi > ymax_px) {
-    ylo = Math.max(chart.yAxis[0].toPixels(thresholds[2]), ymax_px);
-    height = Math.abs(yhi - ylo);
-    chart.renderer
-      .rect(xlo, ylo, width, height, 1)
-      .attr({ fill: "rgb(255,255,0)", stroke: "transparent" })
-      .add();
+export function pm25_addAQIStackedBar(chart, width = 6) {
+  if (!chart?.xAxis?.[0] || !chart?.yAxis?.[0] || !chart?.renderer) {
+    console.warn("Invalid chart object passed to pm25_addAQIStackedBar.");
+    return;
   }
 
-  // Orange
-  yhi = chart.yAxis[0].toPixels(thresholds[2]);
-  if (yhi > ymax_px) {
-    ylo = Math.max(chart.yAxis[0].toPixels(thresholds[3]), ymax_px);
-    height = Math.abs(yhi - ylo);
-    chart.renderer
-      .rect(xlo, ylo, width, height, 1)
-      .attr({ fill: "rgb(255,126,0)", stroke: "transparent" })
-      .add();
+  width = Math.max(1, Number(width) || 6);
+
+  const yAxis = chart.yAxis[0];
+  const xlo = chart.xAxis[0].left;
+  const ymax_px = yAxis.toPixels(yAxis.max);
+
+  for (let i = 0; i &lt; AQI_THRESHOLDS.length - 1; i++) {
+    const yhi = yAxis.toPixels(AQI_THRESHOLDS[i]);
+    const nextThreshold = AQI_THRESHOLDS[i + 1] ?? 5000;
+    if (yhi > ymax_px) {
+      const ylo = Math.max(yAxis.toPixels(nextThreshold), ymax_px);
+      const height = Math.abs(yhi - ylo);
+      chart.renderer
+        .rect(xlo, ylo, width, height, 1)
+        .attr({ fill: AQI_COLORS[i], stroke: "transparent" })
+        .add();
+    }
+  }
+}
+
+/**
+ * Validate the input data arrays for hourly or time series plots.
+ *
+ * @param {DateTime[]} datetime - Array of Luxon DateTime objects (assumed UTC).
+ * @param {Array&lt;number|null>} pm25 - Array of PM2.5 values (finite or null).
+ * @param {Array&lt;number|null>} nowcast - Array of NowCast values (finite or null).
+ * @throws {Error} If input is invalid in structure or type.
+ */
+export function validatePlotArrays(datetime, pm25, nowcast) {
+  // Presence and type check
+  if (!Array.isArray(datetime) || !Array.isArray(pm25) || !Array.isArray(nowcast)) {
+    throw new Error("Input arrays must be defined and of type Array");
   }
 
-  // Red
-  yhi = chart.yAxis[0].toPixels(thresholds[3]);
-  if (yhi > ymax_px) {
-    ylo = Math.max(chart.yAxis[0].toPixels(thresholds[4]), ymax_px);
-    height = Math.abs(yhi - ylo);
-    chart.renderer
-      .rect(xlo, ylo, width, height, 1)
-      .attr({ fill: "rgb(255,0,0)", stroke: "transparent" })
-      .add();
+  // Length check
+  const len = datetime.length;
+  if (pm25.length !== len || nowcast.length !== len) {
+    throw new Error(`All arrays must have the same length. Got: datetime(${len}), pm25(${pm25.length}), nowcast(${nowcast.length})`);
   }
 
-  // Purple
-  yhi = chart.yAxis[0].toPixels(thresholds[4]);
-  if (yhi > ymax_px) {
-    ylo = Math.max(chart.yAxis[0].toPixels(thresholds[5]), ymax_px);
-    height = Math.abs(yhi - ylo);
-    chart.renderer
-      .rect(xlo, ylo, width, height, 1)
-      .attr({ fill: "rgb(143,63,151)", stroke: "transparent" })
-      .add();
+  // Validate DateTime objects
+  requireLuxonDateTimeArray(datetime, 'datetime');
+
+  // Check if datetimes are increasing
+  let warned = false;
+  for (let i = 1; i &lt; len; i++) {
+    const prev = datetime[i - 1];
+    const curr = datetime[i];
+    if (curr.toMillis() &lt;= prev.toMillis()) {
+      if (!warned) {
+        console.warn("⚠️ Warning: datetime array is not strictly increasing");
+        warned = true;
+      }
+      console.warn(`↳ Non-increasing at index ${i - 1} → ${i}: ${prev.toISO()} >= ${curr.toISO()}`);
+    }
   }
 
-  // Maroon
-  yhi = chart.yAxis[0].toPixels(thresholds[5]);
-  if (yhi > ymax_px) {
-    ylo = Math.max(chart.yAxis[0].toPixels(5000), ymax_px);
-    height = Math.abs(yhi - ylo);
-    chart.renderer
-      .rect(xlo, ylo, width, height, 1)
-      .attr({ fill: "rgb(126,0,35)", stroke: "transparent" })
-      .add();
+  // pm25 and nowcast must be finite numbers or null
+  const isValidValue = (v) => v === null || (typeof v === "number" &amp;&amp; isFinite(v));
+  for (let i = 0; i &lt; len; i++) {
+    if (!isValidValue(pm25[i])) {
+      throw new Error(`Invalid pm25 value at index ${i}: ${pm25[i]}`);
+    }
+    if (!isValidValue(nowcast[i])) {
+      throw new Error(`Invalid nowcast value at index ${i}: ${nowcast[i]}`);
+    }
   }
 }
 </code></pre>
@@ -259,13 +222,13 @@ export function pm25_addAQIStackedBar(chart, width = 6, NAAQS = "PM2.5_2024") {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#dailyBarplotConfig">dailyBarplotConfig</a></li><li><a href="global.html#dailyRangeBarplotConfig">dailyRangeBarplotConfig</a></li><li><a href="global.html#diurnalPlotConfig">diurnalPlotConfig</a></li><li><a href="global.html#hourlyBarplotConfig">hourlyBarplotConfig</a></li><li><a href="global.html#pm25ToAQC">pm25ToAQC</a></li><li><a href="global.html#pm25ToColor">pm25ToColor</a></li><li><a href="global.html#pm25ToYMax">pm25ToYMax</a></li><li><a href="global.html#pm25_AQILines">pm25_AQILines</a></li><li><a href="global.html#pm25_addAQIStackedBar">pm25_addAQIStackedBar</a></li><li><a href="global.html#small_dailyBarplotConfig">small_dailyBarplotConfig</a></li><li><a href="global.html#small_dailyRangeBarplotConfig">small_dailyRangeBarplotConfig</a></li><li><a href="global.html#small_diurnalPlotConfig">small_diurnalPlotConfig</a></li><li><a href="global.html#small_hourlyBarplotConfig">small_hourlyBarplotConfig</a></li><li><a href="global.html#small_timeseriesPlotConfig">small_timeseriesPlotConfig</a></li><li><a href="global.html#timeseriesPlotConfig">timeseriesPlotConfig</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AQI_COLORS">AQI_COLORS</a></li><li><a href="global.html#AQI_THRESHOLDS">AQI_THRESHOLDS</a></li><li><a href="global.html#dailyBarplotConfig">dailyBarplotConfig</a></li><li><a href="global.html#dailyRangeBarplotConfig">dailyRangeBarplotConfig</a></li><li><a href="global.html#diurnalPlotConfig">diurnalPlotConfig</a></li><li><a href="global.html#hourlyBarplotConfig">hourlyBarplotConfig</a></li><li><a href="global.html#isValidPM25">isValidPM25</a></li><li><a href="global.html#pm25ToAQC">pm25ToAQC</a></li><li><a href="global.html#pm25ToColor">pm25ToColor</a></li><li><a href="global.html#pm25ToYMax">pm25ToYMax</a></li><li><a href="global.html#pm25_AQILines">pm25_AQILines</a></li><li><a href="global.html#pm25_addAQIStackedBar">pm25_addAQIStackedBar</a></li><li><a href="global.html#requireLuxonDateTime">requireLuxonDateTime</a></li><li><a href="global.html#requireLuxonDateTimeArray">requireLuxonDateTimeArray</a></li><li><a href="global.html#small_dailyBarplotConfig">small_dailyBarplotConfig</a></li><li><a href="global.html#small_dailyRangeBarplotConfig">small_dailyRangeBarplotConfig</a></li><li><a href="global.html#small_diurnalPlotConfig">small_diurnalPlotConfig</a></li><li><a href="global.html#small_hourlyBarplotConfig">small_hourlyBarplotConfig</a></li><li><a href="global.html#small_timeseriesPlotConfig">small_timeseriesPlotConfig</a></li><li><a href="global.html#timeseriesPlotConfig">timeseriesPlotConfig</a></li><li><a href="global.html#validatePlotArrays">validatePlotArrays</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Thu Aug 22 2024 15:39:02 GMT+0200 (Central European Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Tue Jul 08 2025 12:37:24 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
