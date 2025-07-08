@@ -1,73 +1,47 @@
-// moment for timezone-aware date handling
-import moment from "moment-timezone";
-
-// Utility functions
 import { pm25ToColor, pm25ToYMax, pm25_AQILines } from "./plot-utils.js";
 
 /**
  * Returns a dailyRangeBarplot chart configuration.
- * @param {Object} data The data required to create the chart.
+ * @param {Object} data
+ * @param {DateTime[]} data.daily_datetime - Luxon DateTime[] in UTC.
+ * @param {number[]} data.daily_min - Daily PM2.5 minimum values.
+ * @param {number[]} data.daily_mean - Daily PM2.5 mean values.
+ * @param {number[]} data.daily_max - Daily PM2.5 maximum values.
+ * @param {string} data.locationName - Label for chart title.
+ * @param {string} data.timezone - IANA time zone string (e.g. "America/Los_Angeles").
+ * @param {string} [data.title] - Optional override for chart title.
  */
-export function dailyRangeBarplotConfig(
-  data = {
-    daily_datetime,
-    daily_min,
-    daily_mean,
-    daily_max,
-    locationName,
-    timezone,
-    title,
-  }
-) {
-  // ----- Data preparation --------------------------------
+export function dailyRangeBarplotConfig(data) {
+  const title = data.title ?? data.locationName;
+  const ymin = 0;
+  const ymax = pm25ToYMax(Math.max(...data.daily_mean));
 
-  let days = data.daily_datetime.map((x) =>
-    moment.tz(x, data.timezone).format("MMM DD")
+  const categories = data.daily_datetime.map(dt =>
+    dt.setZone(data.timezone).toFormat("MMM dd")
   );
 
-  // Default to well defined y-axis limits for visual stability
-  let ymin = 0;
-  let ymax = pm25ToYMax(Math.max(...data.daily_mean));
+  const dailyMean = data.daily_mean.map(v => ({
+    y: v,
+    color: pm25ToColor(v)
+  }));
 
-  // NOTE:  Passing in '' as the title will expand the height of the plot
-  let title = data.title;
-  if (data.title === undefined) {
-    title = data.locationName;
-  }
+  const dailyRange = data.daily_datetime.map((_, i) => [
+    data.daily_min[i],
+    data.daily_max[i]
+  ]);
 
-  // Create colored series data
-  // See:  https://stackoverflow.com/questions/35854947/how-do-i-change-a-specific-bar-color-in-highcharts-bar-chart
-  let dailyMean = [];
-  for (let i = 0; i < data.daily_datetime.length; i++) {
-    dailyMean[i] = {
-      y: data.daily_mean[i],
-      color: pm25ToColor(data.daily_mean[i]),
-    };
-  }
-
-  let dailyRange = [];
-  for (let i = 0; i < data.daily_datetime.length; i++) {
-    dailyRange[i] = [data.daily_min[i], data.daily_max[i]];
-  }
-
-  // ----- Chart configuration --------------------------------
-
-  let chartConfig = {
+  return {
     accessibility: { enabled: false },
     chart: {
       plotBorderColor: "#ddd",
-      plotBorderWidth: 1,
+      plotBorderWidth: 1
     },
     plotOptions: {
-      columnrange: {
-        animation: false,
-      },
+      columnrange: { animation: false }
     },
-    title: {
-      text: title,
-    },
+    title: { text: title },
     xAxis: {
-      categories: days,
+      categories
     },
     yAxis: {
       min: ymin,
@@ -75,144 +49,99 @@ export function dailyRangeBarplotConfig(
       gridLineColor: "#ddd",
       gridLineDashStyle: "Dash",
       gridLineWidth: 1,
-      title: {
-        text: "PM2.5 (\u00b5g/m\u00b3)",
-      },
-      plotLines: pm25_AQILines(2),
+      title: { text: "PM2.5 (\u00b5g/m\u00b3)" },
+      plotLines: pm25_AQILines(2)
     },
     legend: {
       enabled: true,
-      verticalAlign: "top",
+      verticalAlign: "top"
     },
     series: [
       {
         name: "Daily Range",
         type: "columnrange",
         data: dailyRange,
-        color: "#bbb",
+        color: "#bbb"
       },
       {
         name: "Daily Mean",
         type: "scatter",
         data: dailyMean,
         animation: false,
-        // NOTE:  If the chart width specified in the component html is too small,
-        // NOTE:  large symbols that would bump into each other will not be drawn.
         marker: {
           radius: 3,
           symbol: "circle",
           lineColor: "#333",
-          lineWidth: 0.5,
-        },
-      },
-    ],
+          lineWidth: 0.5
+        }
+      }
+    ]
   };
-
-  return chartConfig;
 }
 
 /**
- * Returns a dailyRangeBarplot chart configuration.
- * The 'small' version of this plot has no legend or axis labeling and is
- * appropriate for use in a display with "small multiples".
- * @param {Object} data The data required to create the chart.
+ * Returns a compact dailyRangeBarplot config for use in small-multiples display.
+ * @param {Object} data See `dailyRangeBarplotConfig` for structure.
  */
-export function small_dailyRangeBarplotConfig(
-  data = {
-    daily_datetime,
-    daily_min,
-    daily_mean,
-    daily_max,
-    locationName,
-    timezone,
-    title,
-  }
-) {
-  // ----- Data preparation --------------------------------
+export function small_dailyRangeBarplotConfig(data) {
+  const title = data.title ?? data.locationName;
+  const ymin = 0;
+  const ymax = pm25ToYMax(Math.max(...data.daily_mean));
 
-  let days = data.daily_datetime.map((x) =>
-    moment.tz(x, data.timezone).format("MMM DD")
+  const categories = data.daily_datetime.map(dt =>
+    dt.setZone(data.timezone).toFormat("MMM dd")
   );
 
-  // Default to well defined y-axis limits for visual stability
-  let ymin = 0;
-  let ymax = pm25ToYMax(Math.max(...data.daily_mean));
+  const dailyMean = data.daily_mean.map(v => ({
+    y: v,
+    color: pm25ToColor(v)
+  }));
 
-  // NOTE:  Passing in '' as the title will expand the height of the plot
-  let title = data.title;
-  if (data.title === undefined) {
-    title = data.locationName;
-  }
+  const dailyRange = data.daily_datetime.map((_, i) => [
+    data.daily_min[i],
+    data.daily_max[i]
+  ]);
 
-  // Create colored series data
-  // See:  https://stackoverflow.com/questions/35854947/how-do-i-change-a-specific-bar-color-in-highcharts-bar-chart
-  let dailyMean = [];
-  for (let i = 0; i < data.daily_datetime.length; i++) {
-    dailyMean[i] = {
-      y: data.daily_mean[i],
-      color: pm25ToColor(data.daily_mean[i]),
-    };
-  }
-
-  let dailyRange = [];
-  for (let i = 0; i < data.daily_datetime.length; i++) {
-    dailyRange[i] = [data.daily_min[i], data.daily_max[i]];
-  }
-
-  // ----- Chart configuration --------------------------------
-
-  let chartConfig = {
+  return {
     accessibility: { enabled: false },
-    chart: {
-      animation: false,
-    },
+    chart: { animation: false },
     plotOptions: {
-      columnrange: {
-        animation: false,
-      },
+      columnrange: { animation: false }
     },
     title: {
       text: title,
-      style: { color: "#333333", fontSize: "12px" },
+      style: { color: "#333333", fontSize: "12px" }
     },
     xAxis: {
-      categories: days,
-      visible: false,
+      categories,
+      visible: false
     },
     yAxis: {
       min: ymin,
       max: ymax,
-      title: {
-        text: "",
-      },
-      plotLines: pm25_AQILines(2),
+      title: { text: "" },
+      plotLines: pm25_AQILines(2)
     },
-    legend: {
-      enabled: false,
-    },
+    legend: { enabled: false },
     series: [
       {
         name: "Daily Range",
         type: "columnrange",
         data: dailyRange,
-        color: "#bbb",
+        color: "#bbb"
       },
       {
         name: "Daily Mean",
         type: "scatter",
         data: dailyMean,
         animation: false,
-        // NOTE:  If the chart width specified in the component html is too small,
-        // NOTE:  large symbols that would bump into each other will not be drawn.
         marker: {
           radius: 2,
           symbol: "circle",
           lineColor: "#333",
-          lineWidth: 0.5,
-        },
-      },
-    ],
+          lineWidth: 0.5
+        }
+      }
+    ]
   };
-
-  return chartConfig;
 }

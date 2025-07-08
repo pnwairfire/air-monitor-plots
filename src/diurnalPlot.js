@@ -1,9 +1,7 @@
-// moment for timezone-aware date handling
-import moment from "moment-timezone";
-
+// Luxon for timezone-aware datetime handling
+import { DateTime } from "luxon";
 // SunCalc for day-night shading
 import SunCalc from "suncalc";
-
 // Utility functions
 import { pm25ToColor, pm25ToYMax, pm25_AQILines } from "./plot-utils.js";
 
@@ -11,124 +9,73 @@ import { pm25ToColor, pm25ToYMax, pm25_AQILines } from "./plot-utils.js";
  * Returns a diurnalPlot chart configuration.
  * @param {Object} data The data required to create the chart.
  */
-export function diurnalPlotConfig(
-  data = {
-    datetime,
-    pm25,
-    nowcast,
-    locationName,
-    timezone,
-    title,
-    // unique to this chart
-    longitude,
-    latitude,
-    hour_average,
-  }
-) {
+export function diurnalPlotConfig(data) {
+  const { datetime, nowcast, locationName, timezone, title, longitude, latitude, hour_average } = data;
+
   // ----- Data preparation --------------------------------
 
-  // Calculate yesterday/today start/end
-  const localHours = data.datetime.map((o) =>
-    moment.tz(o, data.timezone).hours()
-  );
+  const localHours = datetime.map(dt => dt.setZone(timezone).hour);
   const lastHour = localHours[localHours.length - 1];
   const today_end = localHours.length;
-  const today_start = localHours.length - 1 - lastHour;
+  const today_start = today_end - 1 - lastHour;
   const yesterday_end = today_start;
   const yesterday_start = today_start - 24;
-  const yesterday = data.nowcast.slice(yesterday_start, yesterday_end);
-  const today = data.nowcast.slice(today_start, today_end);
+  const yesterday = nowcast.slice(yesterday_start, yesterday_end);
+  const today = nowcast.slice(today_start, today_end);
 
-  // Calculate day/night shading times
-  const middleDatetime = data.datetime[Math.round(data.datetime.length / 2)];
-  const times = SunCalc.getTimes(
-    middleDatetime.valueOf(),
-    data.latitude,
-    data.longitude
-  );
-  const sunriseHour =
-    moment.tz(times.sunrise, data.timezone).hour() +
-    moment.tz(times.sunrise, data.timezone).minute() / 60;
-  const sunsetHour =
-    moment.tz(times.sunset, data.timezone).hour() +
-    moment.tz(times.sunset, data.timezone).minute() / 60;
+  // Midpoint time (in Luxon UTC) → to JS Date in UTC
+  const middleDatetime = datetime[Math.floor(datetime.length / 2)];
+  const sunTimes = SunCalc.getTimes(middleDatetime.toJSDate(), latitude, longitude);
 
-  // Create colored series data
-  // See:  https://stackoverflow.com/questions/35854947/how-do-i-change-a-specific-bar-color-in-highcharts-bar-chart
+  const sunrise = DateTime.fromJSDate(sunTimes.sunrise, { zone: timezone });
+  const sunset = DateTime.fromJSDate(sunTimes.sunset, { zone: timezone });
+  const sunriseHour = sunrise.hour + sunrise.minute / 60;
+  const sunsetHour = sunset.hour + sunset.minute / 60;
 
-  // NOTE:  If the chart width specified in the component html is too small,
-  // NOTE:  large symbols that would bump into each other will not be drawn.
-  let yesterdayData = [];
-  for (let i = 0; i < yesterday.length; i++) {
-    yesterdayData[i] = {
-      y: yesterday[i],
-      color: pm25ToColor(yesterday[i]),
-    };
-  }
-  let todayData = [];
-  for (let i = 0; i < today.length; i++) {
-    todayData[i] = { y: today[i], color: pm25ToColor(today[i]) };
-  }
+  // Color-encoded points
+  const yesterdayData = yesterday.map(y => ({ y, color: pm25ToColor(y) }));
+  const todayData = today.map(y => ({ y, color: pm25ToColor(y) }));
 
-  // Default to well defined y-axis limits for visual stability
-  let ymin = 0;
-  let ymax = pm25ToYMax(Math.max(...data.hour_average, ...yesterday, ...today));
+  const ymin = 0;
+  const ymax = pm25ToYMax(Math.max(...hour_average, ...yesterday, ...today));
+  const chartTitle = title ?? locationName;
 
-  let title = data.title;
-  if (data.title === undefined) {
-    title = data.locationName;
-  }
-
-  // ----- Chart configuration --------------------------------
-
-  let chartConfig = {
+  return {
     accessibility: { enabled: false },
     chart: {
       plotBorderColor: "#ddd",
       plotBorderWidth: 1,
     },
     plotOptions: {
-      line: {
-        animation: false,
-      },
+      line: { animation: false },
     },
     tooltip: {
       shared: true,
       headerFormat: "{point.key}:00<br/>",
     },
     title: {
-      text: title,
+      text: chartTitle,
     },
     xAxis: {
       tickInterval: 3,
       labels: {
         formatter: function () {
-          var label = this.axis.defaultLabelFormatter.call(this);
-          label =
-            label == "0"
-              ? "Midnight"
-              : label == "3"
-              ? "3am"
-              : label == "6"
-              ? "6am"
-              : label == "9"
-              ? "9am"
-              : label == "12"
-              ? "Noon"
-              : label == "15"
-              ? "3pm"
-              : label == "18"
-              ? "5pm"
-              : label == "21"
-              ? "9pm"
-              : label;
-          return label;
-        },
+          return {
+            0: "Midnight",
+            3: "3am",
+            6: "6am",
+            9: "9am",
+            12: "Noon",
+            15: "3pm",
+            18: "6pm",
+            21: "9pm"
+          }[this.value] ?? this.value;
+        }
       },
       plotBands: [
         { color: "rgb(0,0,0,0.1)", from: 0, to: sunriseHour },
-        { color: "rgb(0,0,0,0.1)", from: sunsetHour, to: 24 },
-      ],
+        { color: "rgb(0,0,0,0.1)", from: sunsetHour, to: 24 }
+      ]
     },
     yAxis: {
       min: ymin,
@@ -149,7 +96,7 @@ export function diurnalPlotConfig(
       {
         name: "7 Day Mean",
         type: "line",
-        data: data.hour_average,
+        data: hour_average,
         color: "#aaa",
         lineWidth: 10,
         marker: { radius: 1, symbol: "square", fillColor: "transparent" },
@@ -182,8 +129,6 @@ export function diurnalPlotConfig(
       },
     ],
   };
-
-  return chartConfig;
 }
 
 /**
@@ -192,76 +137,38 @@ export function diurnalPlotConfig(
  * appropriate for use in a display with "small multiples".
  * @param {Object} data The data required to create the chart.
  */
-export function small_diurnalPlotConfig(
-  data = {
-    datetime,
-    pm25,
-    nowcast,
-    locationName,
-    timezone,
-    title,
-    longitude,
-    latitude,
-    hour_average,
-  }
-) {
+export function small_diurnalPlotConfig(data) {
+  const { datetime, nowcast, locationName, timezone, title, longitude, latitude, hour_average } = data;
+
   // ----- Data preparation --------------------------------
 
-  // Calculate yesterday/today start/end
-  const localHours = data.datetime.map((o) =>
-    moment.tz(o, data.timezone).hours()
-  );
+  const localHours = datetime.map(dt => dt.setZone(timezone).hour);
   const lastHour = localHours[localHours.length - 1];
   const today_end = localHours.length;
-  const today_start = localHours.length - 1 - lastHour;
+  const today_start = today_end - 1 - lastHour;
   const yesterday_end = today_start;
   const yesterday_start = today_start - 24;
-  const yesterday = data.nowcast.slice(yesterday_start, yesterday_end);
-  const today = data.nowcast.slice(today_start, today_end);
+  const yesterday = nowcast.slice(yesterday_start, yesterday_end);
+  const today = nowcast.slice(today_start, today_end);
 
-  // Calculate day/night shading times
-  const middleDatetime = data.datetime[Math.round(data.datetime.length / 2)];
-  const times = SunCalc.getTimes(
-    middleDatetime.valueOf(),
-    data.latitude,
-    data.longitude
-  );
-  const sunriseHour =
-    moment.tz(times.sunrise, data.timezone).hour() +
-    moment.tz(times.sunrise, data.timezone).minute() / 60;
-  const sunsetHour =
-    moment.tz(times.sunset, data.timezone).hour() +
-    moment.tz(times.sunset, data.timezone).minute() / 60;
+  const middleDatetime = datetime[Math.floor(datetime.length / 2)];
+  const sunTimes = SunCalc.getTimes(middleDatetime.toJSDate(), latitude, longitude);
 
-  // Create colored series data
-  // See:  https://stackoverflow.com/questions/35854947/how-do-i-change-a-specific-bar-color-in-highcharts-bar-chart
+  const sunrise = DateTime.fromJSDate(sunTimes.sunrise, { zone: timezone });
+  const sunset = DateTime.fromJSDate(sunTimes.sunset, { zone: timezone });
+  const sunriseHour = sunrise.hour + sunrise.minute / 60;
+  const sunsetHour = sunset.hour + sunset.minute / 60;
 
-  // NOTE:  If the chart width specified in the component html  is too small,
-  // NOTE:  large symbols that would bump into each other will not be drawn.
-  let yesterdayData = [];
-  for (let i = 0; i < yesterday.length; i++) {
-    yesterdayData[i] = {
-      y: yesterday[i],
-      color: pm25ToColor(yesterday[i]),
-    };
-  }
-  let todayData = [];
-  for (let i = 0; i < today.length; i++) {
-    todayData[i] = { y: today[i], color: pm25ToColor(today[i]) };
-  }
+  const yesterdayData = yesterday.map(y => ({ y, color: pm25ToColor(y) }));
+  const todayData = today.map(y => ({ y, color: pm25ToColor(y) }));
 
-  // Default to well defined y-axis limits for visual stability
-  let ymin = 0;
-  let ymax = pm25ToYMax(Math.max(...data.hour_average, ...yesterday, ...today));
-
-  let title = data.title;
-  if (data.title === undefined) {
-    title = data.locationName;
-  }
+  const ymin = 0;
+  const ymax = pm25ToYMax(Math.max(...hour_average, ...yesterday, ...today));
+  const chartTitle = title ?? locationName;
 
   // ----- Chart configuration --------------------------------
 
-  let chartConfig = {
+  return {
     accessibility: { enabled: false },
     chart: {
       animation: false,
@@ -272,36 +179,30 @@ export function small_diurnalPlotConfig(
       },
     },
     title: {
-      text: title,
+      text: chartTitle,
       style: { color: "#333333", fontSize: "12px" },
     },
     xAxis: {
       visible: true,
       tickLength: 0,
-      labels: {
-        enabled: false,
-      },
+      labels: { enabled: false },
       plotBands: [
         { color: "rgb(0,0,0,0.1)", from: 0, to: sunriseHour },
-        { color: "rgb(0,0,0,0.1)", from: sunsetHour, to: 24 },
-      ],
+        { color: "rgb(0,0,0,0.1)", from: sunsetHour, to: 24 }
+      ]
     },
     yAxis: {
       min: ymin,
       max: ymax,
-      title: {
-        text: "",
-      },
+      title: { text: "" },
       plotLines: pm25_AQILines(1),
     },
-    legend: {
-      enabled: false,
-    },
+    legend: { enabled: false },
     series: [
       {
         name: "7 Day Mean",
         type: "line",
-        data: data.hour_average,
+        data: hour_average,
         color: "#aaa",
         lineWidth: 5,
         marker: { enabled: false },
@@ -334,6 +235,4 @@ export function small_diurnalPlotConfig(
       },
     ],
   };
-
-  return chartConfig;
 }

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Time Series Plot</title>
+  <title>Hourly Barplot</title>
 
   <!-- Foundational libraries from CDN -->
   <script src="https://cdn.jsdelivr.net/npm/luxon@3.6.1/build/global/luxon.min.js"></script>
@@ -10,7 +10,7 @@
   <script src="https://cdn.jsdelivr.net/npm/arquero@latest/dist/arquero.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/highcharts@12.3.0/highcharts.js"></script>
 
-  <!-- NOTE:  Load these in order: algorithms first, plots last -->
+  <!-- Your UMD bundles (order matters) -->
   <script src="./vendor/air-monitor-algorithms.umd.js"></script>
   <script src="./vendor/air-monitor.umd.js"></script>
   <script src="../dist/air-monitor-plots.umd.js"></script>
@@ -51,7 +51,7 @@
         .filterByValue('locationName', 'Entiat')
         .getIDs();
 
-      let id = ids[0];
+      const id = ids[0];
 
       const data = {
         datetime: monitor.getDatetime(),
@@ -63,7 +63,7 @@
       };
 
       // Standard chart
-      const config = AirMonitorPlots.timeseriesPlotConfig(data);
+      const config = AirMonitorPlots.hourlyBarplotConfig(data);
       config.chart = {
         ...config.chart,
         renderTo: container,
@@ -71,31 +71,20 @@
           load: () => {
             const t1 = performance.now();
             const elapsed = (t1 - t0).toFixed(2);
-            console.log(`Time series chart rendered in ${elapsed} ms`);
+            console.log(`Hourly barplot rendered in ${elapsed} ms`);
             window.highchartsRenderTime = elapsed;
           }
         }
       };
-
       Highcharts.chart(config);
 
       // Small chart
-      const small_config = AirMonitorPlots.small_timeseriesPlotConfig(data);
+      const small_config = AirMonitorPlots.small_hourlyBarplotConfig(data);
       small_config.chart = {
         ...small_config.chart,
         renderTo: small_container,
-        events: {
-          load: () => {
-            const t1 = performance.now();
-            const elapsed = (t1 - t0).toFixed(2);
-            console.log(`Time series chart rendered in ${elapsed} ms`);
-            window.highchartsRenderTime = elapsed;
-          }
-        }
       };
-
       Highcharts.chart(small_config);
-
     });
   </script>
 </body>

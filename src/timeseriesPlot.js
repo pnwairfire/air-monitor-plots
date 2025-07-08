@@ -36,7 +36,7 @@ export function timeseriesPlotConfig(data) {
     title: { text: title },
     time: {
       timezone: data.timezone,
-      useUTC: true,
+      useUTC: false,
     },
     xAxis: {
       type: "datetime",
@@ -134,13 +134,14 @@ export function small_timeseriesPlotConfig(data) {
         marker: { enabled: false },
       },
     },
+    tooltip: { shared: true },
     title: {
       text: title,
       style: { color: "#333333", fontSize: "12px" },
     },
     time: {
       timezone: data.timezone,
-      useUTC: true,
+      useUTC: false,
     },
     xAxis: {
       type: "datetime",
@@ -155,11 +156,19 @@ export function small_timeseriesPlotConfig(data) {
     legend: { enabled: false },
     series: [
       {
-        name: "Hourly PM2.5 Values",
-        type: "scatter",
+        name: "Hourly PM2.5",
+        type: "line",
         pointInterval: 3600 * 1000,
         pointStart: startTime.toMillis(),
         data: data.pm25,
+        lineWidth: 0,
+        color: "transparent",
+        marker: {
+          enabled: true,
+          radius: 2,
+          symbol: "circle",
+          fillColor: "#bbbbbb",
+        },
       },
       {
         name: "Nowcast",

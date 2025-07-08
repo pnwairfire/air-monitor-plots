@@ -1,10 +1,10 @@
 // playwright/timeseriesPlot.test.js
 import { test, expect } from 'playwright/test';
 
-test.describe('timeseriesPlot.html', () => {
+test.describe('hourlyBarplot.html', () => {
   test('renders a Highcharts chart and sets render time', async ({ page }) => {
     // Load the test file via file:// URL
-    const fileUrl = new URL('./timeseriesPlot.html', import.meta.url).href;
+    const fileUrl = new URL('./hourlyBarplot.html', import.meta.url).href;
     await page.goto(fileUrl);
 
     // Wait for the global variable to be set by the chart's load event

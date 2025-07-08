@@ -1,7 +1,7 @@
 // playwright.config.js
 const config = {
   testDir: 'playwright',
-  // workers: 1, // run tests serially
+  // // //workers: 1, // run tests serially
   use: {
     headless: true,
     viewport: { width: 800, height: 600 },

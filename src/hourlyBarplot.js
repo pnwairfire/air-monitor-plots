@@ -1,47 +1,28 @@
-// moment for timezone-aware date handling
-import moment from "moment-timezone";
-
-// Utility functions
-import { pm25ToYMax, pm25ToColor, pm25_AQILines } from "./plot-utils.js";
+import { pm25ToYMax, pm25ToColor } from "./plot-utils.js";
 
 /**
- * Returns a timeseriesPlot chart configuration.
- * @param {Object} data The data required to create the chart.
+ * Returns a Highcharts chart configuration for a full-sized hourly NowCast barplot.
+ * @param {Object} data
+ * @param {DateTime[]} data.datetime - Array of Luxon DateTime objects (UTC).
+ * @param {number[]} data.pm25 - Raw hourly PM2.5 data.
+ * @param {number[]} data.nowcast - NowCast values.
+ * @param {string} data.locationName - Label for the chart.
+ * @param {string} data.timezone - IANA timezone for display.
+ * @param {string} [data.title] - Optional custom title.
+ * @returns {Object} Highcharts chart config object.
  */
-export function hourlyBarplotConfig(
-  data = {
-    datetime,
-    pm25,
-    nowcast,
-    locationName,
-    timezone,
-    title,
-  }
-) {
-  // ----- Data preparation --------------------------------
-
-  // NOTE:  If the chart width specified in the component html is too small,
-  // NOTE:  large symbols that would bump into each other will not be drawn.
-  let seriesData = [];
-  for (let i = 0; i < data.nowcast.length; i++) {
-    seriesData[i] = {
-      y: data.nowcast[i],
-      color: pm25ToColor(data.nowcast[i]),
-    };
-  }
-
-  let startTime = data.datetime[0];
-  // let xAxis_title = 'Time (${data.timezone})';
-
-  // Default to well defined y-axis limits for visual stability
-  let ymin = 0;
-  let ymax = pm25ToYMax(Math.max(...data.nowcast));
-
+export function hourlyBarplotConfig(data) {
+  const startTime = data.datetime[0]; // Luxon DateTime
   const title = data.title ?? data.locationName;
+  const ymin = 0;
+  const ymax = pm25ToYMax(Math.max(...data.nowcast));
 
-  // ----- Chart configuration --------------------------------
+  const seriesData = data.nowcast.map(v => ({
+    y: v,
+    color: pm25ToColor(v),
+  }));
 
-  let chartConfig = {
+  return {
     accessibility: { enabled: false },
     chart: {
       animation: false,
@@ -59,21 +40,18 @@ export function hourlyBarplotConfig(
         minPointLength: 3,
       },
     },
-    title: {
-      text: title,
-    },
+    title: { text: title },
     time: {
       timezone: data.timezone,
-      useUTC: true,
+      useUTC: false, // LOCAL time display
     },
     xAxis: {
       type: "datetime",
-      // title: {margin: 20, style: { "color": "#333", "fontSize": "16px" }, text: xAxis_title},
       gridLineColor: "#ddd",
       gridLineDashStyle: "Dash",
       gridLineWidth: 1,
       minorTicks: true,
-      minorTickInterval: 3 * 3600 * 1000, // every 3 hrs
+      minorTickInterval: 3 * 3600 * 1000,
       minorGridLineColor: "#eee",
       minorGridLineDashStyle: "Dot",
       minorGridLineWidth: 1,
@@ -84,7 +62,6 @@ export function hourlyBarplotConfig(
       title: {
         text: "NowCast PM2.5 (\u00b5g/m\u00b3)",
       },
-      // plotLines: pm25_AQILines(2), // removed as default per Sim Larkin request
     },
     legend: {
       enabled: true,
@@ -95,59 +72,31 @@ export function hourlyBarplotConfig(
         name: "Hourly NowCast",
         type: "column",
         pointInterval: 3600 * 1000,
-        pointStart: startTime.valueOf(), // milliseconds
+        pointStart: startTime.toMillis(),
         data: seriesData,
       },
     ],
   };
-
-  return chartConfig;
 }
 
 /**
- * Returns a timeseriesPlot chart configuration.
- * The 'small' version of this plot has no legend or axis labeling and is
- * appropriate for use in a display with "small multiples".
- * @param {Object} data The data required to create the chart.
+ * Returns a Highcharts config for a small-multiples-style hourly NowCast barplot.
+ * @param {Object} data Same structure as for hourlyBarplotConfig.
  */
-export function small_hourlyBarplotConfig(
-  data = {
-    datetime,
-    pm25,
-    nowcast,
-    locationName,
-    timezone,
-    title,
-  }
-) {
-  // ----- Data preparation --------------------------------
-
-  // NOTE:  If the chart width specified in the component html is too small,
-  // NOTE:  large symbols that would bump into each other will not be drawn.
-  let seriesData = [];
-  for (let i = 0; i < data.nowcast.length; i++) {
-    seriesData[i] = {
-      y: data.nowcast[i],
-      color: pm25ToColor(data.nowcast[i]),
-    };
-  }
-
-  let startTime = data.datetime[0];
-  // let xAxis_title = 'Time (${data.timezone})';
-
-  // Default to well defined y-axis limits for visual stability
-  let ymin = 0;
-  let ymax = pm25ToYMax(Math.max(...data.nowcast));
-
+export function small_hourlyBarplotConfig(data) {
+  const startTime = data.datetime[0];
   const title = data.title ?? data.locationName;
+  const ymin = 0;
+  const ymax = pm25ToYMax(Math.max(...data.nowcast));
 
-  // ----- Chart configuration --------------------------------
+  const seriesData = data.nowcast.map(v => ({
+    y: v,
+    color: pm25ToColor(v),
+  }));
 
-  let chartConfig = {
+  return {
     accessibility: { enabled: false },
-    chart: {
-      animation: false,
-    },
+    chart: { animation: false },
     plotOptions: {
       column: {
         animation: false,
@@ -165,7 +114,7 @@ export function small_hourlyBarplotConfig(
     },
     time: {
       timezone: data.timezone,
-      useUTC: true,
+      useUTC: false,
     },
     xAxis: {
       type: "datetime",
@@ -174,24 +123,17 @@ export function small_hourlyBarplotConfig(
     yAxis: {
       min: ymin,
       max: ymax,
-      title: {
-        text: "",
-      },
-      // plotLines: pm25_AQILines(1), // removed as default per Sim Larkin request
+      title: { text: "" },
     },
-    legend: {
-      enabled: false,
-    },
+    legend: { enabled: false },
     series: [
       {
         name: "Hourly NowCast",
         type: "column",
         pointInterval: 3600 * 1000,
-        pointStart: startTime.valueOf(), // milliseconds
+        pointStart: startTime.toMillis(),
         data: seriesData,
       },
     ],
   };
-
-  return chartConfig;
 }
