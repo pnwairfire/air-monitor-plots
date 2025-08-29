@@ -39,7 +39,6 @@
     "test:playwright": "playwright test playwright",
     "serve:examples": "http-server . -p 3001",
     "serve:examples:open": "npm run serve:examples & npx open-cli http://localhost:3001/playwright",
-    "copy-to-vendor": "cp node_modules/air-monitor-algorithms/dist/air-monitor-algorithms.umd.js node_modules/air-monitor/dist/air-monitor.umd.js playwright/vendor/",
     "publish:public": "npm publish --access public"
   },
   "dependencies": {
