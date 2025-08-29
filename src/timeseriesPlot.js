@@ -36,7 +36,7 @@ export function timeseriesPlotConfig(data) {
     title: { text: title },
     time: {
       timezone: data.timezone,
-      useUTC: false,
+      useUTC: undefined, // Important!
     },
     xAxis: {
       type: "datetime",

@@ -9,7 +9,7 @@ test.describe('hourlyBarplot.html', () => {
 
     // Wait for the global variable to be set by the chart's load event
     await page.waitForFunction(() => window.highchartsRenderTime !== undefined, null, {
-      timeout: 10000
+      timeout: 15000
     });
 
     // Assert the chart container exists

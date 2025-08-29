@@ -47,7 +47,7 @@ export function hourlyBarplotConfig(data) {
     title: { text: title },
     time: {
       timezone: data.timezone,
-      useUTC: false, // LOCAL time display
+      useUTC: undefined, // Important!
     },
     xAxis: {
       type: "datetime",

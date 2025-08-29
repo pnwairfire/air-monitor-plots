@@ -1,6 +1,6 @@
-# air-monitor-plots 1.3.0
+# air-monitor-plots 1.3.1
 
-Refactoring to require luxon DateTime objects in UTC for all timestamps.
+Fixed time axes by setting `useUtc: undefined`.
 
 # air-monitor-plots 1.2.5
 
