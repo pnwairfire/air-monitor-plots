@@ -55,6 +55,31 @@ test('dailyRangeBarplotConfig uses correct yAxis and plotLines', () => {
   assert.ok(config.yAxis.plotLines.length > 0);
 });
 
+const spikeData = {
+  daily_datetime,
+  daily_min: [5, 6, 8],
+  daily_mean: [10, 11, 12],
+  daily_max: [18, 24, 250],
+  locationName: 'Spike Station',
+  timezone: 'America/Los_Angeles'
+};
+
+test('dailyRangeBarplotConfig yAxis.max covers daily_max spikes', () => {
+  const config = dailyRangeBarplotConfig(spikeData);
+  assert.ok(
+    config.yAxis.max >= Math.max(...spikeData.daily_max),
+    `yAxis.max (${config.yAxis.max}) must cover daily_max (${Math.max(...spikeData.daily_max)})`
+  );
+});
+
+test('small_dailyRangeBarplotConfig yAxis.max covers daily_max spikes', () => {
+  const config = small_dailyRangeBarplotConfig(spikeData);
+  assert.ok(
+    config.yAxis.max >= Math.max(...spikeData.daily_max),
+    `yAxis.max (${config.yAxis.max}) must cover daily_max (${Math.max(...spikeData.daily_max)})`
+  );
+});
+
 // ─── Small Plot Tests ─────────────────────────────────────────────────────────
 
 test('small_dailyRangeBarplotConfig hides xAxis', () => {

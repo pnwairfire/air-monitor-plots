@@ -18,7 +18,8 @@ export function dailyRangeBarplotConfig(data) {
 
   const title = data.title ?? data.locationName;
   const ymin = 0;
-  const ymax = pm25ToYMax(Math.max(...data.daily_mean));
+  
+  const ymax = pm25ToYMax(Math.max(...data.daily_max));
 
   const categories = data.daily_datetime.map(dt =>
     dt.setZone(data.timezone).toFormat("MMM dd")
@@ -92,7 +93,11 @@ export function small_dailyRangeBarplotConfig(data) {
 
   const title = data.title ?? data.locationName;
   const ymin = 0;
-  const ymax = pm25ToYMax(Math.max(...data.daily_mean));
+  // Derive the y-axis maximum from daily_max, the array that determines the
+  // tallest drawn element (the top of each columnrange bar). Using daily_mean
+  // here would clip range bars on any day where the daily maximum exceeds the
+  // mean-derived bucket, hiding the spread this plot exists to show.
+  const ymax = pm25ToYMax(Math.max(...data.daily_max));
 
   const categories = data.daily_datetime.map(dt =>
     dt.setZone(data.timezone).toFormat("MMM dd")
