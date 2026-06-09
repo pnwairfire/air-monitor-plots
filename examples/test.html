@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>air-monitor-plots — Visual Example</title>
+
+  <!--
+    Pico.css — a lightweight, classless CSS framework. It styles plain
+    semantic HTML (<main>, <article>, <h2>, <table>…) with no extra markup,
+    giving the page a clean look without a build step.
+  -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+  />
+
+  <style>
+    main.container { max-width: 900px; }
+    hgroup { margin-bottom: 1.5rem; }
+    .chart { height: 360px; }
+    .chart.small { height: 220px; max-width: 260px; }
+    .muted { color: var(--pico-muted-color); font-size: 0.9rem; }
+    article { padding-top: 1rem; }
+  </style>
+</head>
+<body>
+
+  <main class="container">
+
+    <hgroup>
+      <h1>air-monitor-plots</h1>
+      <p>
+        A visual walk-through of the five standard air quality plots
+      </p>
+    </hgroup>
+
+    <!-- ============================================================
+         Intro
+    ============================================================ -->
+    <p>
+      The
+      <a href="https://github.com/pnwairfire/air-monitor-plots">air-monitor-plots</a>
+      package turns hourly air quality data into
+      <a href="https://www.highcharts.com/">Highcharts</a> chart
+      configurations. Each function takes plain data arrays plus a
+      <code>locationName</code> and <code>timezone</code> and
+      <strong>returns a configuration object</strong> — it does not draw the
+      chart itself. The calling page passes that object to
+      <code>Highcharts.chart(container, config)</code>. All timestamps are UTC
+      <a href="https://moment.github.io/luxon/">Luxon</a> <code>DateTime</code>
+      objects, and missing values are represented as <code>null</code>.
+    </p>
+    <p class="muted">
+      This page generates a 336-hour (14-day) synthetic PM2.5 dataset for
+      <em>America/Los_Angeles</em>, modeling a clean-air baseline, a daily
+      (diurnal) cycle, and a multi-day wildfire-smoke event peaking around day 7.
+      The companion
+      <a href="https://www.npmjs.com/package/air-monitor-algorithms">air-monitor-algorithms</a>
+      package computes the NowCast, daily, and diurnal inputs; everything is
+      loaded from CDN with no build step.
+    </p>
+
+
+    <!-- ============================================================
+         Time series
+    ============================================================ -->
+    <article>
+      <h2>Time series</h2>
+      <p>
+        <code>timeseriesPlotConfig({ datetime, pm25, nowcast, locationName,
+        timezone })</code> produces a line chart of raw hourly PM2.5 (gray
+        markers) with the NowCast overlaid (black line). The y-axis carries
+        colored AQI threshold lines, and the x-axis is rendered in the site's
+        local timezone.
+      </p>
+      <div id="timeseriesChart" class="chart"></div>
+    </article>
+
+
+    <!-- ============================================================
+         Hourly NowCast barplot
+    ============================================================ -->
+    <article>
+      <h2>Hourly NowCast barplot</h2>
+      <p>
+        <code>hourlyBarplotConfig({ datetime, nowcast, locationName, timezone
+        })</code> draws each hour's NowCast value as a column colored by its AQI
+        category — green for good air through maroon for hazardous. The
+        knocked-out hours on day&nbsp;12 appear as gaps.
+      </p>
+      <div id="hourlyChart" class="chart"></div>
+    </article>
+
+
+    <!-- ============================================================
+         Daily average barplot
+    ============================================================ -->
+    <article>
+      <h2>Daily average barplot</h2>
+      <p>
+        <code>dailyBarplotConfig({ daily_datetime, daily_mean, locationName,
+        timezone })</code> shows one AQI-colored column per local calendar day.
+        The rise and fall of the smoke event is clear across the two weeks.
+      </p>
+      <div id="dailyChart" class="chart"></div>
+    </article>
+
+
+    <!-- ============================================================
+         Daily range barplot
+    ============================================================ -->
+    <article>
+      <h2>Daily range barplot</h2>
+      <p>
+        <code>dailyRangeBarplotConfig({ daily_datetime, daily_min, daily_mean,
+        daily_max, locationName, timezone })</code> adds the daily min–max
+        spread as a gray range bar, with the AQI-colored daily mean marked on
+        top.
+      </p>
+      <div id="dailyRangeChart" class="chart"></div>
+    </article>
+
+
+    <!-- ============================================================
+         Diurnal profile
+    ============================================================ -->
+    <article>
+      <h2>Diurnal profile (average day)</h2>
+      <p>
+        <code>diurnalPlotConfig({ datetime, nowcast, hour_average, latitude,
+        longitude, locationName, timezone })</code> plots the hour-of-day cycle:
+        a multi-day average ("7 Day Mean") behind yesterday's and today's
+        curves. Shaded bands mark night, computed from the site's latitude and
+        longitude.
+      </p>
+      <div id="diurnalChart" class="chart"></div>
+    </article>
+
+
+    <!-- ============================================================
+         Small multiples
+    ============================================================ -->
+    <article>
+      <h2>Small-multiples variants</h2>
+      <p>
+        Every plot has a <code>small_*</code> companion (for example
+        <code>small_timeseriesPlotConfig</code>) that strips the legend and axis
+        labels for compact "small multiples" displays.
+      </p>
+      <div id="smallChart" class="chart small"></div>
+    </article>
+
+    <footer>
+      <p class="muted">
+        View the page source to see the complete, copy-pasteable example code.
+      </p>
+    </footer>
+
+  </main>
+
+
+  <!-- ============================================================
+       Libraries (all loaded from CDN — no build step)
+
+       Load order matters:
+         1. luxon      — provides the global `luxon`
+         2. suncalc    — provides the global `SunCalc` (used by the diurnal plot)
+         3. highcharts — the renderer; `highcharts-more` adds the columnrange
+                         series type used by the daily range plot
+         4. air-monitor-algorithms — computes nowcast / daily / diurnal inputs
+         5. air-monitor-plots      — turns those inputs into Highcharts configs
+  ============================================================ -->
+  <script src="https://cdn.jsdelivr.net/npm/luxon@3.6.1/build/global/luxon.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/suncalc@1.9.0/suncalc.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highcharts@12.3.0/highcharts.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highcharts@12.3.0/highcharts-more.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/air-monitor-algorithms@1.2.7/dist/air-monitor-algorithms.umd.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/air-monitor-plots@1.3.1/dist/air-monitor-plots.umd.js"></script>
+
+  <script>
+    // ------------------------------------------------------------------
+    // Unpack the tools we need from each library.
+    // ------------------------------------------------------------------
+    const { DateTime } = luxon;
+    const { pm_nowcast, dailyStats, diurnalStats } = AirMonitorAlgorithms;
+    const {
+      timeseriesPlotConfig,
+      small_timeseriesPlotConfig,
+      hourlyBarplotConfig,
+      dailyBarplotConfig,
+      dailyRangeBarplotConfig,
+      diurnalPlotConfig,
+    } = AirMonitorPlots;
+
+    // Display metadata shared by every plot.
+    const locationName = "Smoky Hollow, CA";
+    const timezone     = "America/Los_Angeles";
+    const latitude     = 39.5;   // used by the diurnal plot for sun shading
+    const longitude    = -121.5;
+
+
+    // ------------------------------------------------------------------
+    // Generate 14 days of synthetic hourly PM2.5 data.
+    //
+    //   baseline      — constant clean-air background (10 µg/m³)
+    //   diurnalSignal — 24-hour cycle peaking ~9 AM (0–16 µg/m³)
+    //   episodeSignal — smooth multi-day smoke event peaking at day 7
+    //
+    // Start at 2024-07-01T07:00:00Z = 2024-07-01T00:00:00 PDT so the data
+    // begins exactly at a local midnight (14 full local calendar days).
+    // ------------------------------------------------------------------
+    const nHours   = 14 * 24; // 336 hourly observations
+    const startUTC = DateTime.fromISO("2024-07-01T07:00:00Z").toUTC();
+
+    const datetime = [];
+    const pm25     = [];
+
+    for (let i = 0; i < nHours; i++) {
+      datetime.push(startUTC.plus({ hours: i }));
+
+      const localHour = i % 24;
+      const day       = Math.floor(i / 24);
+
+      const baseline      = 10;
+      const diurnalSignal = 8 + 8 * Math.sin((2 * Math.PI * localHour) / 24 - Math.PI / 4);
+      const episodeSignal = 70 * Math.pow(Math.sin((Math.PI * day) / 14), 2);
+
+      pm25.push(Math.round((baseline + diurnalSignal + episodeSignal) * 10) / 10);
+    }
+
+    // Demonstrate missing-value handling: knock out a few hours on day 12.
+    // These appear as gaps in the time series / hourly charts.
+    [288, 289, 290, 291].forEach((i) => (pm25[i] = null));
+
+
+    // ------------------------------------------------------------------
+    // Derive the inputs the plot functions expect, using
+    // air-monitor-algorithms.
+    // ------------------------------------------------------------------
+    const nowcast = pm_nowcast(pm25);
+    const daily   = dailyStats(datetime, pm25, timezone);   // { datetime, min, mean, max, ... }
+    const diurnal = diurnalStats(datetime, pm25, timezone, 14); // { hour, min, mean, max, ... }
+
+
+    // ------------------------------------------------------------------
+    // Build each Highcharts configuration and render it.
+    //
+    // This is the core pattern of the library: assemble a data object,
+    // call a *Config() function, then hand the result to Highcharts.
+    // ------------------------------------------------------------------
+
+    // --- Time series ---
+    Highcharts.chart(
+      "timeseriesChart",
+      timeseriesPlotConfig({ datetime, pm25, nowcast, locationName, timezone })
+    );
+
+    // --- Hourly NowCast barplot ---
+    Highcharts.chart(
+      "hourlyChart",
+      hourlyBarplotConfig({ datetime, nowcast, locationName, timezone })
+    );
+
+    // --- Daily average barplot ---
+    Highcharts.chart(
+      "dailyChart",
+      dailyBarplotConfig({
+        daily_datetime: daily.datetime,
+        daily_mean: daily.mean,
+        locationName,
+        timezone,
+      })
+    );
+
+    // --- Daily range barplot ---
+    Highcharts.chart(
+      "dailyRangeChart",
+      dailyRangeBarplotConfig({
+        daily_datetime: daily.datetime,
+        daily_min: daily.min,
+        daily_mean: daily.mean,
+        daily_max: daily.max,
+        locationName,
+        timezone,
+      })
+    );
+
+    // --- Diurnal profile ---
+    // The diurnal plot derives "today" and "yesterday" from the full
+    // hourly arrays, and uses `hour_average` (24 values) as the baseline.
+    Highcharts.chart(
+      "diurnalChart",
+      diurnalPlotConfig({
+        datetime,
+        nowcast,
+        hour_average: diurnal.mean,
+        latitude,
+        longitude,
+        locationName,
+        timezone,
+      })
+    );
+
+    // --- Small-multiples variant (time series, no legend/axes) ---
+    Highcharts.chart(
+      "smallChart",
+      small_timeseriesPlotConfig({ datetime, pm25, nowcast, locationName, timezone })
+    );
+  </script>
+
+</body>
+</html>
