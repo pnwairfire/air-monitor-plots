@@ -142,8 +142,8 @@ Ten small, low-risk tasks, favoring correctness / reliability / clarity / docs:
 
 | #  | Title | Why valuable | Effort | Risk |
 |----|-------|--------------|--------|------|
-| 1  | Fix `dailyRange` y-axis to use `daily_max` (H1) | Stops silent clipping of the exact data the plot exists to show | Small | Low |
-| 2  | Add regression tests for a spike day (`daily_max ≫ daily_mean`) | Locks in the H1 fix; current fixtures never exercise it | Small | Low |
+| **1** DONE  | Fix `dailyRange` y-axis to use `daily_max` (H1) | Stops silent clipping of the exact data the plot exists to show | Small | Low |
+| **2** DONE  | Add regression tests for a spike day (`daily_max ≫ daily_mean`) | Locks in the H1 fix; current fixtures never exercise it | Small | Low |
 | 3  | Guard `diurnalPlot` slicing against negative/short windows (M1) | Fail loudly (or clamp) instead of silently wrong series | Medium | Low |
 | 4  | Wire `validatePlotArrays` into the plot functions, or document why not (M2) | Enforces array-length alignment; catches a whole class of caller errors | Medium | Low |
 | 5  | Unify `useUTC` across full and small datetime plots (L1) | Removes a latent timezone hazard; verify against both render paths | Small | Medium |
