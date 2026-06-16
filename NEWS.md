@@ -1,3 +1,7 @@
+# air-monitor-plots 1.3.2
+
+- Fixed y-axis maximum for `dailyRangeBarPlot()`.
+
 # air-monitor-plots 1.3.1
 
 - Fixed time axes by setting `useUtc: undefined`.
