@@ -1,6 +1,6 @@
 # air-monitor-plots 1.3.1
 
-Fixed time axes by setting `useUtc: undefined`.
+- Fixed time axes by setting `useUtc: undefined`.
 
 # air-monitor-plots 1.2.5
 
