@@ -1,6 +1,5 @@
 // Utility functions
-import { pm25ToYMax, pm25ToColor } from "./plot-utils.js";
-import { requireLuxonDateTimeArray } from "./helpers.js";
+import { pm25ToYMax, pm25ToColor, validatePlotArrays } from "./plot-utils.js";
 
 /**
  * Returns a Highcharts chart configuration for a full-sized hourly NowCast barplot.
@@ -14,7 +13,7 @@ import { requireLuxonDateTimeArray } from "./helpers.js";
  * @returns {Object} Highcharts chart config object.
  */
 export function hourlyBarplotConfig(data) {
-  requireLuxonDateTimeArray(data.datetime, "datetime");
+  validatePlotArrays(data.datetime, data.pm25, data.nowcast);
 
   const startTime = data.datetime[0]; // Luxon DateTime
   const ymin = 0;
@@ -88,7 +87,7 @@ export function hourlyBarplotConfig(data) {
  * @param {Object} data Same structure as for hourlyBarplotConfig.
  */
 export function small_hourlyBarplotConfig(data) {
-  requireLuxonDateTimeArray(data.datetime, "datetime");
+  validatePlotArrays(data.datetime, data.pm25, data.nowcast);
 
   const startTime = data.datetime[0];
   const ymin = 0;

@@ -114,4 +114,14 @@ test('small_dailyRangeBarplotConfig throws on non-DateTime input', () => {
   assert.throws(() => small_dailyRangeBarplotConfig(badData), /Luxon DateTime/);
 });
 
+test('dailyRangeBarplotConfig throws on daily_max length mismatch', () => {
+  const badData = { ...baseData, daily_max: [18, 24] };
+  assert.throws(() => dailyRangeBarplotConfig(badData), /daily_max/);
+});
+
+test('dailyRangeBarplotConfig throws on invalid daily_min value', () => {
+  const badData = { ...baseData, daily_min: [5, 'bad', 8] };
+  assert.throws(() => dailyRangeBarplotConfig(badData), /daily_min/);
+});
+
 test.run();

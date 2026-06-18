@@ -8,6 +8,8 @@ import {
   pm25ToYMax,
   pm25_AQILines,
   validatePlotArrays,
+  validateDailyArrays,
+  validateDiurnalInputs,
   pm25_addAQIStackedBar
 } from '../src/plot-utils.js';
 
@@ -107,6 +109,132 @@ test('validatePlotArrays warns if datetime not increasing', () => {
   const pm25 = [10, 12];
   const nowcast = [11, 12];
   assert.not.throws(() => validatePlotArrays(datetime, pm25, nowcast));
+});
+
+// ─── validatePlotArrays ordering ──────────────────────────────────────────────
+
+test('validatePlotArrays reports non-DateTime before length mismatch', () => {
+  // datetime is both non-DateTime AND a different length than the value arrays.
+  // The datetime structural error should win so plots surface it consistently.
+  const datetime = [new Date()];
+  const pm25 = [10, 20];
+  const nowcast = [12, 18];
+  assert.throws(() => validatePlotArrays(datetime, pm25, nowcast), /Luxon DateTime/);
+});
+
+// ─── validateDailyArrays ──────────────────────────────────────────────────────
+
+const dailyDts = [
+  DateTime.utc(2024, 1, 1),
+  DateTime.utc(2024, 1, 2),
+  DateTime.utc(2024, 1, 3)
+];
+
+test('validateDailyArrays accepts a single matching value array', () => {
+  assert.not.throws(() => validateDailyArrays(dailyDts, { daily_mean: [1, 2, 3] }));
+});
+
+test('validateDailyArrays accepts multiple matching value arrays', () => {
+  assert.not.throws(() =>
+    validateDailyArrays(dailyDts, {
+      daily_min: [1, 2, 3],
+      daily_mean: [2, 3, 4],
+      daily_max: [3, 4, 5]
+    })
+  );
+});
+
+test('validateDailyArrays allows null values', () => {
+  assert.not.throws(() => validateDailyArrays(dailyDts, { daily_mean: [1, null, 3] }));
+});
+
+test('validateDailyArrays throws on non-DateTime datetime', () => {
+  assert.throws(
+    () => validateDailyArrays(['2024-01-01'], { daily_mean: [1] }),
+    /Luxon DateTime/
+  );
+});
+
+test('validateDailyArrays throws on length mismatch and names the field', () => {
+  assert.throws(
+    () => validateDailyArrays(dailyDts, { daily_mean: [1, 2] }),
+    /daily_mean/
+  );
+});
+
+test('validateDailyArrays throws on invalid value and names the field', () => {
+  assert.throws(
+    () => validateDailyArrays(dailyDts, { daily_max: [1, 'bad', 3] }),
+    /daily_max/
+  );
+});
+
+// ─── validateDiurnalInputs ────────────────────────────────────────────────────
+
+const diurnalDts = Array.from({ length: 48 }, (_, i) =>
+  DateTime.utc(2024, 1, 1, 0).plus({ hours: i })
+);
+const diurnalBase = {
+  datetime: diurnalDts,
+  nowcast: Array.from({ length: 48 }, (_, i) => 5 + i),
+  hour_average: Array.from({ length: 24 }, (_, i) => 7 + i),
+  latitude: 37.7749,
+  longitude: -122.4194,
+  timezone: 'America/Los_Angeles'
+};
+
+test('validateDiurnalInputs accepts valid input', () => {
+  assert.not.throws(() => validateDiurnalInputs(diurnalBase));
+});
+
+test('validateDiurnalInputs throws on non-DateTime datetime', () => {
+  assert.throws(
+    () => validateDiurnalInputs({ ...diurnalBase, datetime: ['2024-01-01'] }),
+    /Luxon DateTime/
+  );
+});
+
+test('validateDiurnalInputs throws on nowcast length mismatch', () => {
+  assert.throws(
+    () => validateDiurnalInputs({ ...diurnalBase, nowcast: [1, 2, 3] }),
+    /nowcast/
+  );
+});
+
+test('validateDiurnalInputs throws on empty hour_average', () => {
+  assert.throws(
+    () => validateDiurnalInputs({ ...diurnalBase, hour_average: [] }),
+    /hour_average/
+  );
+});
+
+test('validateDiurnalInputs throws on non-finite latitude', () => {
+  assert.throws(
+    () => validateDiurnalInputs({ ...diurnalBase, latitude: undefined }),
+    /latitude/
+  );
+});
+
+test('validateDiurnalInputs throws on non-finite longitude', () => {
+  assert.throws(
+    () => validateDiurnalInputs({ ...diurnalBase, longitude: NaN }),
+    /longitude/
+  );
+});
+
+test('validateDiurnalInputs throws when datetime is too short to slice yesterday/today', () => {
+  const shortDts = Array.from({ length: 12 }, (_, i) =>
+    DateTime.utc(2024, 1, 1, 0).plus({ hours: i })
+  );
+  assert.throws(
+    () =>
+      validateDiurnalInputs({
+        ...diurnalBase,
+        datetime: shortDts,
+        nowcast: Array.from({ length: 12 }, (_, i) => i)
+      }),
+    /too short|yesterday/i
+  );
 });
 
 // ─── pm25_addAQIStackedBar ────────────────────────────────────────────────────

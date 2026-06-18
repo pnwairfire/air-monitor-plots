@@ -90,5 +90,27 @@ test('small_diurnalPlotConfig throws on non-DateTime input', () => {
   assert.throws(() => small_diurnalPlotConfig(badData), /Luxon DateTime/);
 });
 
+test('diurnalPlotConfig throws on missing latitude', () => {
+  const badData = { ...baseData, latitude: undefined };
+  assert.throws(() => diurnalPlotConfig(badData), /latitude/);
+});
+
+test('diurnalPlotConfig throws on empty hour_average', () => {
+  const badData = { ...baseData, hour_average: [] };
+  assert.throws(() => diurnalPlotConfig(badData), /hour_average/);
+});
+
+test('diurnalPlotConfig throws when datetime is too short to slice', () => {
+  const shortDts = Array.from({ length: 12 }, (_, i) =>
+    DateTime.utc(2024, 1, 1, 0).plus({ hours: i })
+  );
+  const badData = {
+    ...baseData,
+    datetime: shortDts,
+    nowcast: Array.from({ length: 12 }, (_, i) => i)
+  };
+  assert.throws(() => diurnalPlotConfig(badData), /too short|yesterday/i);
+});
+
 test.run();
 

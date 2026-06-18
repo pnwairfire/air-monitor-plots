@@ -88,4 +88,14 @@ test('small_hourlyBarplotConfig throws on non-DateTime input', () => {
   assert.throws(() => small_hourlyBarplotConfig(badData), /Luxon DateTime/);
 });
 
+test('hourlyBarplotConfig throws on nowcast length mismatch', () => {
+  const badData = { ...baseData, nowcast: [10, 15] };
+  assert.throws(() => hourlyBarplotConfig(badData), /same length/);
+});
+
+test('hourlyBarplotConfig throws on invalid nowcast value', () => {
+  const badData = { ...baseData, nowcast: [10, 'bad', 20] };
+  assert.throws(() => hourlyBarplotConfig(badData), /Invalid nowcast/);
+});
+
 test.run();

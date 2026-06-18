@@ -3,15 +3,14 @@ import { DateTime } from "luxon";
 // SunCalc for day-night shading
 import SunCalc from "suncalc";
 // Utility functions
-import { pm25ToColor, pm25ToYMax, pm25_AQILines } from "./plot-utils.js";
-import { requireLuxonDateTimeArray } from "./helpers.js";
+import { pm25ToColor, pm25ToYMax, pm25_AQILines, validateDiurnalInputs } from "./plot-utils.js";
 
 /**
  * Returns a diurnalPlot chart configuration.
  * @param {Object} data The data required to create the chart.
  */
 export function diurnalPlotConfig(data) {
-  requireLuxonDateTimeArray(data.datetime, "datetime");
+  validateDiurnalInputs(data);
 
   const { datetime, nowcast, locationName, timezone, title, longitude, latitude, hour_average } = data;
 
@@ -141,7 +140,7 @@ export function diurnalPlotConfig(data) {
  * @param {Object} data The data required to create the chart.
  */
 export function small_diurnalPlotConfig(data) {
-  requireLuxonDateTimeArray(data.datetime, "datetime");
+  validateDiurnalInputs(data);
 
   const { datetime, nowcast, locationName, timezone, title, longitude, latitude, hour_average } = data;
 

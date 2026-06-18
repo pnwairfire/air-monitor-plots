@@ -1,6 +1,5 @@
 // Utility functions
-import { pm25ToColor, pm25ToYMax, pm25_AQILines } from "./plot-utils.js";
-import { requireLuxonDateTimeArray } from "./helpers.js";
+import { pm25ToColor, pm25ToYMax, pm25_AQILines, validateDailyArrays } from "./plot-utils.js";
 
 /**
  * Returns a dailyRangeBarplot chart configuration.
@@ -14,7 +13,11 @@ import { requireLuxonDateTimeArray } from "./helpers.js";
  * @param {string} [data.title] - Optional override for chart title.
  */
 export function dailyRangeBarplotConfig(data) {
-  requireLuxonDateTimeArray(data.daily_datetime, "daily_datetime");
+  validateDailyArrays(data.daily_datetime, {
+    daily_min: data.daily_min,
+    daily_mean: data.daily_mean,
+    daily_max: data.daily_max
+  });
 
   const title = data.title ?? data.locationName;
   const ymin = 0;
@@ -89,7 +92,11 @@ export function dailyRangeBarplotConfig(data) {
  * @param {Object} data See `dailyRangeBarplotConfig` for structure.
  */
 export function small_dailyRangeBarplotConfig(data) {
-  requireLuxonDateTimeArray(data.daily_datetime, "daily_datetime");
+  validateDailyArrays(data.daily_datetime, {
+    daily_min: data.daily_min,
+    daily_mean: data.daily_mean,
+    daily_max: data.daily_max
+  });
 
   const title = data.title ?? data.locationName;
   const ymin = 0;

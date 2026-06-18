@@ -66,4 +66,14 @@ test('small_timeseriesPlotConfig throws on non-DateTime input', () => {
   assert.throws(() => small_timeseriesPlotConfig(badData), /Luxon DateTime/);
 });
 
+test('timeseriesPlotConfig throws on pm25 length mismatch', () => {
+  const badData = { ...baseData, pm25: [10] };
+  assert.throws(() => timeseriesPlotConfig(badData), /same length/);
+});
+
+test('timeseriesPlotConfig throws on invalid nowcast value', () => {
+  const badData = { ...baseData, nowcast: [15, 'bad'] };
+  assert.throws(() => timeseriesPlotConfig(badData), /Invalid nowcast/);
+});
+
 test.run();

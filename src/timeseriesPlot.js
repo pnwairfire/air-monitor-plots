@@ -1,6 +1,5 @@
 // Utility functions
-import { pm25ToYMax, pm25_AQILines } from "./plot-utils.js";
-import { requireLuxonDateTimeArray } from "./helpers.js";
+import { pm25ToYMax, pm25_AQILines, validatePlotArrays } from "./plot-utils.js";
 
 /**
  * Returns a timeseriesPlot chart configuration.
@@ -14,7 +13,7 @@ import { requireLuxonDateTimeArray } from "./helpers.js";
  * @returns {Object} Highcharts chart config.
  */
 export function timeseriesPlotConfig(data) {
-  requireLuxonDateTimeArray(data.datetime, "datetime");
+  validatePlotArrays(data.datetime, data.pm25, data.nowcast);
 
   const startTime = data.datetime[0]; // assumed to be Luxon DateTime
   const ymin = 0;
@@ -109,7 +108,7 @@ export function timeseriesPlotConfig(data) {
  * @returns {Object} Highcharts chart config.
  */
 export function small_timeseriesPlotConfig(data) {
-  requireLuxonDateTimeArray(data.datetime, "datetime");
+  validatePlotArrays(data.datetime, data.pm25, data.nowcast);
 
   const startTime = data.datetime[0];
   const ymin = 0;

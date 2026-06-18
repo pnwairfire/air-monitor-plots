@@ -78,4 +78,14 @@ test('dailyBarplotConfig throws if daily_datetime is not Luxon DateTime[]', () =
   assert.throws(() => dailyBarplotConfig(badData), /DateTime/);
 });
 
+test('dailyBarplotConfig throws on daily_mean length mismatch', () => {
+  const badData = { ...baseData, daily_mean: [5, 12] };
+  assert.throws(() => dailyBarplotConfig(badData), /daily_mean/);
+});
+
+test('dailyBarplotConfig throws on invalid daily_mean value', () => {
+  const badData = { ...baseData, daily_mean: [5, 'bad', 35] };
+  assert.throws(() => dailyBarplotConfig(badData), /daily_mean/);
+});
+
 test.run();
