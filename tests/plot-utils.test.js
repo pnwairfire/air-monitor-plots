@@ -83,6 +83,10 @@ test('validatePlotArrays accepts matching valid input', () => {
   assert.not.throws(() => validatePlotArrays(datetime, pm25, nowcast));
 });
 
+test('validatePlotArrays throws on empty arrays', () => {
+  assert.throws(() => validatePlotArrays([], [], []), /empty/);
+});
+
 test('validatePlotArrays throws on length mismatch', () => {
   const datetime = [DateTime.utc()];
   const pm25 = [10, 20];
@@ -148,6 +152,10 @@ test('validateDailyArrays allows null values', () => {
   assert.not.throws(() => validateDailyArrays(dailyDts, { daily_mean: [1, null, 3] }));
 });
 
+test('validateDailyArrays throws on empty datetime', () => {
+  assert.throws(() => validateDailyArrays([], { daily_mean: [] }), /empty/);
+});
+
 test('validateDailyArrays throws on non-DateTime datetime', () => {
   assert.throws(
     () => validateDailyArrays(['2024-01-01'], { daily_mean: [1] }),
@@ -185,6 +193,13 @@ const diurnalBase = {
 
 test('validateDiurnalInputs accepts valid input', () => {
   assert.not.throws(() => validateDiurnalInputs(diurnalBase));
+});
+
+test('validateDiurnalInputs throws on empty datetime', () => {
+  assert.throws(
+    () => validateDiurnalInputs({ ...diurnalBase, datetime: [], nowcast: [] }),
+    /empty/
+  );
 });
 
 test('validateDiurnalInputs throws on non-DateTime datetime', () => {

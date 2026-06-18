@@ -76,4 +76,9 @@ test('timeseriesPlotConfig throws on invalid nowcast value', () => {
   assert.throws(() => timeseriesPlotConfig(badData), /Invalid nowcast/);
 });
 
+test('timeseriesPlotConfig throws a clear error on empty arrays', () => {
+  const badData = { ...baseData, datetime: [], pm25: [], nowcast: [] };
+  assert.throws(() => timeseriesPlotConfig(badData), /empty/);
+});
+
 test.run();

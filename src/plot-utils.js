@@ -151,6 +151,9 @@ export function validatePlotArrays(datetime, pm25, nowcast) {
   // Validate the datetime array structure first, so a malformed datetime is
   // always reported as such even when the value arrays also disagree on length.
   requireLuxonDateTimeArray(datetime, 'datetime');
+  if (datetime.length === 0) {
+    throw new Error("'datetime' must not be empty");
+  }
 
   // Presence and type check for the value arrays
   if (!Array.isArray(pm25) || !Array.isArray(nowcast)) {
@@ -211,6 +214,9 @@ function isFiniteOrNull(v) {
 export function validateDailyArrays(daily_datetime, values) {
   // Validate the datetime array structure first.
   requireLuxonDateTimeArray(daily_datetime, 'daily_datetime');
+  if (daily_datetime.length === 0) {
+    throw new Error("'daily_datetime' must not be empty");
+  }
 
   const len = daily_datetime.length;
 
@@ -251,6 +257,9 @@ export function validateDiurnalInputs(data) {
 
   // Validate the datetime array structure first.
   requireLuxonDateTimeArray(datetime, 'datetime');
+  if (datetime.length === 0) {
+    throw new Error("'datetime' must not be empty");
+  }
 
   const len = datetime.length;
 
