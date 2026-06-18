@@ -1,3 +1,8 @@
+# air-monitor-plots 1.3.2
+
+- `pm25_addAQIStackedBar()` now draws the Maroon (Hazardous) AQI zone.
+- Reject empty datetime arrays and invalid diurnal timezones with clear errors.
+
 # air-monitor-plots 1.3.1
 
 - Fixed time axes by setting `useUtc: undefined`.

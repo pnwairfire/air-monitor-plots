@@ -155,9 +155,11 @@ A version bump + `NEWS.md` entry is warranted when changing any of:
 | Condition | Behavior | Where |
 |-----------|----------|-------|
 | `datetime` not an array / element not a Luxon `DateTime` | **throws** | `helpers.js` (`requireLuxonDateTimeArray`), called at top of each plot |
+| `datetime` / `daily_datetime` array empty | **throws** | `validatePlotArrays`, `validateDailyArrays`, `validateDiurnalInputs` |
 | `datetime`/`pm25`/`nowcast` not arrays or mismatched length | **throws** | `validatePlotArrays` |
 | `pm25`/`nowcast` value not finite-number-or-null | **throws** | `validatePlotArrays` |
 | datetime array not strictly increasing | **`console.warn`**, continues | `validatePlotArrays` |
+| invalid / missing `timezone` (diurnal) | **throws** | `validateDiurnalInputs` |
 | invalid/null PM2.5 in color/category lookup | returns `null` (AQC) / gray (color) | `plot-utils.js` |
 | invalid PM2.5 in `pm25ToYMax` | returns default `50` | `plot-utils.js` |
 | malformed chart passed to `pm25_addAQIStackedBar` | **`console.warn`**, returns | `plot-utils.js` |
