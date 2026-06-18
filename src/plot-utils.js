@@ -294,6 +294,17 @@ export function validateDiurnalInputs(data) {
     throw new Error(`Expected 'longitude' to be a finite number, got: ${longitude}`);
   }
 
+  // timezone: drives the local-hour computation used for the yesterday/today
+  // slicing below. An invalid or missing zone makes setZone produce invalid
+  // DateTimes whose .hour is NaN, which silently corrupts the slice windows
+  // (and slips past the length guard, since NaN < 0 is false). Fail loudly.
+  if (typeof timezone !== 'string' || timezone.length === 0) {
+    throw new Error(`Expected 'timezone' to be a non-empty IANA timezone string, got: ${timezone}`);
+  }
+  if (!datetime[0].setZone(timezone).isValid) {
+    throw new Error(`Expected 'timezone' to be a valid IANA timezone string, got: ${timezone}`);
+  }
+
   // Slicing guard: diurnalPlot derives yesterday/today by slicing nowcast
   // relative to the last local hour. If there aren't enough leading points the
   // computed start index goes negative and Array.slice silently returns the

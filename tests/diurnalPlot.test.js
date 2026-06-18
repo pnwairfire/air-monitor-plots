@@ -100,6 +100,11 @@ test('diurnalPlotConfig throws on empty hour_average', () => {
   assert.throws(() => diurnalPlotConfig(badData), /hour_average/);
 });
 
+test('diurnalPlotConfig throws on an invalid timezone', () => {
+  const badData = { ...baseData, timezone: 'Not/AZone' };
+  assert.throws(() => diurnalPlotConfig(badData), /timezone/);
+});
+
 test('diurnalPlotConfig throws when datetime is too short to slice', () => {
   const shortDts = Array.from({ length: 12 }, (_, i) =>
     DateTime.utc(2024, 1, 1, 0).plus({ hours: i })

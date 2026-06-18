@@ -237,6 +237,20 @@ test('validateDiurnalInputs throws on non-finite longitude', () => {
   );
 });
 
+test('validateDiurnalInputs throws on an invalid timezone string', () => {
+  assert.throws(
+    () => validateDiurnalInputs({ ...diurnalBase, timezone: 'Not/AZone' }),
+    /timezone/
+  );
+});
+
+test('validateDiurnalInputs throws on a missing (non-string) timezone', () => {
+  assert.throws(
+    () => validateDiurnalInputs({ ...diurnalBase, timezone: undefined }),
+    /timezone/
+  );
+});
+
 test('validateDiurnalInputs throws when datetime is too short to slice yesterday/today', () => {
   const shortDts = Array.from({ length: 12 }, (_, i) =>
     DateTime.utc(2024, 1, 1, 0).plus({ hours: i })
