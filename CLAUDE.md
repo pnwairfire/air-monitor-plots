@@ -1,167 +1,115 @@
 # CLAUDE.md
 
-## Project Overview
+AI-oriented project guide for `air-monitor-plots`. Read this first,
+then consult the two companion documents as needed:
 
-This project, `air-monitor-plots`, is a JavaScript library that generates
-[Highcharts](https://www.highcharts.com/) configuration objects for USFS AirFire
-"standard" air quality plots. It is published as an npm package and consumed by
-web pages that display hourly PM2.5 air quality time series data for the U.S.
-Forest Service [AirFire team](https://www.airfire.org/).
+- **`.claude/CLAUDE_ARCHITECTURE.md`** — architecture, module map, call graph,
+  public API contract, and design rationale.
+- **`.claude/CLAUDE_STYLE_GUIDE.md`** — cross-project working principles
+  (philosophy, refactoring, error handling, communication, review priorities).
+  These are portable conventions shared across projects.
 
-Features:
-
-- Returns Highcharts config objects; it does **not** render charts itself.
-- Works with hourly PM2.5 air quality data.
-- Built for use with the `air-monitor` and `air-monitor-algorithms` packages.
-- Supports "small multiples" via `small_*` chart variants.
-- Fully timezone-aware using Luxon `DateTime` objects.
-
-Plot generators are intentionally decoupled from any specific data model. Each
-`~Config()` function accepts plain arrays of data plus a `locationName`,
-`timezone`, and optional `title`, and returns a configuration object. This lets
-the same plots be reused with data from any source (AirNow, PurpleAir, etc.) as
-long as the caller assembles the expected `plotData` object.
-
-The primary goals of this project are:
-
-- Reliability
-- Operational transparency
-- Maintainability
-- Simplicity
-
-This project is operational infrastructure used to visualize air quality data
-for the public and for operational staff. Correctness and robustness are more
-important than architectural sophistication.
+This file covers *conventions for this project*. The architecture doc
+details *how this project works*; the style guide governs *how we write code*.
 
 ---
 
-## Known Preferences of the Maintainer
+## Project Overview
 
-The maintainer, Jonathan Callahan, values clarity, correctness, and long-term
-maintainability over novelty or abstraction.
+`air-monitor-plots` is a published npm library (`air-monitor-plots`, GPL-3.0)
+that produces [Highcharts](https://www.highcharts.com/) configuration objects
+for USFS AirFire "standard" PM2.5 air quality plots. It is consumed by the U.S.
+Forest Service [AirFire team](https://www.airfire.org/) and is intended to pair
+with the `air-monitor` and `air-monitor-algorithms` packages.
 
-### General Philosophy
+Key framing for any change:
 
-- Prefer simple, understandable code over clever solutions.
-- Favor maintainability over optimization unless performance is a demonstrated problem.
-- Prefer explicit code over metaprogramming or excessive abstraction.
-- Small, incremental improvements are preferred over large rewrites.
-- Existing working code should be respected and changed conservatively.
-- Avoid introducing complexity unless there is a clear operational benefit.
+- **It builds config objects; it does not render charts.** Every `*Config()`
+  function returns a plain Highcharts options Object. The caller invokes
+  `Highcharts.chart(el, config)`. The one exception is `pm25_addAQIStackedBar`,
+  which mutates an already-rendered chart.
+- **Data is decoupled from any data model.** Functions accept plain arrays plus
+  `locationName`, `timezone`, and an optional `title`. This is deliberate so a
+  caller with PurpleAir (or any) data can reuse the same plots — do not couple
+  these functions to `air-monitor` internals.
+- The project is **stable / in maintenance** (currently v1.3.1). Changes are
+  conservative and backward compatibility matters (see the API contract in the
+  architecture doc).
 
-### JavaScript Style
+---
 
-- Use modern ES6 JavaScript.
-- Use ESM (`import` / `export`) syntax. This package is `"type": "module"`.
-- Prefer async/await over promise chains.
-- Prefer descriptive variable and function names.
-- Prefer small functions with clear responsibilities.
-- Avoid introducing dependencies unless they provide significant value.
+## Language and Style
 
-### Documentation and Comments
-
-- Write code for future maintainers.
-- Include explanatory comments describing intent, not just implementation.
-- Public functions should have clear JSDoc documentation (this package
-  generates API docs via `npm run docs`).
-- Operational scripts should have clear file-level descriptions and usage notes.
-- Many consumers of this work are scientists and operational staff who are not
-  professional software engineers. Code readability and clear documentation are
-  therefore especially important.
-
-### Refactoring
-
-- Do not propose architectural rewrites unless specifically requested.
-- Preserve existing behavior unless a bug or design issue has been identified.
-- When suggesting refactoring, explain the expected benefit.
-- Prefer minimal diffs that are easy to review.
-- Small improvements are generally preferred over large rewrites.
-
-### Error Handling
-
-- Failures should be detected and reported clearly.
-- Avoid silent failures.
-- Error messages should provide useful operational context. The existing
-  `helpers.js` validators (e.g. `requireLuxonDateTime`) are a good model: they
-  name the offending variable and the expected type.
-- Reliability is more important than elegance.
-
-### Communication Style
-
-- Explain recommendations before making substantial changes.
-- Distinguish between required fixes and optional improvements.
-- Identify risks and tradeoffs.
-- Rank recommendations by priority.
-- Do not assume a rewrite is desired.
+- Modern ES modules (`"type": "module"`). Use ES6+ syntax and `import`/`export`.
+- Every exported function carries JSDoc with `@param` (including the `data.*`
+  members), `@returns`, and units (`µg/m³`) where relevant.
+- Each plot type ships in two variants: the full `xxxConfig` and a compact
+  `small_xxxConfig` for small-multiples (no legend, hidden/abbreviated axes,
+  smaller markers). Keep the two in sync when changing shared behavior.
+- Source is hand-authored in `src/`; the bundles in `dist/` are generated —
+  never hand-edit them.
 
 ---
 
 ## Project-Specific Constraints
 
-### Package Structure
+### Data Conventions
 
-- Source lives in `src/`. Each plot type has its own module that exports a full
-  config function and a `small_*` variant
-  (e.g. `timeseriesPlotConfig` / `small_timeseriesPlotConfig`).
-- `src/index.js` is the single public entry point and re-exports every public
-  function. Anything not exported there should be treated as internal.
-- `src/plot-utils.js` holds shared AQI/PM2.5 mapping utilities; `src/helpers.js`
-  holds shared validation helpers.
-- The package is built with Rollup (`npm run build`) into `dist/` as both ESM
-  (`air-monitor-plots.js`) and UMD (`air-monitor-plots.umd.js`). Do not hand-edit
-  files in `dist/`.
+- `datetime` / `daily_datetime` arrays are **Luxon `DateTime` objects in UTC**.
+  Display timezone is applied per-call via the IANA `timezone` string. Inputs are
+  validated by `requireLuxonDateTimeArray`; passing JS `Date` or numbers throws.
+- `pm25` and `nowcast` values are **finite numbers or `null`** (null = missing).
+  All value arrays must match the length of their datetime array.
+- Daily plots use `daily_min`, `daily_mean`, `daily_max` aligned with
+  `daily_datetime`.
+- The `time.useUTC` Highcharts setting is intentionally `undefined` (not `false`)
+  in the full timeseries/hourly configs — this is the v1.3.1 axis fix. Do not
+  "clean it up" to a boolean. (`small_` variants use `useUTC: false`.)
 
-### Date and Time Handling
+### AQI / NAAQS (load-bearing)
 
-- Use Luxon for all date and time operations.
-- `datetime` arrays passed to plot functions are expected to be Luxon
-  `DateTime` objects, not native `Date` objects. Validate with the helpers in
-  `src/helpers.js` rather than assuming.
-- Avoid mixing Luxon `DateTime` objects and native JavaScript `Date` objects.
-- Be explicit about timezones rather than relying on system defaults. Plots are
-  timezone-aware and receive an explicit `timezone` from the caller; respect it.
-- Timezone correctness has been a real source of bugs in this project. Be
-  especially careful with any change that touches `useUtc`, hour-of-day
-  bucketing (diurnal plots), or day boundaries (daily plots).
+- AQI category thresholds use the **2024 PM2.5 NAAQS** breakpoints
+  `[0, 9, 35.4, 55.4, 125.4, 225.4]` with a fixed 6-color palette, both defined
+  in `src/plot-utils.js`. These drive colors across every plot and downstream
+  visual consistency — treat them as a public contract, not magic numbers.
+- `pm25ToColor` returns light gray (`rgb(187,187,187)`) for invalid/null values.
+- `pm25ToYMax` uses fixed breakpoints (not raw autoscaling). For range plots the
+  y-max is derived from `daily_max` — using `daily_mean` clips tall range bars (a
+  fixed bug; see git history). Don't reintroduce that.
 
-### Public API and Output Stability
+### Public API and Compatibility
 
-Be conservative when modifying:
+Changing exported function names, the shape of the `data` argument, the
+return-object structure, units, or the AQI thresholds/colors is a breaking change
+requiring a version bump and a `NEWS.md` entry. See the architecture doc for the
+full contract.
 
-- The set of functions exported from `src/index.js`.
-- The shape of the `plotData` input object
-  (`datetime`, `pm25`, `nowcast`, `locationName`, `timezone`, `title`).
-- The structure of the returned Highcharts configuration objects.
-- AQI category thresholds and colors in `src/plot-utils.js`.
+### Key Dependencies
 
-These are consumed by downstream web pages and other AirFire tooling. Preserve
-backward compatibility whenever practical, and call out any breaking change
-explicitly.
-
-### Dependencies
-
-- Runtime dependencies are intentionally minimal: `luxon` and `suncalc`.
-- `air-monitor`, `air-monitor-algorithms`, and `highcharts` are **peer**
-  dependencies — they are provided by the consuming application, not bundled.
-  Do not convert a peer dependency into a direct dependency without discussion.
-- Avoid adding new dependencies unless they provide significant, clear value.
-
-### AQI Thresholds and Colors
-
-- The AQI thresholds in `src/plot-utils.js` follow the 2024 NAAQS PM2.5
-  standard. Changing these values changes how air quality is reported to the
-  public, so treat them as a deliberate, reviewed change — not a casual tweak.
+Runtime deps: `luxon` (timezone-aware datetimes) and `suncalc` (sunrise/sunset
+shading in the diurnal plot). `highcharts`, `air-monitor`, and
+`air-monitor-algorithms` are **peer** dependencies. Do not add or swap
+dependencies without discussion.
 
 ---
 
-## Testing
+## Build, Test, and Document
 
-- Unit tests use [uvu](https://github.com/lukeed/uvu): `npm run test`. Test
-  files live in `tests/` and mirror the `src/` modules.
-- Visual/integration tests use Playwright against the demo pages in
-  `playwright/`: `npm run test:playwright`.
-- To view charts manually in a browser: `npm run serve:examples:open`.
-- New behavior should come with a corresponding unit test where practical.
+- `npm run build` — Rollup builds ESM (`dist/air-monitor-plots.js`) and minified
+  UMD (`dist/air-monitor-plots.umd.js`). `dist/` is gitignored and regenerated;
+  it ships to npm via the `files` field. Do not commit or hand-edit it.
+- `npm test` — runs the [uvu](https://github.com/lukeed/uvu) unit suite over
+  `tests/`. Run a single file with a name filter, e.g.
+  `npx uvu tests dailyRangeBarplot`.
+- `npm run test:playwright` — Playwright visual/render tests against the demo
+  pages in `playwright/`. Append a name to run one, e.g.
+  `npm run test:playwright timeseriesPlot`.
+- `npm run docs` — JSDoc generates HTML into `docs/`.
+- `npm run serve:examples:open` — serve and open the demo pages for manual
+  visual inspection (charts are for human eyes; some validation is manual).
+
+New or changed plot behavior should come with corresponding unit tests; visual
+changes should be eyeballed via the Playwright demo pages.
 
 ---
 
@@ -170,20 +118,10 @@ explicitly.
 When reviewing code:
 
 1. Identify correctness issues.
-2. Identify operational risks (timezone handling, output structure changes,
-   AQI threshold changes).
+2. Identify operational risks and backward-compatibility concerns.
 3. Identify documentation gaps.
 4. Suggest low-risk improvements.
 
-Prioritize recommendations in this order:
-
-1. Correctness
-2. Reliability
-3. Maintainability
-4. Readability
-5. Performance
-
-Performance optimizations should generally be proposed only after correctness
-and maintainability concerns have been addressed.
-
+Prioritize and communicate recommendations as described in
+`.claude/CLAUDE_STYLE_GUIDE.md` (Review Priorities and Communication Style).
 Do not assume a rewrite is desired.
