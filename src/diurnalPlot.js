@@ -115,8 +115,8 @@ export function diurnalPlotConfig(data) {
         }
       },
       plotBands: [
-        { color: "rgb(0,0,0,0.1)", from: 0, to: sunriseHour },
-        { color: "rgb(0,0,0,0.1)", from: sunsetHour, to: 24 }
+        { color: "rgba(0,0,0,0.1)", from: 0, to: sunriseHour },
+        { color: "rgba(0,0,0,0.1)", from: sunsetHour, to: 24 }
       ]
     },
     yAxis: {
@@ -214,8 +214,8 @@ export function small_diurnalPlotConfig(data) {
       tickLength: 0,
       labels: { enabled: false },
       plotBands: [
-        { color: "rgb(0,0,0,0.1)", from: 0, to: sunriseHour },
-        { color: "rgb(0,0,0,0.1)", from: sunsetHour, to: 24 }
+        { color: "rgba(0,0,0,0.1)", from: 0, to: sunriseHour },
+        { color: "rgba(0,0,0,0.1)", from: sunsetHour, to: 24 }
       ]
     },
     yAxis: {
