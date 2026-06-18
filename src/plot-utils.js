@@ -122,7 +122,10 @@ export function pm25_addAQIStackedBar(chart, width = 6) {
   const xlo = chart.xAxis[0].left;
   const ymax_px = yAxis.toPixels(yAxis.max);
 
-  for (let i = 0; i < AQI_THRESHOLDS.length - 1; i++) {
+  // Iterate every AQI zone, including the final open-topped Maroon zone
+  // (>225.4 µg/m³). The last iteration has no upper threshold, so the
+  // `?? 5000` fallback caps it; the band is then clamped to the chart top.
+  for (let i = 0; i < AQI_THRESHOLDS.length; i++) {
     const yhi = yAxis.toPixels(AQI_THRESHOLDS[i]);
     const nextThreshold = AQI_THRESHOLDS[i + 1] ?? 5000;
     if (yhi > ymax_px) {

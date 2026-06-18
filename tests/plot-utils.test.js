@@ -244,4 +244,49 @@ test('pm25_addAQIStackedBar fails gracefully with bad chart', () => {
   assert.not.throws(() => pm25_addAQIStackedBar({}));
 });
 
+// A minimal stub Highcharts chart for exercising the rect-drawing math without
+// a DOM. Pixel space increases downward: value 0 sits at the bottom of the plot
+// area, yAxis.max at the top. Each drawn rect's fill is recorded.
+function makeStubChart(yMax) {
+  const top_px = 10;
+  const bottom_px = 410;
+  const drawn = [];
+  const chart = {
+    xAxis: [{ left: 50 }],
+    yAxis: [{
+      max: yMax,
+      toPixels(value) {
+        return bottom_px - (value / yMax) * (bottom_px - top_px);
+      }
+    }],
+    renderer: {
+      rect(x, y, w, h, r) {
+        const rect = { x, y, w, h, r, fill: null };
+        return {
+          attr(opts) { rect.fill = opts.fill; return this; },
+          add() { drawn.push(rect); return this; }
+        };
+      }
+    }
+  };
+  return { chart, drawn };
+}
+
+test('pm25_addAQIStackedBar draws all six AQI zones including Maroon when in range', () => {
+  const { chart, drawn } = makeStubChart(300);
+  pm25_addAQIStackedBar(chart);
+  assert.is(drawn.length, 6);
+  // The Maroon (>225.4 Hazardous) zone must be drawn. It is the load-bearing
+  // zone for wildfire smoke and was previously omitted by an off-by-one loop bound.
+  assert.ok(drawn.some(r => r.fill === 'rgb(126,0,35)'));
+});
+
+test('pm25_addAQIStackedBar omits zones above the chart y-max', () => {
+  const { chart, drawn } = makeStubChart(50);
+  pm25_addAQIStackedBar(chart);
+  // Only Good/Moderate/USG fit under a y-max of 50; higher zones are culled.
+  assert.is(drawn.length, 3);
+  assert.not.ok(drawn.some(r => r.fill === 'rgb(126,0,35)'));
+});
+
 test.run();
